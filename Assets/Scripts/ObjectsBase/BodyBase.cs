@@ -14,8 +14,13 @@ public class BodyBase : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         ControlBase?.Drive(this);
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
     }
 }

@@ -65,8 +65,6 @@ public class ControlBase
 
         Vector2 requiredAcc = acc.normalized * GetRequiredAcceleraton(_targetVelocity, rigidBody.drag);
         rigidBody.AddForce(requiredAcc * rigidBody.mass, ForceMode2D.Force);
-        Debug.Log("Velocity: " + Mathf.Sqrt(rigidBody.velocity.magnitude));
-        Debug.Log("Mass: " + rigidBody.mass);
-        Debug.Log("Force: " + requiredAcc.magnitude);
+        Debug.Log("Velocity: " + rigidBody.velocity.magnitude);
     }
 }
