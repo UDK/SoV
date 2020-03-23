@@ -4,11 +4,16 @@ using UnityEngine;
 
 public class ControlBase
 {
-    public float _targetVelocity { get; set; }
+    private float _targetVelocity { get; set; }
+    private MonoBehaviour _entity { get; set; }
+    private Rigidbody2D _entityRigidBody { get; set; }
+    private Vector2 _currentMove { get; set; }
 
-    public ControlBase(float targetVelocity)
+    public ControlBase(MonoBehaviour entity, float targetVelocity)
     {
         _targetVelocity = targetVelocity;
+        _entity = entity;
+        _entityRigidBody = entity.GetComponent<Rigidbody2D>();
     }
 
     float GetFinalVelocity(float aVelocityChange, float aDrag)
@@ -23,7 +28,7 @@ public class ControlBase
 
     float GetDrag(float aVelocityChange, float aFinalVelocity)
     {
-        return aVelocityChange / ((aFinalVelocity + aVelocityChange) * Time.fixedDeltaTime);
+        return aVelocityChange / ((aFinalVelocity + aVelocityChange) * Time.deltaTime);
     }
     float GetDragFromAcceleration(float aAcceleration, float aFinalVelocity)
     {
@@ -41,9 +46,8 @@ public class ControlBase
         return GetRequiredVelocityChange(aFinalSpeed, aDrag) / Time.fixedDeltaTime;
     }
 
-    public void Drive(MonoBehaviour entity)
+    public void RegisterDrive()
     {
-        var rigidBody = entity.GetComponent<Rigidbody2D>();
         Vector2 acc = new Vector2();
         if (Input.GetKey(KeyCode.W))
         {
@@ -62,9 +66,13 @@ public class ControlBase
         {
             acc.x = -1;
         }
+        _currentMove = acc;
+    }
 
-        Vector2 requiredAcc = acc.normalized * GetRequiredAcceleraton(_targetVelocity, rigidBody.drag);
-        rigidBody.AddForce(requiredAcc * rigidBody.mass, ForceMode2D.Force);
-        Debug.Log("Velocity: " + rigidBody.velocity.magnitude);
+    public void ReleaseDrive()
+    {
+        Vector2 requiredAcc = _currentMove.normalized * GetRequiredAcceleraton(_targetVelocity, _entityRigidBody.drag);
+        _entityRigidBody.AddForce(requiredAcc * _entityRigidBody.mass, ForceMode2D.Force);
+        Debug.Log("Velocity: " + _entityRigidBody.velocity.magnitude);
     }
 }

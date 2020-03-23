@@ -10,17 +10,18 @@ public class BodyBase : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        ControlBase = new ControlBase(TargetVelocity);
+        ControlBase = new ControlBase(this, TargetVelocity);
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        ControlBase?.Drive(this);
+        ControlBase?.ReleaseDrive();
     }
 
     // Update is called once per frame
     void Update()
     {
+        ControlBase?.RegisterDrive();
     }
 }
