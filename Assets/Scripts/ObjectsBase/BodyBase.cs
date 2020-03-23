@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BodyBase : MonoBehaviour
+public abstract class BodyBase : MonoBehaviour
 {
     public float TargetVelocity;
     public ControlBase ControlBase { get; set; }
@@ -10,7 +10,10 @@ public class BodyBase : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        ControlBase = new ControlBase(this, TargetVelocity);
+        if(this.tag == "Player")
+        {
+            ControlBase = new PlayerControl(this, TargetVelocity);
+        }
     }
 
     // Update is called once per frame
