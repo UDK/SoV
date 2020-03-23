@@ -20,7 +20,6 @@ public abstract class ControlBase
     {
         Vector2 requiredAcc = _currentMove.normalized * GetRequiredAcceleraton(_targetVelocity, _entityRigidBody.drag);
         _entityRigidBody.AddForce(requiredAcc * _entityRigidBody.mass, ForceMode2D.Force);
-        Debug.Log("Velocity: " + _entityRigidBody.velocity.magnitude);
     }
 
     public void RegisterDrive()
