@@ -7,62 +7,73 @@ using UnityEngine;
 /// </summary>
 public class AbstractGravity : MonoBehaviour
 {
-
-    [SerializeField]
-    private float _targetVelocity;
-    private MonoBehaviour _entity { get; set; }
-    private Rigidbody2D _entityRigidBody { get; set; }
-    private Vector2 _currentMove { get; set; } = Vector2.zero;
-
-    private List<Rigidbody2D> gameObjectsOfPulling { get; set; }
-    /// <summary>
-    /// Очень сильно похоже на _targetVelocity
-    /// </summary>
-    protected float ForceOfGravitation { get; set; }
-    protected CircleCollider2D ColliderOfTrigger { get; set; }
+    private BodyBase _bodyBase { get; set; }
+    private readonly Dictionary<GameObject, Satellite> _satellties =
+        new Dictionary<GameObject, Satellite>();
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("ggg Ebat");
-        this.gameObjectsOfPulling.Add(collision.GetComponent<Rigidbody2D>());
+        if(!this._satellties.ContainsKey(collision.gameObject))
+            this._satellties.Add(collision.gameObject, collision);
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
-        this.gameObjectsOfPulling.Remove(collision.GetComponent<Rigidbody2D>());
+        this._satellties.Remove(collision.gameObject);
     }
 
-    private void Prit(Rigidbody2D fromCollider)
+    private void Pull(Satellite satellite)
     {
-        Vector2 distanceBetween = _entityRigidBody.position - fromCollider.position;
-        Vector2 requiredAcc = distanceBetween.normalized * GetAcceleraton(_targetVelocity, fromCollider.velocity.magnitude);
-        fromCollider.AddForce(requiredAcc * fromCollider.mass, ForceMode2D.Force);
-    }
-
-    private float GetRequiredVelocity(float aFinalSpeed, float currentSpeed)
-    {
-        float m = Mathf.Clamp01(Time.fixedDeltaTime);
-        return (aFinalSpeed - currentSpeed) * m / (1 - m);
-    }
-    private float GetAcceleraton(float aFinalSpeed, float currentSpeed)
-    {
-        return GetRequiredVelocity(aFinalSpeed, currentSpeed) / Time.fixedDeltaTime;
+        var force = PhysicHelpers.GetGravitationPullForce(_bodyBase, satellite, satellite.BodyBase.GravityForce);
+        satellite.Rigidbody2D.AddForce(force, ForceMode2D.Force);
     }
 
     void Start()
     {
-        gameObjectsOfPulling = new List<Rigidbody2D>();
-        _entityRigidBody = GetComponent<Rigidbody2D>();
+        _bodyBase = GetComponent<BodyBase>();
     }
 
     void Update()
     {
-        if(this.gameObjectsOfPulling.Count> 0)
+        if(_satellties.Count> 0)
         {
-            foreach(var sputnik in this.gameObjectsOfPulling)
+            foreach(var satellite in _satellties)
             {
-                Prit(sputnik);
+                Pull(satellite.Value);
             }
         }
     }
+    
+    private class Satellite
+    {
+        public Rigidbody2D Rigidbody2D { get; set; }
 
+        public BodyBase BodyBase { get; set; }
+
+        public Collider2D Collider2D { get; set; }
+
+        public static implicit operator Rigidbody2D(Satellite satellite)
+        {
+            return satellite.Rigidbody2D;
+        }
+
+        public static implicit operator BodyBase(Satellite satellite)
+        {
+            return satellite.BodyBase;
+        }
+
+        public static implicit operator Collider2D(Satellite satellite)
+        {
+            return satellite.Collider2D;
+        }
+
+        public static implicit operator Satellite(Collider2D collider2D)
+        {
+            return new Satellite
+            {
+                Rigidbody2D = collider2D.GetComponent<Rigidbody2D>(),
+                BodyBase = collider2D.gameObject.GetComponent<BodyBase>(),
+                Collider2D = collider2D,
+            };
+        }
+    }
 }

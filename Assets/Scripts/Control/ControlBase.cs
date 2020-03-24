@@ -2,74 +2,81 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class ControlBase
+public abstract class ControlBase : MonoBehaviour
 {
-    private float _targetVelocity { get; set; }
-    private MonoBehaviour _entity { get; set; }
+    public float TargetVelocity;
+
     private Rigidbody2D _entityRigidBody { get; set; }
-    private Vector2 _currentMove { get; set; } = Vector2.zero;
+    private Actions _currentAction { get; set; } = Actions.EmptyInstance;
 
     public ControlBase(MonoBehaviour entity, float targetVelocity)
     {
-        _targetVelocity = targetVelocity;
-        _entity = entity;
-        _entityRigidBody = entity.GetComponent<Rigidbody2D>();
     }
 
     public void ReleaseDrive()
     {
-        Vector2 requiredAcc = _currentMove.normalized * GetAcceleraton(_targetVelocity, _entityRigidBody.velocity.magnitude);
-        _entityRigidBody.AddForce(requiredAcc * _entityRigidBody.mass, ForceMode2D.Force);
+        ProcessMove();
     }
 
     public void RegisterDrive()
     {
-        this._currentMove = Drive();
+        this._currentAction = Drive();
     }
 
-    protected virtual Vector2 Drive()
+    protected virtual Actions Drive()
     {
-        return Vector2.zero;
+        return Actions.EmptyInstance;
     }
 
-    private float GetFinalVelocity(float aVelocityChange, float aDrag)
+    private void ProcessMove()
     {
-        return aVelocityChange * (1 / Mathf.Clamp01(aDrag * Time.fixedDeltaTime) - 1);
-    }
-    private float GetFinalVelocityFromAcceleration(float aAcceleration, float aDrag)
-    {
-        return GetFinalVelocity(aAcceleration * Time.fixedDeltaTime, aDrag);
-    }
+        try
+        {
+            Vector2 currentMove = Vector2.zero;
+            if((_currentAction.Move & Move.Up) != 0)
+            {
+                currentMove.y = 1;
+            }
+            if((_currentAction.Move & Move.Down) != 0)
+            {
+                currentMove.y = -1;
+            }
+            if((_currentAction.Move & Move.Rigth) != 0)
+            {
+                currentMove.x = 1;
+            }
+            if((_currentAction.Move & Move.Left) != 0)
+            {
+                currentMove.x = -1;
+            }
 
 
-    private float GetDrag(float aVelocityChange, float aFinalVelocity)
-    {
-        return aVelocityChange / ((aFinalVelocity + aVelocityChange) * Time.deltaTime);
-    }
-    private float GetDragFromAcceleration(float aAcceleration, float aFinalVelocity)
-    {
-        return GetDrag(aAcceleration * Time.fixedDeltaTime, aFinalVelocity);
+
+            Vector2 requiredAcc = currentMove.normalized * PhysicHelpers.GetAcceleraton(TargetVelocity, _entityRigidBody.velocity.magnitude);
+            _entityRigidBody.AddForce(requiredAcc * _entityRigidBody.mass, ForceMode2D.Force);
+        }
+        catch
+        {
+            Debug.Log("Fuck this control. This is again null.");
+        }
     }
 
-
-    private float GetRequiredVelocityChange(float aFinalSpeed, float aDrag)
+    // Update is called once per frame
+    void Start()
     {
-        float m = Mathf.Clamp01(aDrag * Time.fixedDeltaTime);
-        return aFinalSpeed * m / (1 - m);
-    }
-    private float GetRequiredAcceleraton(float aFinalSpeed, float aDrag)
-    {
-        return GetRequiredVelocityChange(aFinalSpeed, aDrag) / Time.fixedDeltaTime;
+        _currentAction = Actions.EmptyInstance;
+        _entityRigidBody = this.GetComponent<Rigidbody2D>();
     }
 
-
-    private float GetRequiredVelocity(float aFinalSpeed, float currentSpeed)
+    // Update is called once per frame
+    void FixedUpdate()
     {
-        float m = Mathf.Clamp01(Time.fixedDeltaTime);
-        return (aFinalSpeed - currentSpeed) * m / (1 - m);
+        ReleaseDrive();
     }
-    private float GetAcceleraton(float aFinalSpeed, float currentSpeed)
+
+    // Update is called once per frame
+    void Update()
     {
-        return GetRequiredVelocity(aFinalSpeed, currentSpeed) / Time.fixedDeltaTime;
+        RegisterDrive();
     }
 }

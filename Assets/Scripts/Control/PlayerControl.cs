@@ -9,27 +9,27 @@ public class PlayerControl : ControlBase
     {
     }
 
-    protected override Vector2 Drive()
+    protected override Actions Drive()
     {
-        Vector2 acc = new Vector2();
+        Actions actions = Actions.EmptyInstance;
         if (Input.GetKey(KeyCode.W))
         {
-            acc.y = 1;
+            actions.Move |= Move.Up;
         }
         else if (Input.GetKey(KeyCode.S))
         {
-            acc.y = -1;
+            actions.Move |= Move.Down;
         }
 
         if (Input.GetKey(KeyCode.D))
         {
-            acc.x = 1;
+            actions.Move |= Move.Rigth;
         }
-        else if(Input.GetKey(KeyCode.A))
+        else if (Input.GetKey(KeyCode.A))
         {
-            acc.x = -1;
+            actions.Move |= Move.Left;
         }
 
-        return acc;
+        return actions;
     }
 }
