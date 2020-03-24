@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEngine;
 
 public class Get : MonoBehaviour
-{
+{/*
     public static List<T> FindAssetsByType<T>() where T : UnityEngine.Object
     {
         List<T> assets = new List<T>();
@@ -19,5 +19,5 @@ public class Get : MonoBehaviour
             }
         }
         return assets;
-    }
+    }*/
 }
