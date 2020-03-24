@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class BodyBase : MonoBehaviour
+public class BodyBase : MonoBehaviour
 {
     public float TargetVelocity;
     public ControlBase ControlBase { get; set; }
