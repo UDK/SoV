@@ -18,7 +18,7 @@ public abstract class ControlBase
 
     public void ReleaseDrive()
     {
-        Vector2 requiredAcc = _currentMove.normalized * GetRequiredAcceleraton(_targetVelocity, _entityRigidBody.drag);
+        Vector2 requiredAcc = _currentMove.normalized * GetAcceleraton(_targetVelocity, _entityRigidBody.velocity.magnitude);
         _entityRigidBody.AddForce(requiredAcc * _entityRigidBody.mass, ForceMode2D.Force);
     }
 
@@ -60,5 +60,16 @@ public abstract class ControlBase
     private float GetRequiredAcceleraton(float aFinalSpeed, float aDrag)
     {
         return GetRequiredVelocityChange(aFinalSpeed, aDrag) / Time.fixedDeltaTime;
+    }
+
+
+    private float GetRequiredVelocity(float aFinalSpeed, float currentSpeed)
+    {
+        float m = Mathf.Clamp01(Time.fixedDeltaTime);
+        return (aFinalSpeed - currentSpeed) * m / (1 - m);
+    }
+    private float GetAcceleraton(float aFinalSpeed, float currentSpeed)
+    {
+        return GetRequiredVelocity(aFinalSpeed, currentSpeed) / Time.fixedDeltaTime;
     }
 }
