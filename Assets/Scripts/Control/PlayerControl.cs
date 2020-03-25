@@ -4,8 +4,8 @@ using UnityEditor;
 public class PlayerControl : ControlBase
 {
 
-    public PlayerControl(MonoBehaviour entity, float targetVelocity)
-        : base(entity, targetVelocity)
+    public PlayerControl()
+        : base()
     {
     }
 

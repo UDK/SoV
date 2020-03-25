@@ -8,9 +8,12 @@ public abstract class ControlBase : MonoBehaviour
 
     private Rigidbody2D _entityRigidBody { get; set; }
     private Actions _currentAction { get; set; } = Actions.EmptyInstance;
+    private IGravity _movementGravity;
 
-    public ControlBase(MonoBehaviour entity, float targetVelocity)
+    public ControlBase()
     {
+        _currentAction = Actions.EmptyInstance;
+        _movementGravity = new MovementPhysics();
     }
 
     public void ReleaseDrive()
@@ -51,9 +54,8 @@ public abstract class ControlBase : MonoBehaviour
             }
 
 
-
-            Vector2 requiredAcc = currentMove.normalized * PhysicHelpers.GetAcceleraton(TargetVelocity, _entityRigidBody.velocity.magnitude);
-            _entityRigidBody.AddForce(requiredAcc * _entityRigidBody.mass, ForceMode2D.Force);
+            var force = _movementGravity.PullForce(_entityRigidBody, currentMove, TargetVelocity);
+            _entityRigidBody.AddForce(force, ForceMode2D.Force);
         }
         catch
         {
@@ -64,7 +66,6 @@ public abstract class ControlBase : MonoBehaviour
     // Update is called once per frame
     void Start()
     {
-        _currentAction = Actions.EmptyInstance;
         _entityRigidBody = this.GetComponent<Rigidbody2D>();
     }
 
