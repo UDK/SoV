@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Игровой объект
+/// </summary>
 public class BodyBase : MonoBehaviour
 {
-    public float GravityForce;
-    public float Mass;
-
     // Start is called before the first frame update
     void Start()
     {

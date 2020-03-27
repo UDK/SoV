@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Assets.Scripts.Physics;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ public abstract class ControlBase : MonoBehaviour
 
     private Rigidbody2D _entityRigidBody { get; set; }
     private Actions _currentAction { get; set; } = Actions.EmptyInstance;
-    private IGravity _movementGravity;
+    private IForcePhysics _movementGravity;
 
     public ControlBase()
     {

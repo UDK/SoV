@@ -2,80 +2,38 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Gravitation : MonoBehaviour
+
+namespace Assets.Scripts.Physics
 {
-    private Rigidbody2D _rigidBody { get; set; }
-    private readonly Dictionary<GameObject, Satellite> _satellties =
-        new Dictionary<GameObject, Satellite>();
-    private IGravity _gravitation;
+    public class Gravitation : MonoBehaviour
+    {
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if(!this._satellties.ContainsKey(collision.gameObject))
-            this._satellties.Add(collision.gameObject, collision);
-    }
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        this._satellties.Remove(collision.gameObject);
-    }
+        private GravitationPhysics _gravitation = new GravitationPhysics();
 
-    private void Pull(Satellite satellite)
-    {
-        var force = _gravitation.PullForce(
-            _rigidBody,
-            satellite.Rigidbody2D.transform.position,
-            satellite.BodyBase.GravityForce);
-        satellite.Rigidbody2D.AddForce(force, ForceMode2D.Force);
-    }
+        [SerializeField]
+        private float GravityForce;
+        public float Mass { get; set; }
 
-    void Start()
-    {
-        _rigidBody = GetComponent<Rigidbody2D>();
-        _gravitation = new GravitationPhysics();
-    }
-
-    void Update()
-    {
-        if(_satellties.Count> 0)
+        void Start()
         {
-            foreach(var satellite in _satellties)
-            {
-                Pull(satellite.Value);
-            }
-        }
-    }
-    
-    private class Satellite
-    {
-        public Rigidbody2D Rigidbody2D { get; set; }
-
-        public BodyBase BodyBase { get; set; }
-
-        public Collider2D Collider2D { get; set; }
-
-        public static implicit operator Rigidbody2D(Satellite satellite)
-        {
-            return satellite.Rigidbody2D;
+            _gravitation.gravityForce = GravityForce;
         }
 
-        public static implicit operator BodyBase(Satellite satellite)
+        private void OnTriggerEnter2D(Collider2D collision)
         {
-            return satellite.BodyBase;
+            _gravitation.RegisterGameObject(collision.gameObject);
         }
 
-        public static implicit operator Collider2D(Satellite satellite)
+        private void OnTriggerExit2D(Collider2D collision)
         {
-            return satellite.Collider2D;
+            _gravitation.UnRegisterGameObject(collision.gameObject);
         }
 
-        public static implicit operator Satellite(Collider2D collider2D)
+        void FixedUpdate()
         {
-            return new Satellite
-            {
-                Rigidbody2D = collider2D.GetComponent<Rigidbody2D>(),
-                BodyBase = collider2D.gameObject.GetComponent<BodyBase>(),
-                Collider2D = collider2D,
-            };
+            _gravitation.Iterate(this.gameObject);
         }
+
+
     }
 }
