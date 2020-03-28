@@ -11,6 +11,7 @@ namespace Assets.Scripts.Physics
     {
         public Rigidbody2D Rigidbody2D { get; set; }
 
+        TypeBody TypeCelestialBody { get; set; } = TypeBody.DeTachedCelestialBody;
 
         public static implicit operator Rigidbody2D(Body satellite)
         {
@@ -24,5 +25,12 @@ namespace Assets.Scripts.Physics
                 Rigidbody2D = collider2D.GetComponent<Rigidbody2D>()
             };
         }
+    }
+
+
+    enum TypeBody
+    {
+        DeTachedCelestialBody = 0,
+        Satellite = 1
     }
 }
