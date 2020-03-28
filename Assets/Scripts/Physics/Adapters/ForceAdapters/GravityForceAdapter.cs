@@ -19,6 +19,10 @@ namespace Assets.Scripts.Physics.Adapters.ForceAdapters
         public Vector2 PullForce(Rigidbody2D who, Vector2 iv, float influence)
         {
             var distance = Vector2.Distance(who.transform.position, iv);
+            if (distance == 0)
+            {
+                return new Vector2(0, 0);
+            }
             float force = influence / Mathf.Pow(distance, 2);
             // Find the Normal direction
             Vector2 normalDirection = ((Vector2)who.transform.position - iv).normalized;

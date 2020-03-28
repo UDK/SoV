@@ -8,8 +8,7 @@ namespace Assets.Scripts.GlobalControllers.Control
 {
     public abstract class ControlBehaviourBase : MonoBehaviour
     {
-        [SerializeField]
-        private float _targetVelocity;
+        public float TargetVelocity;
 
         private Rigidbody2D _entityRigidBody { get; set; }
         private Actions _currentAction { get; set; } = Actions.EmptyInstance;
@@ -59,7 +58,7 @@ namespace Assets.Scripts.GlobalControllers.Control
                 }
 
 
-                var force = _movementForceAdapter.PullForce(_entityRigidBody, currentMove, _targetVelocity);
+                var force = _movementForceAdapter.PullForce(_entityRigidBody, currentMove, TargetVelocity);
                 _entityRigidBody.AddForce(force, ForceMode2D.Force);
             }
             catch
@@ -69,7 +68,7 @@ namespace Assets.Scripts.GlobalControllers.Control
         }
 
         // Update is called once per frame
-        void Start()
+        void Awake()
         {
             _entityRigidBody = this.GetComponent<Rigidbody2D>();
         }

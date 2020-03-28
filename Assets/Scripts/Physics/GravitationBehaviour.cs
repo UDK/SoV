@@ -9,32 +9,32 @@ namespace Assets.Scripts.Physics
     public class GravitationBehaviour : MonoBehaviour
     {
 
-        private GravitationAdapter _gravitationAdpter;
+        private GravitationAdapter _gravitationAdapter;
 
         [SerializeField]
-        private float _gravityForce;
+        private float _gravityForce = 0;
 
         [SerializeField]
         private float _mass { get; set; }
 
         void Start()
         {
-            _gravitationAdpter = new GravitationAdapter();
+            _gravitationAdapter = new GravitationAdapter();
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            _gravitationAdpter.Register(collision.gameObject);
+            _gravitationAdapter.Register(collision.gameObject);
         }
 
         private void OnTriggerExit2D(Collider2D collision)
         {
-            _gravitationAdpter.UnRegister(collision.gameObject);
+            _gravitationAdapter.UnRegister(collision.gameObject);
         }
 
         void FixedUpdate()
         {
-            _gravitationAdpter.Iterate(this.gameObject, _gravityForce);
+            _gravitationAdapter.Iterate(this.gameObject, _gravityForce);
         }
 
 

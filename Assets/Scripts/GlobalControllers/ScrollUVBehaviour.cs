@@ -4,40 +4,46 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Assets.Scripts.GlobalControllers
 {
     class ScrollUVBehaviour : MonoBehaviour
 	{
-		public float parralax = 2f;
-		private float _start_offset_x = 0f;
-		private float _start_offset_y = 0f;
+		public float Parralax = 2f;
+
+		/*private float _height = 0f;
+		private float _width = 0f;*/
 
 		void Start()
 		{
-			MeshRenderer mr = GetComponent<MeshRenderer>();
+			/*_height = mat.mainTexture.height / mat.mainTextureScale.y;
+			_width = mat.mainTexture.width / mat.mainTextureScale.x;*/
+			SetOffset(
+				transform.position.x + Random.Range(-50, 50),
+				transform.position.y + Random.Range(-50, 50));
 
-			Material mat = mr.material;
 
-			Vector2 offset = mat.mainTextureOffset;
-
-			_start_offset_x = offset.x;
-			_start_offset_y = offset.y;
 		}
 		void Update()
 		{
+			SetOffset(transform.position.x, transform.position.y);
+		}
 
+		private void SetOffset(float x, float y)
+		{
 			MeshRenderer mr = GetComponent<MeshRenderer>();
 
 			Material mat = mr.material;
 
 			Vector2 offset = mat.mainTextureOffset;
 
-			offset.x = transform.position.x / transform.localScale.x / parralax + _start_offset_x;
-			offset.y = transform.position.y / transform.localScale.y / parralax + _start_offset_y;
+			var lx = x / transform.localScale.x / Parralax;
+			var ly = y / transform.localScale.y / Parralax;
 
+			offset.x = lx;
+			offset.y = ly;
 			mat.mainTextureOffset = offset;
-
 		}
 	}
 }
