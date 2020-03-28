@@ -9,7 +9,8 @@ namespace Assets.Scripts.Physics
     public class GravitationBehaviour : MonoBehaviour
     {
 
-        private GravitationAdapter _gravitationAdapter;
+        private GravitationAdapter _gravitationAdapter =
+            new GravitationAdapter();
 
         [SerializeField]
         private float _gravityForce = 0;
@@ -19,7 +20,6 @@ namespace Assets.Scripts.Physics
 
         void Start()
         {
-            _gravitationAdapter = new GravitationAdapter();
         }
 
         private void OnTriggerEnter2D(Collider2D collision)

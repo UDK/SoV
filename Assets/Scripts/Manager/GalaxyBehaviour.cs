@@ -25,7 +25,10 @@ namespace Assets.Scripts.Manager
         public int Width;
 
         [SerializeField]
-        public int Scale;
+        public int PointsOnOnePlanet;
+
+        [SerializeField]
+        public int PlanetNoiseScale;
 
         [SerializeField]
         public TileType[] TileTypes;
@@ -44,10 +47,13 @@ namespace Assets.Scripts.Manager
         }
         public void Init()
         {
-            var tileMap = _tileGenerator.GenerateTileMap(Height, Width, Scale);
-            for (int y = 0; y < Height; y++)
+            var height = (int)(Height / PointsOnOnePlanet);
+            var width = (int)(Width / PointsOnOnePlanet);
+
+            var tileMap = _tileGenerator.GenerateTileMap(height, width, PlanetNoiseScale);
+            for (int y = 0; y < height; y++)
             {
-                for (int x = 0; x < Width; x++)
+                for (int x = 0; x < width; x++)
                 {
                     TileType tileType = tileMap[y, x];
 
@@ -56,8 +62,8 @@ namespace Assets.Scripts.Manager
                         var gameObject = Instantiate(
                             tileType,
                             new Vector3(
-                                Random.Range(x - 2, x + 2) * 5,
-                                Random.Range(y - 2, y + 2) * 5,
+                                x * width,
+                                y * height,
                                 0f),
                             Quaternion.identity,
                             transform) as GameObject;
@@ -68,10 +74,22 @@ namespace Assets.Scripts.Manager
 
         public MonoBehaviour InitPlayer()
         {
-            BodyBehaviourBase player;
-            while (!transform.GetChild(
-                Random.Range(0, transform.childCount))
-                    .TryGetComponent<BodyBehaviourBase>(out player));
+            // may be we should use else statement
+            BodyBehaviourBase player = null;
+            foreach (var tileType in TileTypes)
+            {
+                if (tileType == Tile.Planet)
+                {
+                    var body = AddBody(tileType, Random.Range(0, Width), Random.Range(0, Height));
+                    player = body.GetComponent<BodyBehaviourBase>();
+                    break;
+                }
+            }
+
+            if (player == null)
+            {
+                throw new InvalidOperationException("Tile type for player wasn't set");
+            }
 
             SetControlForGameObject<PlayerControlBehaviour>(
                 player.gameObject);
@@ -98,6 +116,18 @@ namespace Assets.Scripts.Manager
             }
         }
 
+        private GameObject AddBody(GameObject gameObject, float x, float y)
+        {
+            var body = Instantiate(
+                gameObject,
+                new Vector3(
+                    x,
+                    y,
+                    0f),
+                Quaternion.identity,
+                transform) as GameObject;
+            return body;
+        }
         private void SetControlForGameObject<TControl>(
             GameObject player)
             where TControl : ControlBehaviourBase

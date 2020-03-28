@@ -15,7 +15,7 @@ namespace Assets.Scripts.Manager.Generator
 
         public GameObject Template;
 
-        public float Height;
+        public float Probability;
 
         public static implicit operator Tile(TileType tile)
         {

@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 
 namespace Assets.Scripts.Manager.Generator
 {
+    /// <summary>
+    /// Избавиться от интерфейса
+    /// </summary>
+    /// <typeparam name="TNoiseAdapter"></typeparam>
     public class TileGenerator<TNoiseAdapter> : ITileGenerator
         where TNoiseAdapter: INoiseAdapter<TileType>, new()
     {
@@ -28,7 +32,7 @@ namespace Assets.Scripts.Manager.Generator
             foreach (TileType terrainType in _tileTypes)
             {
                 // return the first terrain type whose height is higher than the generated one
-                if (height < terrainType.Height)
+                if (height < terrainType.Probability)
                 {
                     return terrainType;
                 }

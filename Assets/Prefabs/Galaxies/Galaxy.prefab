@@ -44,17 +44,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MaxSpeed: 10
-  Height: 20
-  Width: 20
-  Scale: 2
+  Height: 512
+  Width: 512
+  PointsOnOnePlanet: 16
+  PlanetNoiseScale: 4
   TileTypes:
   - Tile: 0
     Template: {fileID: 0}
-    Height: 0.6
+    Probability: 0.6
   - Tile: 1
     Template: {fileID: 4591929703359146565, guid: e8e1044ee80f9964391be1d13a1ce69e,
       type: 3}
-    Height: 1
+    Probability: 1
   BackgroundQuads:
   - Back: {fileID: 6823495696098249772, guid: 294efa9da8a75ee4aaeace7cd3e66f8e, type: 3}
     Parallax: 5
