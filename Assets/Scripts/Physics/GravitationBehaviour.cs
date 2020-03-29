@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Assets.Scripts.Helpers;
 
 
 namespace Assets.Scripts.Physics
@@ -15,7 +16,7 @@ namespace Assets.Scripts.Physics
         private float _gravityForce;
 
         [SerializeField]
-        private float _mass { get; set; }
+        private float _mass;
 
         void Start()
         {
@@ -24,7 +25,10 @@ namespace Assets.Scripts.Physics
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            _gravitationAdpter.Register(collision.gameObject);
+            if (_mass * 0.7 >= collision.GetComponentInChildren<GravitationBehaviour>()._mass && collision.gameObject.tag != EnumTags.Core)
+            {
+                _gravitationAdpter.Register(collision.gameObject);
+            }
         }
 
         private void OnTriggerExit2D(Collider2D collision)
