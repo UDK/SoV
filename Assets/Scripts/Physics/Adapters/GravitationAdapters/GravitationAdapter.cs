@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Assets.Scripts.Physics.Adapters.ForceAdapters;
 using System.Collections;
 using Assets.Scripts.Helpers;
+using System;
 
 namespace Assets.Scripts.Physics.Adapters.GravitationAdapter
 {
@@ -34,6 +35,8 @@ namespace Assets.Scripts.Physics.Adapters.GravitationAdapter
 
         public void UnRegister(GameObject collision)
         {
+            if (!_registeredBodies.ContainsKey(collision))
+                return;
             try
             {
                 collision.tag = EnumTags.FreeSpaceBody;
@@ -43,7 +46,7 @@ namespace Assets.Scripts.Physics.Adapters.GravitationAdapter
                 }
                 _registeredBodies.Remove(collision.gameObject);
             }
-            catch
+            catch(Exception ex)
             {
                 Debug.LogError("Блядские корутины");
             }

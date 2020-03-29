@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Assets.Scripts.Helpers;
+using Random = UnityEngine.Random;
 
 
 namespace Assets.Scripts.Physics
@@ -15,9 +16,6 @@ namespace Assets.Scripts.Physics
         [SerializeField]
         private float _gravityForce = 0;
 
-        [SerializeField]
-        private float _mass;
-
         void Awake()
         {
             _gravitationAdapter = new GravitationAdapter(transform.parent.gameObject);
@@ -25,7 +23,8 @@ namespace Assets.Scripts.Physics
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (collision.CompareTag(EnumTags.FreeSpaceBody))
+            if (collision.CompareTag(EnumTags.FreeSpaceBody) &&
+                transform.parent.GetComponent<BodyBehaviourBase>().Mass > collision.GetComponent<BodyBehaviourBase>().Mass)
             {
                 _gravitationAdapter.Register(collision.gameObject);
             }
