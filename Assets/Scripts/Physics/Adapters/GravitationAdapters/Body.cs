@@ -9,8 +9,13 @@ namespace Assets.Scripts.Physics.Adapters.GravitationAdapter
 {
     public class Body
     {
+        public Coroutine CoroutineCheckIntoOrbit { get; set; }
+
         public Rigidbody2D Rigidbody2D { get; set; }
 
+        public int ChangeBecomeSatellite { get; set; }
+
+        public bool BeginCheckIntoOrbit { get; set; } = false;
 
         public static implicit operator Rigidbody2D(Body satellite)
         {
@@ -21,8 +26,12 @@ namespace Assets.Scripts.Physics.Adapters.GravitationAdapter
         {
             return new Body
             {
-                Rigidbody2D = collider2D.GetComponent<Rigidbody2D>()
+                Rigidbody2D = collider2D.GetComponent<Rigidbody2D>(),
+                ChangeBecomeSatellite = 0
+
             };
         }
     }
+
+
 }
