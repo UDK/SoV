@@ -18,7 +18,7 @@ namespace Assets.Scripts.Physics
         [SerializeField]
         private float _mass;
 
-        void Start()
+        void Awake()
         {
             _gravitationAdpter = new GravitationAdapter();
         }
@@ -33,7 +33,10 @@ namespace Assets.Scripts.Physics
 
         private void OnTriggerExit2D(Collider2D collision)
         {
-            _gravitationAdpter.UnRegister(collision.gameObject);
+            if (_mass * 0.7 >= collision.GetComponentInChildren<GravitationBehaviour>()._mass && collision.gameObject.tag != EnumTags.Core)
+            {
+                _gravitationAdpter.UnRegister(collision.gameObject, gameObject);
+            }
         }
 
         void FixedUpdate()

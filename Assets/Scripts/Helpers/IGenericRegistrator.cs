@@ -12,7 +12,7 @@ namespace Assets.Scripts.Helpers
     /// </summary>
     public interface IGenericRegistrator<in T>
     {
-        void UnRegister(T collision);
+        void UnRegister(T collision , T Parent);
 
         void Register(T gameObject);
 

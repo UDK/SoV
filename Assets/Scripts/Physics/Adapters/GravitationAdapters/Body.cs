@@ -9,9 +9,9 @@ namespace Assets.Scripts.Physics.Adapters.GravitationAdapter
 {
     public class Body
     {
-        public Rigidbody2D Rigidbody2D { get; set; }
+        public Coroutine CoroutineCheckIntoOrbit { get; set; }
 
-        public TypeBody TypeCelestialBody { get; set; }
+        public Rigidbody2D Rigidbody2D { get; set; }
 
         public int ChangeBecomeSatellite { get; set; }
 
@@ -27,18 +27,11 @@ namespace Assets.Scripts.Physics.Adapters.GravitationAdapter
             return new Body
             {
                 Rigidbody2D = collider2D.GetComponent<Rigidbody2D>(),
-                TypeCelestialBody = TypeBody.DeTachedCelestialBody,
                 ChangeBecomeSatellite = 0
 
             };
         }
     }
 
-
-    public enum TypeBody
-    {
-        DeTachedCelestialBody = 0,
-        Satellite = 1
-    }
 
 }

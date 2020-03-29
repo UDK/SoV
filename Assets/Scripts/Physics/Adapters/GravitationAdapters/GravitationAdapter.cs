@@ -11,10 +11,10 @@ namespace Assets.Scripts.Physics.Adapters.GravitationAdapter
     public class GravitationAdapter : IGravitationAdapter
     {
         private readonly IForceAdapter _forcePhysics;
-        private readonly List<Body> _registeredBodies;
+        private readonly Dictionary<GameObject, Body> _registeredBodies;
 
         //2 - очень сильно зависти от скорости, надо будет её в конце или вывести или получить эмпирическим путем
-       private readonly Vector2 _inaccuracy = new Vector2(2, 2);
+        private readonly Vector2 _inaccuracy = new Vector2(2, 2);
 
         const int _iterateCheckEntryOfOrbit = 30;
         private const double _relativeMass = 0.75;
@@ -22,17 +22,21 @@ namespace Assets.Scripts.Physics.Adapters.GravitationAdapter
         public GravitationAdapter()
         {
             _forcePhysics = new GravityForceAdapter();
-            _registeredBodies = new List<Body>();
-        }
-        
-        public void Register(GameObject gameObject)
-        {
-            this._registeredBodies.Add(gameObject);
+            _registeredBodies = new Dictionary<GameObject, Body>();
         }
 
-        public void UnRegister(GameObject collision)
+        public void Register(GameObject gameObject)
         {
-            this._registeredBodies.Remove(collision.gameObject);
+            _registeredBodies.Add(gameObject, gameObject);
+        }
+
+        public void UnRegister(GameObject collision, GameObject Parent)
+        {
+            if (!this._registeredBodies.ContainsKey(collision))
+            {
+                collision.GetComponent<MonoBehaviour>().StopCoroutine(_registeredBodies[collision].CoroutineCheckIntoOrbit);
+                _registeredBodies.Remove(collision.gameObject);
+            }
         }
 
         /// <summary>
@@ -45,24 +49,26 @@ namespace Assets.Scripts.Physics.Adapters.GravitationAdapter
             MonoBehaviour monoBehaviour = gameObject.GetComponent<MonoBehaviour>();
             foreach (var celestialBodies in _registeredBodies)
             {
-                if (!celestialBodies.BeginCheckIntoOrbit)
+                if (celestialBodies.Value.BeginCheckIntoOrbit == true)
                 {
-                    celestialBodies.BeginCheckIntoOrbit = true;
-                    monoBehaviour.StartCoroutine(CheckEntryIntoOrbit(celestialBodies, rigidbodyOfGameObject));
+                    Pull(celestialBodies.Value, rigidbodyOfGameObject, gravityForce);
+                    continue;
                 }
-                if (celestialBodies.TypeCelestialBody == TypeBody.Satellite)
+                else if (celestialBodies.Value.Rigidbody2D.tag == EnumTags.Satellite)
                 {
-                    MovingCircle(celestialBodies.Rigidbody2D, rigidbodyOfGameObject);
+                    MovingCircle(celestialBodies.Value.Rigidbody2D, rigidbodyOfGameObject);
                 }
-                else if(celestialBodies.Rigidbody2D.tag != EnumTags.Satellite)
+                else
                 {
-                    Pull(celestialBodies, rigidbodyOfGameObject, gravityForce);
+                    celestialBodies.Value.BeginCheckIntoOrbit = true;
+                    celestialBodies.Value.CoroutineCheckIntoOrbit = monoBehaviour.StartCoroutine(CheckEntryIntoOrbit(celestialBodies.Value, rigidbodyOfGameObject));
+                    Pull(celestialBodies.Value, rigidbodyOfGameObject, gravityForce);
                 }
             }
         }
 
-        
-        private void MovingCircle(Rigidbody2D gameObject, Rigidbody2D relatively )
+
+        private void MovingCircle(Rigidbody2D gameObject, Rigidbody2D relatively)
         {
             gameObject.velocity = relatively.velocity;
             gameObject.transform.RotateAround(relatively.transform.localPosition, Vector3.back, Time.deltaTime * 10);
@@ -92,7 +98,6 @@ namespace Assets.Scripts.Physics.Adapters.GravitationAdapter
             }
             if (_iterateCheckEntryOfOrbit * _relativeMass <= trueIterateCheckEntry)
             {
-                gameObject.TypeCelestialBody = TypeBody.Satellite;
                 gameObject.Rigidbody2D.gameObject.tag = EnumTags.Satellite;
                 gameObject.Rigidbody2D.transform.SetParent(rigidBody.transform);
             }
