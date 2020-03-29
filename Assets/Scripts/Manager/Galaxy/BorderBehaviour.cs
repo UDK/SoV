@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Physics.Adapters.ForceAdapters;
+﻿using Assets.Scripts.Helpers;
+using Assets.Scripts.Physics.Adapters.ForceAdapters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +27,7 @@ namespace Assets.Scripts.Manager.Galaxy
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if(collision.transform.parent != null &&
+            if(collision.tag == EnumTags.FreeSpaceBody &&
                 !_registeredGameObjects.ContainsKey(collision))
             {
                 _registeredGameObjects.Add(
@@ -37,7 +38,7 @@ namespace Assets.Scripts.Manager.Galaxy
 
         private void OnTriggerExit2D(Collider2D collision)
         {
-            if (collision.transform.parent != null)
+            if (collision.tag == EnumTags.FreeSpaceBody)
             {
                 var rigidBody = collision.GetComponent<Rigidbody2D>();
 

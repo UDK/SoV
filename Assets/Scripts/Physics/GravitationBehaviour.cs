@@ -27,7 +27,7 @@ namespace Assets.Scripts.Physics
         {
             if (EnumTags.FreeSpaceBody == collision.tag)
             {
-                _gravitationAdpter.Register(collision.gameObject);
+                _gravitationAdapter.Register(collision.gameObject);
             }
         }
 
@@ -35,7 +35,7 @@ namespace Assets.Scripts.Physics
         {
             if (EnumTags.FreeSpaceBody == collision.tag)
             {
-                _gravitationAdpter.UnRegister(collision.gameObject);
+                _gravitationAdapter.UnRegister(collision.gameObject);
             }
         }
 
