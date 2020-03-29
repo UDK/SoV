@@ -10,6 +10,6 @@ namespace Assets.Scripts.Physics.Adapters.GravitationAdapter
 {
     public interface IGravitationAdapter : IGenericRegistrator<GameObject>
     {
-        void Iterate(GameObject gameObject, float gravityForce);
+        void Iterate(float gravityForce);
     }
 }

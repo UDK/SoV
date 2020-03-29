@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 6217019570567497345}
   - component: {fileID: 5334711649401466039}
   - component: {fileID: 7300284930650498961}
-  - component: {fileID: 5555070641343733137}
   - component: {fileID: 7798322930524578970}
   m_Layer: 0
   m_Name: PlanetTemplate
@@ -121,22 +120,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!58 &5555070641343733137
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7262656473733311864}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 4
 --- !u!114 &7798322930524578970
 MonoBehaviour:
   m_ObjectHideFlags: 0

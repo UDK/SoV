@@ -10,8 +10,7 @@ namespace Assets.Scripts.Physics
     public class GravitationBehaviour : MonoBehaviour
     {
 
-        private GravitationAdapter _gravitationAdapter =
-            new GravitationAdapter();
+        private GravitationAdapter _gravitationAdapter;
 
         [SerializeField]
         private float _gravityForce = 0;
@@ -21,11 +20,12 @@ namespace Assets.Scripts.Physics
 
         void Awake()
         {
+            _gravitationAdapter = new GravitationAdapter(transform.parent.gameObject);
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (EnumTags.FreeSpaceBody == collision.tag)
+            if (collision.CompareTag(EnumTags.FreeSpaceBody))
             {
                 _gravitationAdapter.Register(collision.gameObject);
             }
@@ -33,7 +33,7 @@ namespace Assets.Scripts.Physics
 
         private void OnTriggerExit2D(Collider2D collision)
         {
-            if (EnumTags.FreeSpaceBody == collision.tag)
+            if (collision.CompareTag(EnumTags.FreeSpaceBody))
             {
                 _gravitationAdapter.UnRegister(collision.gameObject);
             }
@@ -41,7 +41,7 @@ namespace Assets.Scripts.Physics
 
         void FixedUpdate()
         {
-            _gravitationAdapter.Iterate(this.gameObject, _gravityForce);
+            _gravitationAdapter.Iterate(_gravityForce);
         }
 
 

@@ -12,6 +12,7 @@ namespace Assets.Scripts.Physics.Adapters.GravitationAdapter
     {
         private readonly IForceAdapter _forcePhysics;
         private readonly Dictionary<GameObject, Body> _registeredBodies;
+        private readonly Body _parent;
 
         //2 - очень сильно зависти от скорости, надо будет её в конце или вывести или получить эмпирическим путем
         private readonly Vector2 _inaccuracy = new Vector2(2, 2);
@@ -19,10 +20,11 @@ namespace Assets.Scripts.Physics.Adapters.GravitationAdapter
         const int _iterateCheckEntryOfOrbit = 30;
         private const double _relativeMass = 0.75;
 
-        public GravitationAdapter()
+        public GravitationAdapter(GameObject parent)
         {
             _forcePhysics = new GravityForceAdapter();
             _registeredBodies = new Dictionary<GameObject, Body>();
+            _parent = parent;
         }
 
         public void Register(GameObject gameObject)
@@ -32,22 +34,28 @@ namespace Assets.Scripts.Physics.Adapters.GravitationAdapter
 
         public void UnRegister(GameObject collision)
         {
-            if (!this._registeredBodies.ContainsKey(collision))
+            try
             {
                 collision.tag = EnumTags.FreeSpaceBody;
-                collision.GetComponent<MonoBehaviour>().StopCoroutine(_registeredBodies[collision].CoroutineCheckIntoOrbit);
+                if(_registeredBodies[collision].CoroutineCheckIntoOrbit != null)
+                {
+                    _parent.MonoBehaviour.StopCoroutine(_registeredBodies[collision].CoroutineCheckIntoOrbit);
+                }
                 _registeredBodies.Remove(collision.gameObject);
+            }
+            catch
+            {
+                Debug.LogError("Блядские корутины");
             }
         }
 
         /// <summary>
         /// Uses pointed gravity force
         /// </summary>
-        /// <param name="gameObject"></param>
-        public void Iterate(GameObject gameObject, float gravityForce)
+        /// <param name="gravityForce"></param>
+        public void Iterate(float gravityForce)
         {
-            Rigidbody2D rigidbodyOfGameObject = gameObject.GetComponentInParent<Rigidbody2D>();
-            MonoBehaviour monoBehaviour = gameObject.GetComponent<MonoBehaviour>();
+            Rigidbody2D rigidbodyOfGameObject = _parent.Rigidbody2D;
             foreach (var celestialBodies in _registeredBodies)
             {
                 if (celestialBodies.Value.BeginCheckIntoOrbit == true)
@@ -62,7 +70,7 @@ namespace Assets.Scripts.Physics.Adapters.GravitationAdapter
                 else
                 {
                     celestialBodies.Value.BeginCheckIntoOrbit = true;
-                    celestialBodies.Value.CoroutineCheckIntoOrbit = monoBehaviour.StartCoroutine(CheckEntryIntoOrbit(celestialBodies.Value, rigidbodyOfGameObject));
+                    celestialBodies.Value.CoroutineCheckIntoOrbit = _parent.MonoBehaviour.StartCoroutine(CheckEntryIntoOrbit(celestialBodies.Value, rigidbodyOfGameObject));
                     Pull(celestialBodies.Value, rigidbodyOfGameObject, gravityForce);
                 }
             }

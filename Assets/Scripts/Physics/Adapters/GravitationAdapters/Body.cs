@@ -13,6 +13,8 @@ namespace Assets.Scripts.Physics.Adapters.GravitationAdapter
 
         public Rigidbody2D Rigidbody2D { get; set; }
 
+        public MonoBehaviour MonoBehaviour { get; set; }
+
         public int ChangeBecomeSatellite { get; set; }
 
         public bool BeginCheckIntoOrbit { get; set; } = false;
@@ -27,6 +29,7 @@ namespace Assets.Scripts.Physics.Adapters.GravitationAdapter
             return new Body
             {
                 Rigidbody2D = collider2D.GetComponent<Rigidbody2D>(),
+                MonoBehaviour = collider2D.GetComponent<MonoBehaviour>(),
                 ChangeBecomeSatellite = 0
 
             };
