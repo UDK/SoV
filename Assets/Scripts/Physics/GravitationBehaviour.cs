@@ -25,7 +25,7 @@ namespace Assets.Scripts.Physics
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (_mass * 0.7 >= collision.GetComponentInChildren<GravitationBehaviour>()._mass && collision.gameObject.tag != EnumTags.Core)
+            if (EnumTags.FreeSpaceBody == collision.tag)
             {
                 _gravitationAdpter.Register(collision.gameObject);
             }
@@ -33,9 +33,9 @@ namespace Assets.Scripts.Physics
 
         private void OnTriggerExit2D(Collider2D collision)
         {
-            if (_mass * 0.7 >= collision.GetComponentInChildren<GravitationBehaviour>()._mass && collision.gameObject.tag != EnumTags.Core)
+            if (EnumTags.FreeSpaceBody == collision.tag)
             {
-                _gravitationAdpter.UnRegister(collision.gameObject, gameObject);
+                _gravitationAdpter.UnRegister(collision.gameObject);
             }
         }
 

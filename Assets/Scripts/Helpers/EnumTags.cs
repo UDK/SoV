@@ -13,5 +13,6 @@ namespace Assets.Scripts.Helpers
     {
         static public string Satellite = "Satellite";
         static public string Core = "Core Gravity";
+        static public string FreeSpaceBody = "Space body";
     }
 }

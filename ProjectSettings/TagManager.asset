@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Core Gravity
   - Satellite
+  - Space body
   layers:
   - Default
   - TransparentFX

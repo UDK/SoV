@@ -30,10 +30,11 @@ namespace Assets.Scripts.Physics.Adapters.GravitationAdapter
             _registeredBodies.Add(gameObject, gameObject);
         }
 
-        public void UnRegister(GameObject collision, GameObject Parent)
+        public void UnRegister(GameObject collision)
         {
             if (!this._registeredBodies.ContainsKey(collision))
             {
+                collision.tag = EnumTags.FreeSpaceBody;
                 collision.GetComponent<MonoBehaviour>().StopCoroutine(_registeredBodies[collision].CoroutineCheckIntoOrbit);
                 _registeredBodies.Remove(collision.gameObject);
             }
