@@ -43,9 +43,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd12bf17acf820b4ab9faa9b55d99a45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxSpeed: 40
-  Height: 512
-  Width: 512
+  MaxSpeed: 20
+  Height: 1024
+  Width: 1024
   PointsOnOnePlanet: 16
   PlanetNoiseScale: 4
   TileTypes:

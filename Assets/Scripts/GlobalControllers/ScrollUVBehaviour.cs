@@ -20,8 +20,8 @@ namespace Assets.Scripts.GlobalControllers
 			/*_height = mat.mainTexture.height / mat.mainTextureScale.y;
 			_width = mat.mainTexture.width / mat.mainTextureScale.x;*/
 			SetOffset(
-				transform.position.x + Random.Range(-50, 50),
-				transform.position.y + Random.Range(-50, 50));
+				transform.position.x + Random.Range(-50f, 50f),
+				transform.position.y + Random.Range(-50f, 50f));
 
 
 		}

@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.GlobalControllers;
+using Assets.Scripts.Manager.Galaxy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace Assets.Scripts.Manager
     class GameManagerBehaviour : MonoBehaviour
     {
         [SerializeField]
-        public GalaxyBehaviour[] GalaxyBehaviours;
+        public GalaxyBehaviour[] GalaxyBehaviours = null;
 
         private GameManagerBehaviour()
         {
@@ -35,6 +36,7 @@ namespace Assets.Scripts.Manager
             var camera = gameObject.AddComponent<CameraBehaviour>();
             camera.Player = player;
             galaxy.InitBackground(camera);
+            galaxy.InitBorders();
         }
 
         //Update is called every frame.
