@@ -23,7 +23,7 @@ namespace Assets.Scripts.Physics.Adapters.ForceAdapters
         /// <returns>Force for moving by sob</returns>
         public Vector2 PullForce(Rigidbody2D who, Vector2 iv, float influence)
         {
-            if(iv.x == 0 && iv.y == 0)
+            if (iv.x == 0 && iv.y == 0)
             {
                 return Vector2.zero;
             }
@@ -35,32 +35,39 @@ namespace Assets.Scripts.Physics.Adapters.ForceAdapters
             var absX = Mathf.Abs(who.velocity.x);
             var absY = Mathf.Abs(who.velocity.y);
             var sub = influence - currentSpeed;
-            if (sub < influence * 0.05)
+            float minSpeed = influence * 0.05f;
+            if (sub < minSpeed)
             {
                 currentSpeed = 0;
                 iv.x = -Mathf.Sign(who.velocity.x);
                 iv.y = -Mathf.Sign(who.velocity.y);
             }
-            else if (oneSideY && oneSideX && (absX != absY))
+            else if (sub < 2 * minSpeed)
             {
-                if(absX > absY)
+                if (oneSideY && oneSideX && (absX != absY))
                 {
-                    iv.x = -Mathf.Sign(who.velocity.x);
+                    if (absX > absY)
+                    {
+                        iv.x = -Mathf.Sign(who.velocity.x) * influence * 100;
+                    }
+                    else
+                    {
+                        iv.y = -Mathf.Sign(who.velocity.y) * influence * 100;
+                    }
+                    currentSpeed = 0;
                 }
-                else
+                else if (oneSideX && (int)absY != 0)
                 {
-                    iv.y = -Mathf.Sign(who.velocity.y);
+                    iv.y = -Mathf.Sign(who.velocity.y) * influence * 100;
+                    iv.x *= influence;
+                    currentSpeed = 0;
                 }
-            }
-            else if (oneSideX && absY != 0)
-            {
-                iv.y = -Mathf.Sign(who.velocity.y) * influence;
-                iv.x *= influence;
-            }
-            else if (oneSideY && absX != 0)
-            {
-                iv.x = -Mathf.Sign(who.velocity.x) * influence;
-                iv.y *= influence;
+                else if (oneSideY && (int)absX != 0)
+                {
+                    iv.x = -Mathf.Sign(who.velocity.x) * influence * 100;
+                    iv.y *= influence;
+                    currentSpeed = 0;
+                }
             }
 
 
