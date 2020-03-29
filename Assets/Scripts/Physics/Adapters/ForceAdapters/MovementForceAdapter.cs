@@ -27,6 +27,8 @@ namespace Assets.Scripts.Physics.Adapters.ForceAdapters
             {
                 return Vector2.zero;
             }
+            float minSpeed = influence;
+            influence *= 2;
 
             var currentSpeed = who.velocity.magnitude;
 
@@ -35,44 +37,37 @@ namespace Assets.Scripts.Physics.Adapters.ForceAdapters
             var absX = Mathf.Abs(who.velocity.x);
             var absY = Mathf.Abs(who.velocity.y);
             var sub = influence - currentSpeed;
-            float minSpeed = influence * 0.05f;
             if (sub < minSpeed)
             {
-                currentSpeed = 0;
-                iv.x = -Mathf.Sign(who.velocity.x);
-                iv.y = -Mathf.Sign(who.velocity.y);
-            }
-            else if (sub < 2 * minSpeed)
-            {
-                if (oneSideY && oneSideX && (absX != absY))
+                currentSpeed = minSpeed;
+                if(oneSideX && oneSideY)
                 {
                     if (absX > absY)
                     {
-                        iv.x = -Mathf.Sign(who.velocity.x) * influence * 100;
+                        iv.x *= -1;
                     }
                     else
                     {
-                        iv.y = -Mathf.Sign(who.velocity.y) * influence * 100;
+                        iv.y *= -1;
                     }
-                    currentSpeed = 0;
                 }
-                else if (oneSideX && (int)absY != 0)
+                else
                 {
-                    iv.y = -Mathf.Sign(who.velocity.y) * influence * 100;
-                    iv.x *= influence;
-                    currentSpeed = 0;
-                }
-                else if (oneSideY && (int)absX != 0)
-                {
-                    iv.x = -Mathf.Sign(who.velocity.x) * influence * 100;
-                    iv.y *= influence;
-                    currentSpeed = 0;
+                    if (oneSideX)
+                    {
+                        iv.x = 0;
+                        iv.y = -Mathf.Sign(who.velocity.y);
+                    }
+                    if (oneSideY)
+                    {
+                        iv.y = 0;
+                        iv.x = -Mathf.Sign(who.velocity.x);
+                    }
                 }
             }
 
-
             var acceleration = GetRequiredVelocity(influence, currentSpeed) / Time.fixedDeltaTime;
-            return iv.normalized * who.mass * acceleration;
+            return iv * who.mass * acceleration;
         }
     }
 }

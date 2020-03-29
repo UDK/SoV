@@ -18,7 +18,6 @@ namespace Assets.Scripts.Physics.Adapters.GravitationAdapter
 
         public void Register(GameObject gameObject)
         {
-
             if (!this._registeredBodies.ContainsKey(gameObject.gameObject))
                 this._registeredBodies.Add(gameObject.gameObject, gameObject);
         }
