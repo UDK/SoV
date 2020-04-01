@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using Assets.Scripts.Physics.Adapters.ForceAdapters;
 using System.Collections;
 using Assets.Scripts.Helpers;
+using System;
+using Random = UnityEngine.Random;
 
 namespace Assets.Scripts.Physics.Adapters.GravitationAdapter
 {
@@ -12,6 +14,7 @@ namespace Assets.Scripts.Physics.Adapters.GravitationAdapter
     {
         private readonly IForceAdapter _forcePhysics;
         private readonly Dictionary<GameObject, Body> _registeredBodies;
+        private readonly Body _parent;
 
         //2 - очень сильно зависти от скорости, надо будет её в конце или вывести или получить эмпирическим путем
         private readonly Vector2 _inaccuracy = new Vector2(2, 2);
@@ -19,10 +22,11 @@ namespace Assets.Scripts.Physics.Adapters.GravitationAdapter
         const int _iterateCheckEntryOfOrbit = 30;
         private const double _relativeMass = 0.75;
 
-        public GravitationAdapter()
+        public GravitationAdapter(GameObject parent)
         {
             _forcePhysics = new GravityForceAdapter();
             _registeredBodies = new Dictionary<GameObject, Body>();
+            _parent = parent;
         }
 
         public void Register(GameObject gameObject)
@@ -30,68 +34,62 @@ namespace Assets.Scripts.Physics.Adapters.GravitationAdapter
             _registeredBodies.Add(gameObject, gameObject);
         }
 
-        public void UnRegister(GameObject collision)
+        public void Unregister(GameObject gameObject)
         {
-            if (!this._registeredBodies.ContainsKey(collision))
+            if (!_registeredBodies.ContainsKey(gameObject))
+                return;
+            try
             {
-                collision.tag = EnumTags.FreeSpaceBody;
-                collision.GetComponent<MonoBehaviour>().StopCoroutine(_registeredBodies[collision].CoroutineCheckIntoOrbit);
-                _registeredBodies.Remove(collision.gameObject);
+                gameObject.tag = EnumTags.FreeSpaceBody;
+                if (_registeredBodies[gameObject].CoroutineCheckIntoOrbit != null)
+                {
+                    _parent.RawMonoBehaviour.StopCoroutine(_registeredBodies[gameObject].CoroutineCheckIntoOrbit);
+                }
+                _registeredBodies.Remove(gameObject.gameObject);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError("Блядские корутины");
             }
         }
 
         /// <summary>
         /// Uses pointed gravity force
         /// </summary>
-        /// <param name="gameObject"></param>
-        public void Iterate(GameObject gameObject, float gravityForce)
+        /// <param name="gravityForce"></param>
+        public void Iterate(float gravityForce)
         {
-            Rigidbody2D rigidbodyOfGameObject = gameObject.GetComponentInParent<Rigidbody2D>();
-            MonoBehaviour monoBehaviour = gameObject.GetComponent<MonoBehaviour>();
-            foreach (var celestialBodies in _registeredBodies)
+            foreach (var celestialBody in _registeredBodies)
             {
-                if (celestialBodies.Value.BeginCheckIntoOrbit == true)
+                if (celestialBody.Value.BeginCheckIntoOrbit)
                 {
-                    Pull(celestialBodies.Value, rigidbodyOfGameObject, gravityForce);
+                    Pull(celestialBody.Value, _parent, gravityForce);
                     continue;
                 }
-                else if (celestialBodies.Value.Rigidbody2D.tag == EnumTags.Satellite)
+                else if (celestialBody.Value.Rigidbody2D.tag != EnumTags.Satellite)
                 {
-                    MovingCircle(celestialBodies.Value.Rigidbody2D, rigidbodyOfGameObject);
-                }
-                else
-                {
-                    celestialBodies.Value.BeginCheckIntoOrbit = true;
-                    celestialBodies.Value.CoroutineCheckIntoOrbit = monoBehaviour.StartCoroutine(CheckEntryIntoOrbit(celestialBodies.Value, rigidbodyOfGameObject));
-                    Pull(celestialBodies.Value, rigidbodyOfGameObject, gravityForce);
+                    celestialBody.Value.BeginCheckIntoOrbit = true;
+                    celestialBody.Value.CoroutineCheckIntoOrbit =
+                        _parent.RawMonoBehaviour.StartCoroutine(CheckEntryIntoOrbit(celestialBody.Value, _parent));
+                    Pull(celestialBody.Value, _parent, gravityForce);
                 }
             }
-        }
-
-
-        private void MovingCircle(Rigidbody2D gameObject, Rigidbody2D relatively)
-        {
-            gameObject.velocity = relatively.velocity;
-            gameObject.transform.RotateAround(relatively.transform.localPosition, Vector3.back, Time.deltaTime * 10);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="gameObject">Объект который вошел в зону влияния(притяжения)</param>
-        /// <param name="rigidBody"></param>
+        /// <param name="possibleSatellite">Объект который вошел в зону влияния(притяжения)</param>
+        /// <param name="parentalObject"></param>
         /// <returns></returns>
-        private IEnumerator CheckEntryIntoOrbit(Body gameObject, Rigidbody2D rigidBody)
+        private IEnumerator CheckEntryIntoOrbit(Body possibleSatellite, Body parentalObject)
         {
-            //Second cosmo-speed
-            //2*(G*M)/R
-
-
-            Vector2 speed = gameObject.Rigidbody2D.velocity;
+            Vector2 speed = possibleSatellite.Rigidbody2D.velocity;
             int trueIterateCheckEntry = 0;
             for (int iterate = 0; iterate < _iterateCheckEntryOfOrbit; iterate++)
             {
-                if (Mathf.Abs((rigidBody.velocity - speed).x) < _inaccuracy.x && Mathf.Abs((rigidBody.velocity - speed).y) < _inaccuracy.y)
+                if (Mathf.Abs((parentalObject.Rigidbody2D.velocity - speed).x) < _inaccuracy.x &&
+                    Mathf.Abs((parentalObject.Rigidbody2D.velocity - speed).y) < _inaccuracy.y)
                 {
                     trueIterateCheckEntry++;
                 }
@@ -99,10 +97,29 @@ namespace Assets.Scripts.Physics.Adapters.GravitationAdapter
             }
             if (_iterateCheckEntryOfOrbit * _relativeMass <= trueIterateCheckEntry)
             {
-                gameObject.Rigidbody2D.gameObject.tag = EnumTags.Satellite;
-                gameObject.Rigidbody2D.transform.SetParent(rigidBody.transform);
+                var parentalBody = parentalObject.RawMonoBehaviour.GetComponent<BodyBehaviourBase>();
+                var satelliteOrbiting = possibleSatellite.RawMonoBehaviour.GetComponent<OrbitingBehaviour>();
+
+                // if it was someone's satellite
+                satelliteOrbiting.StopCallback?.Invoke();
+                satelliteOrbiting.Stop();
+
+                // we should register this satellite inside of bodyBehaviourForgamePlay
+                // _registeredBodies.Remove(possibleSatellite.RawMonoBehaviour.gameObject);
+                parentalBody.Satellites++;
+                satelliteOrbiting.StopCallback = () =>
+                {
+                    // instead of this one we should unregister planet in bodyBehaviour
+                    Unregister(possibleSatellite.RawMonoBehaviour.gameObject);
+                };
+                satelliteOrbiting.OrbitDegreesPerSec = 60f / parentalBody.Satellites;
+                satelliteOrbiting.OrbitDistance =
+                    parentalBody.Satellites * 3f;
+                satelliteOrbiting.Target =
+                    parentalObject.RawMonoBehaviour.transform;
+                satelliteOrbiting.Begin();
             }
-            gameObject.BeginCheckIntoOrbit = false;
+            possibleSatellite.BeginCheckIntoOrbit = false;
 
         }
         private void Pull(Body satellite, Rigidbody2D rigidBody, float gravityForce)

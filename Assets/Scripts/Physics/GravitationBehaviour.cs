@@ -3,45 +3,43 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Assets.Scripts.Helpers;
+using Random = UnityEngine.Random;
 
 
 namespace Assets.Scripts.Physics
 {
     public class GravitationBehaviour : MonoBehaviour
     {
-
-        private GravitationAdapter _gravitationAdpter;
-
-        [SerializeField]
-        private float _gravityForce;
+        private GravitationAdapter _gravitationAdapter;
 
         [SerializeField]
-        private float _mass;
+        private float _gravityForce = 0;
 
         void Awake()
         {
-            _gravitationAdpter = new GravitationAdapter();
+            _gravitationAdapter = new GravitationAdapter(transform.parent.gameObject);
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (EnumTags.FreeSpaceBody == collision.tag)
+            if (collision.CompareTag(EnumTags.FreeSpaceBody) &&
+                transform.parent.GetComponent<BodyBehaviourBase>().Mass > collision.GetComponent<BodyBehaviourBase>().Mass)
             {
-                _gravitationAdpter.Register(collision.gameObject);
+                _gravitationAdapter.Register(collision.gameObject);
             }
         }
 
         private void OnTriggerExit2D(Collider2D collision)
         {
-            if (EnumTags.FreeSpaceBody == collision.tag)
+            if (collision.CompareTag(EnumTags.FreeSpaceBody))
             {
-                _gravitationAdpter.UnRegister(collision.gameObject);
+                _gravitationAdapter.Unregister(collision.gameObject);
             }
         }
 
         void FixedUpdate()
         {
-            _gravitationAdpter.Iterate(this.gameObject, _gravityForce);
+            _gravitationAdapter.Iterate(_gravityForce);
         }
 
 

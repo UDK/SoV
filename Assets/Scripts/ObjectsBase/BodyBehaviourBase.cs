@@ -1,12 +1,23 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 /// <summary>
 /// Игровой объект
 /// </summary>
 public class BodyBehaviourBase : MonoBehaviour
 {
+    [SerializeField]
+    public float Mass;
+
+    public int Satellites;
+
+    private void Awake()
+    {
+        Mass = Random.Range(1f, 500f);
+    }
+
     // Start is called before the first frame update
     void Start()
     {
