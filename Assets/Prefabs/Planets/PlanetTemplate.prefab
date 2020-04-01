@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 5334711649401466039}
   - component: {fileID: 7300284930650498961}
   - component: {fileID: 7798322930524578970}
+  - component: {fileID: 6366539741882390930}
   m_Layer: 0
   m_Name: PlanetTemplate
   m_TagString: Space body
@@ -132,6 +133,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2552b7bedd4c81f4fad848e4d13c1aea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Mass: 0
+  Satellites: 0
+--- !u!114 &6366539741882390930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7262656473733311864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed73b2eae1049dd4580a75c3e8d7b744, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Target: {fileID: 0}
+  OrbitDistance: 3
+  OrbitDegreesPerSec: 30
 --- !u!1001 &6150685166652044827
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -147,17 +165,17 @@ PrefabInstance:
     - target: {fileID: 9023501368151451179, guid: 601d7fa4662711840bf29f33ba2237c6,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9023501368151451179, guid: 601d7fa4662711840bf29f33ba2237c6,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9023501368151451179, guid: 601d7fa4662711840bf29f33ba2237c6,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -21.276608
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9023501368151451179, guid: 601d7fa4662711840bf29f33ba2237c6,
         type: 3}

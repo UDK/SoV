@@ -11,6 +11,8 @@ public class BodyBehaviourBase : MonoBehaviour
     [SerializeField]
     public float Mass;
 
+    public int Satellites;
+
     private void Awake()
     {
         Mass = Random.Range(1f, 500f);

@@ -69,7 +69,7 @@ namespace Assets.Scripts.Manager.Galaxy
                             Quaternion.identity,
                             transform) as GameObject;
                         gameObject.GetComponent<Rigidbody2D>().velocity = 
-                                new Vector2(Random.Range(-1, 1), Random.Range(-1, 1)) * Random.Range(5f, 10f);
+                                new Vector2(Random.Range(-1, 1), Random.Range(-1, 1)) * Random.Range(1f, 5f);
                     }
                 }
             }

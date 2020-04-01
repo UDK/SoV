@@ -46,7 +46,7 @@ namespace Assets.Scripts.Manager.Galaxy
                 var oneSideY = PushDirection.y != 0 && Mathf.Sign(PushDirection.y) == Mathf.Sign(rigidBody.velocity.y);
                 if(!oneSideX || !oneSideY)
                 {
-                    rigidBody.velocity = PushDirection * 10f;
+                    rigidBody.velocity = PushDirection * 2f;
                 }
                 _registeredGameObjects.Remove(collision);
             }
@@ -56,7 +56,7 @@ namespace Assets.Scripts.Manager.Galaxy
         {
             foreach(var pair in _registeredGameObjects)
             {
-                var force = _movementForceAdapter.PullForce(pair.Value, PushDirection, 10f);
+                var force = _movementForceAdapter.PullForce(pair.Value, PushDirection, 5f);
                 pair.Value.AddForce(force, ForceMode2D.Force);
             }
         }

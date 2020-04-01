@@ -10,7 +10,6 @@ namespace Assets.Scripts.Physics
 {
     public class GravitationBehaviour : MonoBehaviour
     {
-
         private GravitationAdapter _gravitationAdapter;
 
         [SerializeField]
@@ -34,7 +33,7 @@ namespace Assets.Scripts.Physics
         {
             if (collision.CompareTag(EnumTags.FreeSpaceBody))
             {
-                _gravitationAdapter.UnRegister(collision.gameObject);
+                _gravitationAdapter.Unregister(collision.gameObject);
             }
         }
 
