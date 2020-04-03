@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Unity.Entities;
-using Unity.Jobs;
 
-namespace Assets.DOTSScripts.GlobalControllers
+namespace Assets.DOTSScripts.GlobalControllers.Camera
 {
     [GenerateAuthoringComponent]
-    public struct PlayerData : IComponentData
+    public struct PlayerComponent : IComponentData
     {
     }
 }

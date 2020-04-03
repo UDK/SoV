@@ -10,6 +10,5 @@ namespace Assets.DOTSScripts.GlobalControllers.Camera
     [GenerateAuthoringComponent]
     public struct CameraComponent : IComponentData
     {
-        public Entity Player;
     }
 }
