@@ -4,6 +4,7 @@ using Assets.Scripts.Manager.Background;
 using Assets.Scripts.Manager.Galaxy;
 using Assets.Scripts.Manager.Generator;
 using Assets.Scripts.Maths.Adapters;
+using Assets.Scripts.Physics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -68,8 +69,8 @@ namespace Assets.Scripts.Manager.Galaxy
                                 0f),
                             Quaternion.identity,
                             transform) as GameObject;
-                        gameObject.GetComponent<Rigidbody2D>().velocity = 
-                                new Vector2(Random.Range(-1, 1), Random.Range(-1, 1)) * Random.Range(1f, 5f);
+                        gameObject.GetComponent<MovementBehaviour>().SetVelocity(
+                            new Vector3(Random.Range(-1, 1), Random.Range(-1, 1)) * Random.Range(0.2f, 0.8f));
                     }
                 }
             }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Assets.Scripts.Helpers;
 using Random = UnityEngine.Random;
-
+using System.Threading.Tasks;
 
 namespace Assets.Scripts.Physics
 {
@@ -18,6 +18,15 @@ namespace Assets.Scripts.Physics
         void Awake()
         {
             _gravitationAdapter = new GravitationAdapter(transform.parent.gameObject);
+            //StartCoroutine(Iterate());
+        }
+
+        private IEnumerator Iterate()
+        {
+            while (true)
+            {
+                yield return new WaitForSeconds(0.5f);
+            }
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
@@ -39,9 +48,7 @@ namespace Assets.Scripts.Physics
 
         void FixedUpdate()
         {
-            _gravitationAdapter.IterateFactoryMethod(_gravityForce);
+            _gravitationAdapter?.IterateFactoryMethod(_gravityForce);
         }
-
-
     }
 }

@@ -2,15 +2,16 @@
 using Assets.Scripts.Physics.Adapters.ForceAdapters;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace Assets.Scripts.GlobalControllers.Control
 {
     public abstract class ControlBehaviourBase : MonoBehaviour
     {
-        public float TargetVelocity;
+        public float TargetVelocity = 0f;
 
-        private Rigidbody2D _entityRigidBody { get; set; }
+        private MovementBehaviour _movement { get; set; }
         private Actions _currentAction { get; set; } = Actions.EmptyInstance;
         private IForce _movementForceAdapter;
 
@@ -39,27 +40,25 @@ namespace Assets.Scripts.GlobalControllers.Control
         {
             try
             {
-                Vector2 currentMove = Vector2.zero;
+                Vector2 direction = Vector2.zero;
                 if ((_currentAction.Move & Move.Up) != 0)
                 {
-                    currentMove.y = 1;
+                    direction.y = 1;
                 }
                 if ((_currentAction.Move & Move.Down) != 0)
                 {
-                    currentMove.y = -1;
+                    direction.y = -1;
                 }
                 if ((_currentAction.Move & Move.Rigth) != 0)
                 {
-                    currentMove.x = 1;
+                    direction.x = 1;
                 }
                 if ((_currentAction.Move & Move.Left) != 0)
                 {
-                    currentMove.x = -1;
+                    direction.x = -1;
                 }
 
-
-                var force = _movementForceAdapter.PullForceFabricMethod(_entityRigidBody, currentMove, TargetVelocity);
-                _entityRigidBody.AddForce(force, ForceMode2D.Force);
+                _movement.MoveInDirection(direction);
             }
             catch
             {
@@ -70,7 +69,7 @@ namespace Assets.Scripts.GlobalControllers.Control
         // Update is called once per frame
         void Awake()
         {
-            _entityRigidBody = this.GetComponent<Rigidbody2D>();
+            _movement = this.GetComponent<MovementBehaviour>();
         }
 
         // Update is called once per frame
