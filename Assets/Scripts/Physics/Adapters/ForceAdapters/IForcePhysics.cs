@@ -6,7 +6,7 @@ namespace Assets.Scripts.Physics.Adapters.ForceAdapters
     /// <summary>
     /// Отвечает за силовую часть толкания
     /// </summary>
-    public interface IForceAdapter
+    public interface IForce
     {
         /// <summary>
         /// Gives Vector2 force
@@ -15,6 +15,6 @@ namespace Assets.Scripts.Physics.Adapters.ForceAdapters
         /// <param name="iv">Influence vector</param>
         /// <param name="influence">Influence parameter that charges end force</param>
         /// <returns>Force related to who or sob</returns>
-        Vector2 PullForce(Rigidbody2D who, Vector2 iv, float influence);
+        Vector2 PullForceFabricMethod(Rigidbody2D who, Vector2 iv, float influence);
     }
 }

@@ -39,7 +39,7 @@ namespace Assets.Scripts.Physics
 
         void FixedUpdate()
         {
-            _gravitationAdapter.Iterate(_gravityForce);
+            _gravitationAdapter.IterateFactoryMethod(_gravityForce);
         }
 
 

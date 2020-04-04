@@ -12,12 +12,12 @@ namespace Assets.Scripts.GlobalControllers.Control
 
         private Rigidbody2D _entityRigidBody { get; set; }
         private Actions _currentAction { get; set; } = Actions.EmptyInstance;
-        private IForceAdapter _movementForceAdapter;
+        private IForce _movementForceAdapter;
 
         public ControlBehaviourBase()
         {
             _currentAction = Actions.EmptyInstance;
-            _movementForceAdapter = new MovementForceAdapter();
+            _movementForceAdapter = new MovementForce();
         }
 
         public void ReleaseDrive()
@@ -58,7 +58,7 @@ namespace Assets.Scripts.GlobalControllers.Control
                 }
 
 
-                var force = _movementForceAdapter.PullForce(_entityRigidBody, currentMove, TargetVelocity);
+                var force = _movementForceAdapter.PullForceFabricMethod(_entityRigidBody, currentMove, TargetVelocity);
                 _entityRigidBody.AddForce(force, ForceMode2D.Force);
             }
             catch

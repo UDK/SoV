@@ -46,7 +46,7 @@ MonoBehaviour:
   MaxSpeed: 20
   Height: 2048
   Width: 2048
-  PointsOnOnePlanet: 80
+  PointsOnOnePlanet: 40
   PlanetNoiseScale: 4
   TileTypes:
   - Tile: 0

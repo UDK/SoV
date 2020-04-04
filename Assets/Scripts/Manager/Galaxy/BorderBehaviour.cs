@@ -22,8 +22,8 @@ namespace Assets.Scripts.Manager.Galaxy
         private readonly Dictionary<Collider2D, Rigidbody2D> _registeredGameObjects =
             new Dictionary<Collider2D, Rigidbody2D>();
 
-        private readonly IForceAdapter _movementForceAdapter
-            = new MovementForceAdapter();
+        private readonly IForce _movementForceAdapter
+            = new MovementForce();
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
@@ -56,7 +56,7 @@ namespace Assets.Scripts.Manager.Galaxy
         {
             foreach(var pair in _registeredGameObjects)
             {
-                var force = _movementForceAdapter.PullForce(pair.Value, PushDirection, 5f);
+                var force = _movementForceAdapter.PullForceFabricMethod(pair.Value, PushDirection, 5f);
                 pair.Value.AddForce(force, ForceMode2D.Force);
             }
         }
