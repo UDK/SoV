@@ -13,9 +13,9 @@ namespace Assets.Scripts.Physics
         public float AccelarationDeltaTime = 0.001f;
 
         /// <summary>
-        /// points /s
+        /// points / s
         /// </summary>
-        public float TargetVelocity = 1f;
+        public float MaxVelocity = 2f;
 
         public Vector3 Velocity =>
             _velocity;
@@ -23,31 +23,27 @@ namespace Assets.Scripts.Physics
         private Vector3 _velocity = Vector3.zero;
 
         /// <summary>
-        /// Set direction for object
+        /// Smoothly set velocity
         /// </summary>
-        /// <param name="iv">Normalized vector3 for pointing direction for moving</param>
-        public void MoveInDirection(Vector3 iv, float? targetVelocity = null)
+        /// <param name="velocity">Normalized vector3 for pointing direction for moving</param>
+        public void SmoothlySetVelocity(Vector3 velocity)
         {
             //Debug.Log(physicsVelocity.Linear);
-            if (iv.x != 0 || iv.y != 0 || iv.z != 0)
+            if (velocity.x != 0 || velocity.y != 0 || velocity.z != 0)
             {
                 var currentSpeed = math.sqrt(math.pow(_velocity.x, 2) + math.pow(_velocity.y, 2)+ math.pow(_velocity.z, 2));
-                Debug.Log(currentSpeed);
-                if (currentSpeed > TargetVelocity)
+                /*Debug.Log(currentSpeed);*/
+                if (currentSpeed > MaxVelocity)
                 {
-                    iv = Vector3.zero;
-                }
-                else
-                {
-                    iv *= targetVelocity ?? TargetVelocity;
+                    velocity = Vector3.zero;
                 }
 
-                _velocity = math.lerp(_velocity, iv, AccelarationDeltaTime);
+                _velocity = math.lerp(_velocity, velocity, AccelarationDeltaTime);
             }
         }
 
         /// <summary>
-        /// Set speed
+        /// Rough set speed
         /// </summary>
         /// <param name="iv">Normalized vector3 for pointing direction for moving</param>
         public void SetVelocity(Vector3 velocity)

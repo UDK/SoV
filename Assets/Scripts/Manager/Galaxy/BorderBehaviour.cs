@@ -28,15 +28,15 @@ namespace Assets.Scripts.Manager.Galaxy
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            var movement = collision.GetComponent<MovementBehaviour>();
-            movement.SetVelocity(PushDirection * 0.5f);
-            /*if(collision.tag == EnumTags.FreeSpaceBody &&
-                !_registeredGameObjects.ContainsKey(collision))
+            if(collision.tag == EnumTags.FreeSpaceBody/* &&
+                !_registeredGameObjects.ContainsKey(collision)*/)
             {
-                _registeredGameObjects.Add(
+                var movement = collision.GetComponent<MovementBehaviour>();
+                movement.SetVelocity(PushDirection * 0.5f);
+                /*_registeredGameObjects.Add(
                     collision,
-                    collision.GetComponent<MovementBehaviour>());
-            }*/
+                    collision.GetComponent<MovementBehaviour>());*/
+            }
         }
 
         private void OnTriggerExit2D(Collider2D collision)

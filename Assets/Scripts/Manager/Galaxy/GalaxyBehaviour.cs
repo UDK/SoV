@@ -18,7 +18,7 @@ namespace Assets.Scripts.Manager.Galaxy
     public class GalaxyBehaviour : MonoBehaviour
     {
         [SerializeField]
-        public int MaxSpeed;
+        public int TargetSpeedForPlayers;
 
         [SerializeField]
         public int Height;
@@ -176,7 +176,7 @@ namespace Assets.Scripts.Manager.Galaxy
             where TControl : ControlBehaviourBase
         {
             var control = player.AddComponent<TControl>();
-            control.TargetVelocity = MaxSpeed;
+            control.TargetVelocity = TargetSpeedForPlayers;
         }
     }
 }
