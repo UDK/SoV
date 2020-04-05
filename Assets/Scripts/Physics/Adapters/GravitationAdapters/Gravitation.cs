@@ -124,11 +124,14 @@ namespace Assets.Scripts.Physics.Adapters.GravitationAdapter
         }
         private void Pull(Body satellite, Rigidbody2D rigidBody, float gravityForce)
         {
-            var force = _forcePhysics.PullForceFabricMethod(
-                rigidBody,
-                satellite.Rigidbody2D.transform.position,
-                gravityForce);
-            satellite.Rigidbody2D.AddForce(force, ForceMode2D.Force);
+            lock (satellite)
+            {
+                var force = _forcePhysics.PullForceFabricMethod(
+                    rigidBody,
+                    satellite.Rigidbody2D.transform.position,
+                    gravityForce);
+                satellite.Rigidbody2D.AddForce(force, ForceMode2D.Force);
+            }
         }
     }
 }

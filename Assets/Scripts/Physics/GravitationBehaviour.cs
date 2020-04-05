@@ -4,13 +4,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using Assets.Scripts.Helpers;
 using Random = UnityEngine.Random;
+using System.Threading;
+using Assets.Scripts.Manager.Galaxy;
 using System.Threading.Tasks;
+using System;
 
 namespace Assets.Scripts.Physics
 {
     public class GravitationBehaviour : MonoBehaviour
     {
         private GravitationAdapter _gravitationAdapter;
+
+        private GalaxyBehaviour galaxyParent;
 
         [SerializeField]
         private float _gravityForce = 0;
@@ -19,6 +24,11 @@ namespace Assets.Scripts.Physics
         {
             _gravitationAdapter = new GravitationAdapter(transform.parent.gameObject);
             //StartCoroutine(Iterate());
+        }
+
+        private void Start()
+        {
+            galaxyParent = GetComponentInParent<GalaxyBehaviour>();
         }
 
         private IEnumerator Iterate()
@@ -46,9 +56,20 @@ namespace Assets.Scripts.Physics
             }
         }
 
-        void FixedUpdate()
+        void Update()
         {
-            _gravitationAdapter?.IterateFactoryMethod(_gravityForce);
+            galaxyParent.task.Add(Task.Run(() =>
+            {
+                Action action = () =>
+                {
+                    _gravitationAdapter.IterateFactoryMethod(1);
+                };
+            }));
         }
+
+        //private void FixedUpdate()
+        //{
+        //    _gravitationAdapter?.IterateFactoryMethod(1);
+        //}
     }
 }

@@ -5,10 +5,12 @@ using Assets.Scripts.Manager.Galaxy;
 using Assets.Scripts.Manager.Generator;
 using Assets.Scripts.Maths.Adapters;
 using Assets.Scripts.Physics;
+using Assets.Scripts.Physics.Adapters.GravitationAdapter;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -17,6 +19,10 @@ namespace Assets.Scripts.Manager.Galaxy
 {
     public class GalaxyBehaviour : MonoBehaviour
     {
+        public List<GravitationAdapter> gravitationAdapters = new List<GravitationAdapter>(120);
+
+        public List<Task> task = new List<Task>(362);
+
         [SerializeField]
         public int TargetSpeedForPlayers;
 
@@ -42,6 +48,8 @@ namespace Assets.Scripts.Manager.Galaxy
 
         private void Awake()
         {
+            ThreadPool.SetMinThreads(1, 1);
+            ThreadPool.SetMaxThreads(1, 1);
             _tileGenerator =
                    new TileGenerator<
                        PerlinNoiseAdapter<TileType>>(
@@ -59,7 +67,7 @@ namespace Assets.Scripts.Manager.Galaxy
                 {
                     TileType tileType = tileMap[y, x];
 
-                    if(tileType != Tile.Nothing)
+                    if (tileType != Tile.Nothing)
                     {
                         var gameObject = Instantiate(
                             tileType,
@@ -103,9 +111,9 @@ namespace Assets.Scripts.Manager.Galaxy
         public void InitBackground(
             MonoBehaviour camera)
         {
-            foreach(var back in BackgroundQuads)
+            foreach (var back in BackgroundQuads)
             {
-                var quad = 
+                var quad =
                     Instantiate(
                         back.Back,
                         new Vector3(
@@ -178,5 +186,25 @@ namespace Assets.Scripts.Manager.Galaxy
             var control = player.AddComponent<TControl>();
             control.TargetVelocity = TargetSpeedForPlayers;
         }
+
+        private void Update()
+        {
+            
+        }
+
+        private void LateUpdate()
+        {
+            Task.WaitAll(task.ToArray());
+            task.Clear();
+        }
+
+        //private void FixedUpdate()
+        //{
+        //    foreach (var gravAd in gravitationAdapters)
+        //    {
+        //        ThreadPool.QueueUserWorkItem(gravAd.IterateFactoryMethod);
+        //    }
+        //    Task.WaitAll();
+        //}
     }
 }
