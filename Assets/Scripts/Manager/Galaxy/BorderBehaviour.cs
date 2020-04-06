@@ -1,6 +1,6 @@
 ﻿using Assets.Scripts.Helpers;
 using Assets.Scripts.Physics;
-using Assets.Scripts.Physics.Adapters.ForceAdapters;
+using Assets.Scripts.Physics.Fabric.ForceFabrics;
 using System;
 using System.Collections.Generic;
 using System.Linq;

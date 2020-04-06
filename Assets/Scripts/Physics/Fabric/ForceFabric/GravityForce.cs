@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Assets.Scripts.Physics.Adapters.ForceAdapters
+namespace Assets.Scripts.Physics.Fabric.ForceFabrics
 {
     public class GravityForce : IForce
     {

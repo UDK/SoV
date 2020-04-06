@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Assets.Scripts.Maths.Adapters
+namespace Assets.Scripts.Maths.NoiseFabrics
 {
-    public class PerlinNoiseAdapter<TTile> : INoiseAdapter<TTile>
+    public class PerlinNoise<TTile> : INoiseFabric<TTile>
     {
         public TTile[,] GenerateNoise(
             int heigth,

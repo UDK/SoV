@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Assets.Scripts.Maths.Adapters
+namespace Assets.Scripts.Maths.NoiseFabrics
 {
-    public interface INoiseAdapter<TTile>
+    public interface INoiseFabric<TTile>
     {
         TTile[,] GenerateNoise(
             int heigth,

@@ -1,4 +1,4 @@
-﻿using Assets.Scripts.Physics.Adapters.GravitationAdapter;
+﻿using Assets.Scripts.Physics.Fabric.GravitationFabrics;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

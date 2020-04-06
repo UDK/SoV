@@ -1,5 +1,5 @@
 ﻿using Assets.Scripts.Physics;
-using Assets.Scripts.Physics.Adapters.ForceAdapters;
+using Assets.Scripts.Physics.Fabric.ForceFabrics;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;

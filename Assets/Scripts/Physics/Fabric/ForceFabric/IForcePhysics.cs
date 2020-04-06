@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 
-namespace Assets.Scripts.Physics.Adapters.ForceAdapters
+namespace Assets.Scripts.Physics.Fabric.ForceFabrics
 {
     /// <summary>
     /// Отвечает за силовую часть толкания

@@ -3,7 +3,7 @@ using Assets.Scripts.GlobalControllers.Control;
 using Assets.Scripts.Manager.Background;
 using Assets.Scripts.Manager.Galaxy;
 using Assets.Scripts.Manager.Generator;
-using Assets.Scripts.Maths.Adapters;
+using Assets.Scripts.Maths.NoiseFabrics;
 using Assets.Scripts.Physics;
 using System;
 using System.Collections.Generic;
@@ -44,7 +44,7 @@ namespace Assets.Scripts.Manager.Galaxy
         {
             _tileGenerator =
                    new TileGenerator<
-                       PerlinNoiseAdapter<TileType>>(
+                       PerlinNoise<TileType>>(
                            TileTypes);
         }
         public void Init()

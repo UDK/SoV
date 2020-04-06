@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
-using Assets.Scripts.Physics.Adapters.ForceAdapters;
+using Assets.Scripts.Physics.Fabric.ForceFabrics;
 using System.Collections;
 using Assets.Scripts.Helpers;
 using System;
 using Random = UnityEngine.Random;
 
-namespace Assets.Scripts.Physics.Adapters.GravitationAdapter
+namespace Assets.Scripts.Physics.Fabric.GravitationFabrics
 {
     //Добавлять небесное тело в родительская иерахию в rigidBody.setParent и проверять через GetParent есть ли родитель, если есть, то не притягивать02-
     public class GravitationAdapter : IGravitationAdapter
