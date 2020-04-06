@@ -7,24 +7,27 @@ using UnityEngine;
 
 namespace Assets.Scripts.Physics.Fabric.GravitationFabrics
 {
-    public class Body
+    /// <summary>
+    /// Intermediate sattelite data
+    /// </summary>
+    public class IntSatData
     {
-        public Coroutine CoroutineCheckIntoOrbit { get; set; }
-
         public MovementBehaviour MovementBehaviour { get; set; }
 
         public MonoBehaviour RawMonoBehaviour { get; set; }
 
-        public bool BeginCheckIntoOrbit { get; set; } = false;
+        public int HitsBeforeOrbit { get; set; }
 
-        public static implicit operator MovementBehaviour(Body satellite)
+        public int TempI { get; set; }
+
+        public static implicit operator MovementBehaviour(IntSatData satellite)
         {
             return satellite.MovementBehaviour;
         }
 
-        public static implicit operator Body(GameObject collider2D)
+        public static implicit operator IntSatData(GameObject collider2D)
         {
-            return new Body
+            return new IntSatData
             {
                 MovementBehaviour = collider2D.GetComponent<MovementBehaviour>(),
                 RawMonoBehaviour = collider2D.GetComponent<MonoBehaviour>(),
