@@ -18,16 +18,8 @@ namespace Assets.Scripts.Physics
         void Awake()
         {
             _gravitationAdapter = new GravitationAdapter(transform.parent.gameObject);
-            //StartCoroutine(Iterate());
         }
 
-        private IEnumerator Iterate()
-        {
-            while (true)
-            {
-                yield return new WaitForSeconds(0.5f);
-            }
-        }
 
         private void OnTriggerEnter2D(Collider2D collision)
         {

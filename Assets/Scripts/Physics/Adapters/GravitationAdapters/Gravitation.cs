@@ -41,10 +41,6 @@ namespace Assets.Scripts.Physics.Adapters.GravitationAdapter
             try
             {
                 gameObject.tag = EnumTags.FreeSpaceBody;
-                if (_registeredBodies[gameObject].CoroutineCheckIntoOrbit != null)
-                {
-                    _parent.RawMonoBehaviour.StopCoroutine(_registeredBodies[gameObject].CoroutineCheckIntoOrbit);
-                }
                 _registeredBodies.Remove(gameObject.gameObject);
             }
             catch (Exception ex)
@@ -69,8 +65,7 @@ namespace Assets.Scripts.Physics.Adapters.GravitationAdapter
                 else if (celestialBody.Value.Rigidbody2D.tag != EnumTags.Satellite)
                 {
                     celestialBody.Value.BeginCheckIntoOrbit = true;
-                    celestialBody.Value.CoroutineCheckIntoOrbit =
-                        _parent.RawMonoBehaviour.StartCoroutine(CheckEntryIntoOrbit(celestialBody.Value, _parent));
+                    CheckEntryIntoOrbit(celestialBody.Value, _parent);
                     Pull(celestialBody.Value, _parent, gravityForce);
                 }
             }
@@ -82,7 +77,7 @@ namespace Assets.Scripts.Physics.Adapters.GravitationAdapter
         /// <param name="possibleSatellite">Объект который вошел в зону влияния(притяжения)</param>
         /// <param name="parentalObject"></param>
         /// <returns></returns>
-        private IEnumerator CheckEntryIntoOrbit(Body possibleSatellite, Body parentalObject)
+        private void CheckEntryIntoOrbit(Body possibleSatellite, Body parentalObject)
         {
             Vector2 speed = possibleSatellite.Rigidbody2D.velocity;
             int trueIterateCheckEntry = 0;
@@ -93,7 +88,6 @@ namespace Assets.Scripts.Physics.Adapters.GravitationAdapter
                 {
                     trueIterateCheckEntry++;
                 }
-                yield return new WaitForSeconds(0.025f);
             }
             if (_iterateCheckEntryOfOrbit * _relativeMass <= trueIterateCheckEntry)
             {
