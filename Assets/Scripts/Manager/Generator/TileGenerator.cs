@@ -1,4 +1,4 @@
-﻿using Assets.Scripts.Maths.Adapters;
+﻿using Assets.Scripts.Maths.NoiseFabrics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +12,7 @@ namespace Assets.Scripts.Manager.Generator
     /// </summary>
     /// <typeparam name="TNoiseAdapter"></typeparam>
     public class TileGenerator<TNoiseAdapter> : ITileGenerator
-        where TNoiseAdapter: INoiseAdapter<TileType>, new()
+        where TNoiseAdapter: INoiseFabric<TileType>, new()
     {
         private readonly TNoiseAdapter _noiseAdapter;
         private readonly TileType[] _tileTypes;

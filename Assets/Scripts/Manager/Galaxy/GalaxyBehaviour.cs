@@ -3,7 +3,8 @@ using Assets.Scripts.GlobalControllers.Control;
 using Assets.Scripts.Manager.Background;
 using Assets.Scripts.Manager.Galaxy;
 using Assets.Scripts.Manager.Generator;
-using Assets.Scripts.Maths.Adapters;
+using Assets.Scripts.Maths.NoiseFabrics;
+using Assets.Scripts.Physics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace Assets.Scripts.Manager.Galaxy
     public class GalaxyBehaviour : MonoBehaviour
     {
         [SerializeField]
-        public int MaxSpeed;
+        public int TargetSpeedForPlayers;
 
         [SerializeField]
         public int Height;
@@ -43,7 +44,7 @@ namespace Assets.Scripts.Manager.Galaxy
         {
             _tileGenerator =
                    new TileGenerator<
-                       PerlinNoiseAdapter<TileType>>(
+                       PerlinNoise<TileType>>(
                            TileTypes);
         }
         public void Init()
@@ -68,8 +69,8 @@ namespace Assets.Scripts.Manager.Galaxy
                                 0f),
                             Quaternion.identity,
                             transform) as GameObject;
-                        gameObject.GetComponent<Rigidbody2D>().velocity = 
-                                new Vector2(Random.Range(-1, 1), Random.Range(-1, 1)) * Random.Range(1f, 5f);
+                        gameObject.GetComponent<MovementBehaviour>().SetVelocity(
+                            new Vector3(Random.Range(-1, 1), Random.Range(-1, 1)) * Random.Range(0.2f, 0.8f));
                     }
                 }
             }
@@ -175,7 +176,7 @@ namespace Assets.Scripts.Manager.Galaxy
             where TControl : ControlBehaviourBase
         {
             var control = player.AddComponent<TControl>();
-            control.TargetVelocity = MaxSpeed;
+            control.TargetVelocity = TargetSpeedForPlayers;
         }
     }
 }

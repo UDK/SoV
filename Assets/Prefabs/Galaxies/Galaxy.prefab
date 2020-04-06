@@ -43,7 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd12bf17acf820b4ab9faa9b55d99a45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxSpeed: 20
+  TargetSpeedForPlayers: 1
   Height: 2048
   Width: 2048
   PointsOnOnePlanet: 40

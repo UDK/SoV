@@ -30,6 +30,7 @@ namespace Assets.Scripts.Physics
         public void Stop()
         {
             tag = EnumTags.FreeSpaceBody;
+            gameObject.layer = LayerMask.NameToLayer("sattelite");
             Target = null;
             _relativeDistance = Vector3.zero;
             _once = true;
@@ -58,9 +59,7 @@ namespace Assets.Scripts.Physics
 
         void FixedUpdate()
         {
-
             Orbit();
-
         }
     }
 }

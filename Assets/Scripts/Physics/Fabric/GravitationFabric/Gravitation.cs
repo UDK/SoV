@@ -1,56 +1,49 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
-using Assets.Scripts.Physics.Adapters.ForceAdapters;
+using Assets.Scripts.Physics.Fabric.ForceFabrics;
 using System.Collections;
 using Assets.Scripts.Helpers;
 using System;
 using Random = UnityEngine.Random;
+using System.Linq;
 
-namespace Assets.Scripts.Physics.Adapters.GravitationAdapter
+namespace Assets.Scripts.Physics.Fabric.GravitationFabrics
 {
     //Добавлять небесное тело в родительская иерахию в rigidBody.setParent и проверять через GetParent есть ли родитель, если есть, то не притягивать02-
     public class GravitationAdapter : IGravitationAdapter
     {
         private readonly IForce _forcePhysics;
-        private readonly Dictionary<GameObject, Body> _registeredBodies;
-        private readonly Body _parent;
+        private readonly List<IntSatData> _registeredBodies;
+        private readonly IntSatData _parent;
+
+
 
         //2 - очень сильно зависти от скорости, надо будет её в конце или вывести или получить эмпирическим путем
         private readonly Vector2 _inaccuracy = new Vector2(2, 2);
 
-        const int _iterateCheckEntryOfOrbit = 30;
-        private const double _relativeMass = 0.75;
+        private const int _iterateCheckEntryOfOrbit = 30;
+        private const double _boundPossibility = 0.75;
 
         public GravitationAdapter(GameObject parent)
         {
             _forcePhysics = new GravityForce();
-            _registeredBodies = new Dictionary<GameObject, Body>();
+            _registeredBodies = new List<IntSatData>();
             _parent = parent;
         }
 
         public void Register(GameObject gameObject)
         {
-            _registeredBodies.Add(gameObject, gameObject);
+            _registeredBodies.Add(gameObject);
         }
 
         public void Unregister(GameObject gameObject)
         {
-            if (!_registeredBodies.ContainsKey(gameObject))
+            if (!_registeredBodies.Any(x => x.RawMonoBehaviour.gameObject == gameObject))
                 return;
-            try
-            {
-                gameObject.tag = EnumTags.FreeSpaceBody;
-                if (_registeredBodies[gameObject].CoroutineCheckIntoOrbit != null)
-                {
-                    _parent.RawMonoBehaviour.StopCoroutine(_registeredBodies[gameObject].CoroutineCheckIntoOrbit);
-                }
-                _registeredBodies.Remove(gameObject.gameObject);
-            }
-            catch (Exception ex)
-            {
-                Debug.LogError("Блядские корутины");
-            }
+
+            gameObject.tag = EnumTags.FreeSpaceBody;
+            _registeredBodies.RemoveAll(x => x.RawMonoBehaviour.gameObject == gameObject);
         }
 
         /// <summary>
@@ -59,20 +52,24 @@ namespace Assets.Scripts.Physics.Adapters.GravitationAdapter
         /// <param name="gravityForce"></param>
         public void IterateFactoryMethod(float gravityForce)
         {
-            foreach (var celestialBody in _registeredBodies)
+            for (int i = 0; i < _registeredBodies.Count; i++)
             {
-                if (celestialBody.Value.BeginCheckIntoOrbit)
+                if(CheckEntryIntoOrbit(_registeredBodies[i], _parent))
                 {
-                    Pull(celestialBody.Value, _parent, gravityForce);
+                    i--;
                     continue;
                 }
-                else if (celestialBody.Value.Rigidbody2D.tag != EnumTags.Satellite)
+                Pull(_registeredBodies[i], _parent, gravityForce);
+                /*if (celestialBody.Value.TempI == 0)
                 {
-                    celestialBody.Value.BeginCheckIntoOrbit = true;
-                    celestialBody.Value.CoroutineCheckIntoOrbit =
-                        _parent.RawMonoBehaviour.StartCoroutine(CheckEntryIntoOrbit(celestialBody.Value, _parent));
-                    Pull(celestialBody.Value, _parent, gravityForce);
+                    Pull(celestialBody.Value, _parent, MovementBehaviour, gravityForce);
+                    continue;
                 }
+                else if (celestialBody.Value.MovementBehaviour.tag != EnumTags.Satellite)
+                {
+                    CheckEntryIntoOrbit(celestialBody.Value, _parent);
+                    Pull(celestialBody.Value, _parent, MovementBehaviour, gravityForce);
+                }*/
             }
         }
 
@@ -82,21 +79,26 @@ namespace Assets.Scripts.Physics.Adapters.GravitationAdapter
         /// <param name="possibleSatellite">Объект который вошел в зону влияния(притяжения)</param>
         /// <param name="parentalObject"></param>
         /// <returns></returns>
-        private IEnumerator CheckEntryIntoOrbit(Body possibleSatellite, Body parentalObject)
+        private bool CheckEntryIntoOrbit(
+            IntSatData possibleSatellite,
+            IntSatData parentalObject)
         {
-            Vector2 speed = possibleSatellite.Rigidbody2D.velocity;
-            int trueIterateCheckEntry = 0;
-            for (int iterate = 0; iterate < _iterateCheckEntryOfOrbit; iterate++)
+            Vector3 speed = possibleSatellite.MovementBehaviour.Velocity;
+            if (Mathf.Abs((parentalObject.MovementBehaviour.Velocity - speed).x) < _inaccuracy.x &&
+                Mathf.Abs((parentalObject.MovementBehaviour.Velocity - speed).y) < _inaccuracy.y)
             {
-                if (Mathf.Abs((parentalObject.Rigidbody2D.velocity - speed).x) < _inaccuracy.x &&
-                    Mathf.Abs((parentalObject.Rigidbody2D.velocity - speed).y) < _inaccuracy.y)
-                {
-                    trueIterateCheckEntry++;
-                }
-                yield return new WaitForSeconds(0.025f);
+                possibleSatellite.HitsBeforeOrbit++;
             }
-            if (_iterateCheckEntryOfOrbit * _relativeMass <= trueIterateCheckEntry)
+
+            possibleSatellite.TempI++;
+            if (possibleSatellite.TempI < _iterateCheckEntryOfOrbit)
             {
+                return false;
+            }
+
+            if (_iterateCheckEntryOfOrbit * _boundPossibility <= possibleSatellite.HitsBeforeOrbit)
+            {
+                Unregister(possibleSatellite.RawMonoBehaviour.gameObject);
                 var parentalBody = parentalObject.RawMonoBehaviour.GetComponent<BodyBehaviourBase>();
                 var satelliteOrbiting = possibleSatellite.RawMonoBehaviour.GetComponent<OrbitingBehaviour>();
 
@@ -110,7 +112,7 @@ namespace Assets.Scripts.Physics.Adapters.GravitationAdapter
                 satelliteOrbiting.StopCallback = () =>
                 {
                     // instead of this one we should unregister planet in bodyBehaviour
-                    Unregister(possibleSatellite.RawMonoBehaviour.gameObject);
+                    //Unregister(possibleSatellite.RawMonoBehaviour.gameObject);
                 };
                 satelliteOrbiting.OrbitDegreesPerSec = 60f / parentalBody.Satellites;
                 satelliteOrbiting.OrbitDistance =
@@ -118,17 +120,25 @@ namespace Assets.Scripts.Physics.Adapters.GravitationAdapter
                 satelliteOrbiting.Target =
                     parentalObject.RawMonoBehaviour.transform;
                 satelliteOrbiting.Begin();
+                possibleSatellite.TempI = 0;
+                possibleSatellite.HitsBeforeOrbit = 0;
+                return true;
             }
-            possibleSatellite.BeginCheckIntoOrbit = false;
+
+            possibleSatellite.TempI = 0;
+            possibleSatellite.HitsBeforeOrbit = 0;
+            return false;
 
         }
-        private void Pull(Body satellite, Rigidbody2D rigidBody, float gravityForce)
+
+        private void Pull(IntSatData satellite, IntSatData parent, float gravityForce)
         {
             var force = _forcePhysics.PullForceFabricMethod(
-                rigidBody,
-                satellite.Rigidbody2D.transform.position,
+                parent,
+                satellite.MovementBehaviour.transform.position,
                 gravityForce);
-            satellite.Rigidbody2D.AddForce(force, ForceMode2D.Force);
+            satellite.MovementBehaviour.SmoothlySetVelocity(force);
+
         }
     }
 }

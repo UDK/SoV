@@ -1,10 +1,10 @@
-﻿using Assets.Scripts.Physics.Adapters.GravitationAdapter;
+﻿using Assets.Scripts.Physics.Fabric.GravitationFabrics;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Assets.Scripts.Helpers;
 using Random = UnityEngine.Random;
-
+using System.Threading.Tasks;
 
 namespace Assets.Scripts.Physics
 {
@@ -19,6 +19,7 @@ namespace Assets.Scripts.Physics
         {
             _gravitationAdapter = new GravitationAdapter(transform.parent.gameObject);
         }
+
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
@@ -39,9 +40,7 @@ namespace Assets.Scripts.Physics
 
         void FixedUpdate()
         {
-            _gravitationAdapter.IterateFactoryMethod(_gravityForce);
+            _gravitationAdapter?.IterateFactoryMethod(_gravityForce);
         }
-
-
     }
 }

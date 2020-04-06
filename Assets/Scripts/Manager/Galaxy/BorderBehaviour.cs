@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.Helpers;
-using Assets.Scripts.Physics.Adapters.ForceAdapters;
+using Assets.Scripts.Physics;
+using Assets.Scripts.Physics.Fabric.ForceFabrics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,20 +20,19 @@ namespace Assets.Scripts.Manager.Galaxy
     {
         public Vector2 PushDirection = Vector2.zero;
 
-        private readonly Dictionary<Collider2D, Rigidbody2D> _registeredGameObjects =
-            new Dictionary<Collider2D, Rigidbody2D>();
-
-        private readonly IForce _movementForceAdapter
-            = new MovementForce();
+        private readonly Dictionary<Collider2D, MovementBehaviour> _registeredGameObjects =
+            new Dictionary<Collider2D, MovementBehaviour>();
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if(collision.tag == EnumTags.FreeSpaceBody &&
-                !_registeredGameObjects.ContainsKey(collision))
+            if(collision.tag == EnumTags.FreeSpaceBody/* &&
+                !_registeredGameObjects.ContainsKey(collision)*/)
             {
-                _registeredGameObjects.Add(
+                var movement = collision.GetComponent<MovementBehaviour>();
+                movement.SetVelocity(PushDirection * 0.5f);
+                /*_registeredGameObjects.Add(
                     collision,
-                    collision.GetComponent<Rigidbody2D>());
+                    collision.GetComponent<MovementBehaviour>());*/
             }
         }
 
@@ -40,13 +40,13 @@ namespace Assets.Scripts.Manager.Galaxy
         {
             if (collision.tag == EnumTags.FreeSpaceBody)
             {
-                var rigidBody = collision.GetComponent<Rigidbody2D>();
+                var movement = collision.GetComponent<MovementBehaviour>();
 
-                var oneSideX = PushDirection.x != 0 && Mathf.Sign(PushDirection.x) == Mathf.Sign(rigidBody.velocity.x);
-                var oneSideY = PushDirection.y != 0 && Mathf.Sign(PushDirection.y) == Mathf.Sign(rigidBody.velocity.y);
+                var oneSideX = PushDirection.x != 0 && Mathf.Sign(PushDirection.x) == Mathf.Sign(movement.Velocity.x);
+                var oneSideY = PushDirection.y != 0 && Mathf.Sign(PushDirection.y) == Mathf.Sign(movement.Velocity.y);
                 if(!oneSideX || !oneSideY)
                 {
-                    rigidBody.velocity = PushDirection * 2f;
+                    movement.SetVelocity(PushDirection * 0.5f);
                 }
                 _registeredGameObjects.Remove(collision);
             }
@@ -54,11 +54,10 @@ namespace Assets.Scripts.Manager.Galaxy
 
         private void FixedUpdate()
         {
-            foreach(var pair in _registeredGameObjects)
+            /*foreach(var pair in _registeredGameObjects)
             {
-                var force = _movementForceAdapter.PullForceFabricMethod(pair.Value, PushDirection, 5f);
-                pair.Value.AddForce(force, ForceMode2D.Force);
-            }
+                pair.Value.MoveInDirection(PushDirection, 0.5f);
+            }*/
         }
 
     }
