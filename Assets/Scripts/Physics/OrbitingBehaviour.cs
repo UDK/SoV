@@ -58,9 +58,7 @@ namespace Assets.Scripts.Physics
 
         void FixedUpdate()
         {
-
             Orbit();
-
         }
     }
 }

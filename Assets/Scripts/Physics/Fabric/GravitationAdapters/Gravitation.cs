@@ -15,6 +15,9 @@ namespace Assets.Scripts.Physics.Adapters.GravitationAdapter
         private readonly IForce _forcePhysics;
         private readonly Dictionary<GameObject, Body> _registeredBodies;
         private readonly Body _parent;
+        private MovementBehaviour MovementBehaviour { get; set; }
+
+
 
         //2 - очень сильно зависти от скорости, надо будет её в конце или вывести или получить эмпирическим путем
         private readonly Vector2 _inaccuracy = new Vector2(2, 2);
@@ -27,6 +30,7 @@ namespace Assets.Scripts.Physics.Adapters.GravitationAdapter
             _forcePhysics = new GravityForce();
             _registeredBodies = new Dictionary<GameObject, Body>();
             _parent = parent;
+            MovementBehaviour = parent.GetComponent<MovementBehaviour>();
         }
 
         public void Register(GameObject gameObject)
@@ -59,14 +63,14 @@ namespace Assets.Scripts.Physics.Adapters.GravitationAdapter
             {
                 if (celestialBody.Value.BeginCheckIntoOrbit)
                 {
-                    Pull(celestialBody.Value, _parent, gravityForce);
+                    Pull(celestialBody.Value, _parent, MovementBehaviour, gravityForce);
                     continue;
                 }
-                else if (celestialBody.Value.Rigidbody2D.tag != EnumTags.Satellite)
+                else if (celestialBody.Value.MovementBehaviour.tag != EnumTags.Satellite)
                 {
                     celestialBody.Value.BeginCheckIntoOrbit = true;
-                    CheckEntryIntoOrbit(celestialBody.Value, _parent);
-                    Pull(celestialBody.Value, _parent, gravityForce);
+                    //CheckEntryIntoOrbit(celestialBody.Value, _parent);
+                    Pull(celestialBody.Value, _parent, MovementBehaviour, gravityForce);
                 }
             }
         }
@@ -79,12 +83,12 @@ namespace Assets.Scripts.Physics.Adapters.GravitationAdapter
         /// <returns></returns>
         private void CheckEntryIntoOrbit(Body possibleSatellite, Body parentalObject)
         {
-            Vector2 speed = possibleSatellite.Rigidbody2D.velocity;
+            Vector3 speed = possibleSatellite.MovementBehaviour.Velocity;
             int trueIterateCheckEntry = 0;
             for (int iterate = 0; iterate < _iterateCheckEntryOfOrbit; iterate++)
             {
-                if (Mathf.Abs((parentalObject.Rigidbody2D.velocity - speed).x) < _inaccuracy.x &&
-                    Mathf.Abs((parentalObject.Rigidbody2D.velocity - speed).y) < _inaccuracy.y)
+                if (Mathf.Abs((parentalObject.MovementBehaviour.Velocity - speed).x) < _inaccuracy.x &&
+                    Mathf.Abs((parentalObject.MovementBehaviour.Velocity - speed).y) < _inaccuracy.y)
                 {
                     trueIterateCheckEntry++;
                 }
@@ -116,13 +120,15 @@ namespace Assets.Scripts.Physics.Adapters.GravitationAdapter
             possibleSatellite.BeginCheckIntoOrbit = false;
 
         }
-        private void Pull(Body satellite, Rigidbody2D rigidBody, float gravityForce)
+
+        private void Pull(Body satellite, Body rigidBody, MovementBehaviour moveThisobject, float gravityForce)
         {
             var force = _forcePhysics.PullForceFabricMethod(
                 rigidBody,
-                satellite.Rigidbody2D.transform.position,
+                satellite.MovementBehaviour.transform.position,
                 gravityForce);
-            satellite.Rigidbody2D.AddForce(force, ForceMode2D.Force);
+            moveThisobject.SmoothlySetVelocity(force * -1);
+
         }
     }
 }

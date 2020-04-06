@@ -23,9 +23,6 @@ namespace Assets.Scripts.Manager.Galaxy
         private readonly Dictionary<Collider2D, MovementBehaviour> _registeredGameObjects =
             new Dictionary<Collider2D, MovementBehaviour>();
 
-        private readonly IForce _movementForceAdapter
-            = new MovementForce();
-
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if(collision.tag == EnumTags.FreeSpaceBody/* &&

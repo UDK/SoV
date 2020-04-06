@@ -18,7 +18,6 @@ namespace Assets.Scripts.GlobalControllers.Control
         public ControlBehaviourBase()
         {
             _currentAction = Actions.EmptyInstance;
-            _movementForceAdapter = new MovementForce();
         }
 
         public void ReleaseDrive()

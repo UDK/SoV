@@ -29,9 +29,16 @@ namespace Assets.Scripts.Physics
         public void SmoothlySetVelocity(Vector3 velocity)
         {
             //Debug.Log(physicsVelocity.Linear);
+            var currentSpeed2 = math.sqrt(math.pow(velocity.x, 2) + math.pow(velocity.y, 2) + math.pow(velocity.z, 2));
+            if(currentSpeed2 > MaxVelocity)
+            {
+                Debug.LogError("Speed over");
+                return;
+            }
             if (velocity.x != 0 || velocity.y != 0 || velocity.z != 0)
             {
                 var currentSpeed = math.sqrt(math.pow(_velocity.x, 2) + math.pow(_velocity.y, 2)+ math.pow(_velocity.z, 2));
+                
                 /*Debug.Log(currentSpeed);*/
                 if (currentSpeed > MaxVelocity)
                 {

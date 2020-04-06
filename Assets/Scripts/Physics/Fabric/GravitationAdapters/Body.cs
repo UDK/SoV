@@ -11,22 +11,22 @@ namespace Assets.Scripts.Physics.Adapters.GravitationAdapter
     {
         public Coroutine CoroutineCheckIntoOrbit { get; set; }
 
-        public Rigidbody2D Rigidbody2D { get; set; }
+        public MovementBehaviour MovementBehaviour { get; set; }
 
         public MonoBehaviour RawMonoBehaviour { get; set; }
 
         public bool BeginCheckIntoOrbit { get; set; } = false;
 
-        public static implicit operator Rigidbody2D(Body satellite)
+        public static implicit operator MovementBehaviour(Body satellite)
         {
-            return satellite.Rigidbody2D;
+            return satellite.MovementBehaviour;
         }
 
         public static implicit operator Body(GameObject collider2D)
         {
             return new Body
             {
-                Rigidbody2D = collider2D.GetComponent<Rigidbody2D>(),
+                MovementBehaviour = collider2D.GetComponent<MovementBehaviour>(),
                 RawMonoBehaviour = collider2D.GetComponent<MonoBehaviour>(),
 
             };

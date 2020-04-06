@@ -16,19 +16,18 @@ namespace Assets.Scripts.Physics.Adapters.ForceAdapters
         /// <param name="iv">Second object that will be pulled</param>
         /// <param name="influence">Influence parameter that charges end force</param>
         /// <returns>Force for moving by sob</returns>
-        public Vector2 PullForceFabricMethod(Rigidbody2D who, Vector2 iv, float influence)
+        public Vector2 PullForceFabricMethod(MovementBehaviour who, Vector2 iv, float influence)
         {
             var distance = Vector2.Distance(who.transform.position, iv);
             if (distance == 0)
             {
                 return new Vector2(0, 0);
             }
-            float force = influence / Mathf.Pow(distance, 2);
             // Find the Normal direction
             Vector2 normalDirection = ((Vector2)who.transform.position - iv).normalized;
 
             // calculate the force on the object from the planet
-            Vector2 normalForce = normalDirection * force;
+            Vector2 normalForce = normalDirection * influence;
 
             return normalForce;
         }
