@@ -5,6 +5,7 @@ using UnityEngine;
 using Assets.Scripts.Helpers;
 using Random = UnityEngine.Random;
 using System.Threading.Tasks;
+using Assets.Scripts.Physics.Sattellite;
 using Assets.Scripts.Physics.Fabric.ForceFabrics;
 using System.Linq;
 
@@ -15,6 +16,7 @@ namespace Assets.Scripts.Physics
         private IForce _forcePhysics;
         private List<IntSatData> _registeredBodies;
         private IntSatData _parent;
+        private SatelliteManagerBehavior _satelliteManagerBehavior;
 
         //2 - очень сильно зависти от скорости, надо будет её в конце или вывести или получить эмпирическим путем
         private readonly Vector2 _inaccuracy = new Vector2(2, 2);
@@ -30,6 +32,7 @@ namespace Assets.Scripts.Physics
             _forcePhysics = new GravityForce();
             _registeredBodies = new List<IntSatData>();
             _parent = transform.parent.gameObject;
+            _satelliteManagerBehavior = GetComponentInParent<SatelliteManagerBehavior>();
         }
 
 
@@ -94,30 +97,7 @@ namespace Assets.Scripts.Physics
 
             if (_iterateCheckEntryOfOrbit * _boundPossibility <= possibleSatellite.HitsBeforeOrbit)
             {
-                //OnTriggerExit2D(possibleSatellite);
-                var parentalBody = parentalObject.RawMonoBehaviour.GetComponent<BodyBehaviourBase>();
-                var satelliteOrbiting = possibleSatellite.RawMonoBehaviour.GetComponent<OrbitingBehaviour>();
-
-                // if it was someone's satellite
-                satelliteOrbiting.StopCallback?.Invoke();
-                satelliteOrbiting.Stop();
-
-                // we should register this satellite inside of bodyBehaviourForgamePlay
-                // _registeredBodies.Remove(possibleSatellite.RawMonoBehaviour.gameObject);
-                parentalBody.Satellites++;
-                satelliteOrbiting.StopCallback = () =>
-                {
-                    // instead of this one we should unregister planet in bodyBehaviour
-                    //Unregister(possibleSatellite.RawMonoBehaviour.gameObject);
-                };
-                satelliteOrbiting.OrbitDegreesPerSec = 60f / parentalBody.Satellites;
-                satelliteOrbiting.OrbitDistance =
-                    parentalBody.Satellites * 3f;
-                satelliteOrbiting.Target =
-                    parentalObject.RawMonoBehaviour.transform;
-                satelliteOrbiting.Begin();
-                possibleSatellite.TempI = 0;
-                possibleSatellite.HitsBeforeOrbit = 0;
+                _satelliteManagerBehavior.AttacheSattelite(possibleSatellite, parentalObject);
                 return true;
             }
 

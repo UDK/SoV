@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 6217019570567497345}
   - component: {fileID: 5334711649401466039}
   - component: {fileID: 7798322930524578970}
-  - component: {fileID: 6366539741882390930}
   - component: {fileID: 5326998679394715418}
   - component: {fileID: -5287210698986922439}
+  - component: {fileID: 2037273031957533503}
   m_Layer: 10
   m_Name: PlanetTemplate
   m_TagString: Space body
@@ -115,21 +115,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Mass: 0
   Satellites: 0
---- !u!114 &6366539741882390930
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7262656473733311864}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ed73b2eae1049dd4580a75c3e8d7b744, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Target: {fileID: 0}
-  OrbitDistance: 3
-  OrbitDegreesPerSec: 30
 --- !u!114 &5326998679394715418
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -165,6 +150,18 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &2037273031957533503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7262656473733311864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f871dbd2ea4b37e48a79154de52d16ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &6150685166652044827
 PrefabInstance:
   m_ObjectHideFlags: 0
