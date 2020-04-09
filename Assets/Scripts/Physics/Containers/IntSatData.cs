@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Assets.Scripts.Physics.Fabric.GravitationFabrics
+namespace Assets.Scripts.Physics.Containers
 {
     /// <summary>
     /// Intermediate sattelite data
