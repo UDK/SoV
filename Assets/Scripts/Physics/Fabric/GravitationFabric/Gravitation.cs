@@ -11,7 +11,7 @@ using System.Linq;
 namespace Assets.Scripts.Physics.Fabric.GravitationFabrics
 {
     //Добавлять небесное тело в родительская иерахию в rigidBody.setParent и проверять через GetParent есть ли родитель, если есть, то не притягивать02-
-    public class GravitationAdapter : IGravitationAdapter
+    public class Gravitation : IGravitationAdapter
     {
         private readonly IForce _forcePhysics;
         private readonly List<IntSatData> _registeredBodies;
@@ -25,7 +25,7 @@ namespace Assets.Scripts.Physics.Fabric.GravitationFabrics
         private const int _iterateCheckEntryOfOrbit = 30;
         private const double _boundPossibility = 0.75;
 
-        public GravitationAdapter(GameObject parent)
+        public Gravitation(GameObject parent)
         {
             _forcePhysics = new GravityForce();
             _registeredBodies = new List<IntSatData>();
@@ -60,16 +60,6 @@ namespace Assets.Scripts.Physics.Fabric.GravitationFabrics
                     continue;
                 }
                 Pull(_registeredBodies[i], _parent, gravityForce);
-                /*if (celestialBody.Value.TempI == 0)
-                {
-                    Pull(celestialBody.Value, _parent, MovementBehaviour, gravityForce);
-                    continue;
-                }
-                else if (celestialBody.Value.MovementBehaviour.tag != EnumTags.Satellite)
-                {
-                    CheckEntryIntoOrbit(celestialBody.Value, _parent);
-                    Pull(celestialBody.Value, _parent, MovementBehaviour, gravityForce);
-                }*/
             }
         }
 

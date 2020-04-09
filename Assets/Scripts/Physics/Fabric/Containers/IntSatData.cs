@@ -16,6 +16,8 @@ namespace Assets.Scripts.Physics.Fabric.GravitationFabrics
 
         public MonoBehaviour RawMonoBehaviour { get; set; }
 
+        public Collider2D Collider2D { get; set; }
+
         public int HitsBeforeOrbit { get; set; }
 
         public int TempI { get; set; }
@@ -25,12 +27,18 @@ namespace Assets.Scripts.Physics.Fabric.GravitationFabrics
             return satellite.MovementBehaviour;
         }
 
+        public static implicit operator Collider2D(IntSatData satellite)
+        {
+            return satellite.Collider2D;
+        }
+
         public static implicit operator IntSatData(GameObject collider2D)
         {
             return new IntSatData
             {
                 MovementBehaviour = collider2D.GetComponent<MovementBehaviour>(),
                 RawMonoBehaviour = collider2D.GetComponent<MonoBehaviour>(),
+                Collider2D = collider2D.GetComponent<Collider2D>(),
 
             };
         }
