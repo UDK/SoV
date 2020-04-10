@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using Assets.Scripts.Physics.Sattellite;
 using Assets.Scripts.Physics.Fabric.ForceFabrics;
 using System.Linq;
-using Assets.Scripts.ObjectsBase.Containers;
 
 namespace Assets.Scripts.Physics
 {
@@ -40,7 +39,7 @@ namespace Assets.Scripts.Physics
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (collision.CompareTag(EnumTags.FreeSpaceBody) &&
-                ((IGameplayBody)transform.parent.GetComponent<BodyBehaviourBase>().DataOfGameplay).Mass > ((IGameplayBody)collision.GetComponent<BodyBehaviourBase>().DataOfGameplay).Mass)
+                (transform.parent.GetComponent<BodyBehaviourBase>().Mass > collision.GetComponent<BodyBehaviourBase>().Mass))
             {
                 _registeredBodies.Add(collision.gameObject);
             }

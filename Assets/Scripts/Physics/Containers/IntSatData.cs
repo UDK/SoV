@@ -14,6 +14,7 @@ namespace Assets.Scripts.Physics.Containers
     {
         public MovementBehaviour MovementBehaviour { get; set; }
 
+        //Нужно будет удалить
         public MonoBehaviour RawMonoBehaviour { get; set; }
 
         public Collider2D Collider2D { get; set; }

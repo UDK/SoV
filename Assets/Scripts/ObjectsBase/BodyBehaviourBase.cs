@@ -1,5 +1,4 @@
-﻿using Assets.Scripts.ObjectsBase.Containers;
-using Assets.Scripts.Physics.Sattellite;
+﻿using Assets.Scripts.Physics.Sattellite;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,20 +7,20 @@ using Random = UnityEngine.Random;
 /// <summary>
 /// Игровой объект
 /// </summary>
-public class BodyBehaviourBase : MonoBehaviour
+public class BodyBehaviourBase : MonoBehaviour, ISatelliteBody
 {
     [SerializeField]
-    private IGameplayBody dataOfGameplay;
+    private float mass;
 
-    public IBody DataOfGameplay { get => (IBody)dataOfGameplay; }
 
     SatelliteManagerBehavior satelliteManager;
 
+    public float Mass => mass;
+
     private void Awake()
     {
-        dataOfGameplay = new BodyGameplay(this);
         satelliteManager = GetComponent<SatelliteManagerBehavior>();
-        dataOfGameplay.Mass = Random.Range(1f, 500f);
+        mass = Random.Range(1f, 500f);
     }
 
     // Start is called before the first frame update
@@ -37,5 +36,10 @@ public class BodyBehaviourBase : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+    }
+
+    public void Destroy()
+    {
+        this.Destroy();
     }
 }

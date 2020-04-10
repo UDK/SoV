@@ -28,7 +28,7 @@ namespace Assets.Scripts.Physics.Sattellite
                 new SatellitesContainer
                 {
                     satelliteObserver = satelliteBehaviour,
-                    satelliteBody = (ISatelliteBody)parent.GetComponent<BodyBehaviourBase>().DataOfGameplay,
+                    satelliteBody = parent.GetComponent<BodyBehaviourBase>(),
                 });
             satelliteBehaviour.DeltaDistanceModify(_deltaOrbitsDistance, satelliteObservers.Count);
             sattelite.tag = EnumTags.Satellite;
