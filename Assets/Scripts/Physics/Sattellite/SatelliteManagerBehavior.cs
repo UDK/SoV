@@ -14,14 +14,21 @@ namespace Assets.Scripts.Physics.Sattellite
         //Удалить и передавать при иницализации
         float _deltaOrbitsDistance = 3f;
 
+        [SerializeField]
+        List<MonoBehaviour> qqq = new List<MonoBehaviour>();
+
         List<ISatelliteObserver> satelliteObservers = new List<ISatelliteObserver>();
 
         public void AttacheSattelite(MonoBehaviour sattelite, MonoBehaviour parent)
         {
             Satellite satelliteBehaviour = new Satellite(sattelite.transform, parent.transform);
             satelliteObservers.Add(satelliteBehaviour);
+            satelliteBehaviour.DeltaDistanceModify(_deltaOrbitsDistance, satelliteObservers.Count);
             sattelite.tag = EnumTags.Satellite;
             sattelite.gameObject.layer = LayerMask.NameToLayer("sattelite");
+            //Чисто для дебага делаем спутник красным
+            sattelite.GetComponent<MeshRenderer>().material.color = Color.red;
+            qqq.Add(sattelite);
         }
 
         void DeAttacheSattelite()

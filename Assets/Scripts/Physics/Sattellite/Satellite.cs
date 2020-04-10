@@ -10,7 +10,13 @@ namespace Assets.Scripts.Physics.Sattellite
 {
     public class Satellite : ISatelliteObserver
     {
+        /// <summary>
+        /// Кто притягивает
+        /// </summary>
         private readonly Transform _target;
+        /// <summary>
+        /// Кто притягивается
+        /// </summary>
         private readonly Transform _subject;
 
         private float _deltaDistance = 3.0f;
@@ -20,10 +26,11 @@ namespace Assets.Scripts.Physics.Sattellite
         private Vector3 _relativeDistance = Vector3.zero;
         private bool _once = true;
 
-        public Satellite(Transform target, Transform subject)
+        public Satellite(Transform subject, Transform target)
         {
             _target = target;
             _subject = subject;
+            _relativeDistance = _subject.position - _target.position;
         }
 
         public void DeltaDistanceModify(float deltaDistance, int orbitsNumber)

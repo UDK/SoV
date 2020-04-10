@@ -46,7 +46,7 @@ MonoBehaviour:
   TargetSpeedForPlayers: 1
   Height: 2048
   Width: 2048
-  PointsOnOnePlanet: 40
+  PointsOnOnePlanet: 80
   PlanetNoiseScale: 4
   TileTypes:
   - Tile: 0
