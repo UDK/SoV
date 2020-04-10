@@ -17,12 +17,19 @@ namespace Assets.Scripts.Physics.Sattellite
         [SerializeField]
         List<MonoBehaviour> qqq = new List<MonoBehaviour>();
 
-        List<ISatelliteObserver> satelliteObservers = new List<ISatelliteObserver>();
+        List<SatellitesContainer> satelliteObservers = new List<SatellitesContainer>();
+
+
 
         public void AttacheSattelite(MonoBehaviour sattelite, MonoBehaviour parent)
         {
             Satellite satelliteBehaviour = new Satellite(sattelite.transform, parent.transform);
-            satelliteObservers.Add(satelliteBehaviour);
+            satelliteObservers.Add(
+                new SatellitesContainer
+                {
+                    satelliteObserver = satelliteBehaviour,
+                    satelliteBody = (ISatelliteBody)parent.GetComponent<BodyBehaviourBase>().DataOfGameplay,
+                });
             satelliteBehaviour.DeltaDistanceModify(_deltaOrbitsDistance, satelliteObservers.Count);
             sattelite.tag = EnumTags.Satellite;
             sattelite.gameObject.layer = LayerMask.NameToLayer("sattelite");
@@ -43,15 +50,15 @@ namespace Assets.Scripts.Physics.Sattellite
         {
             for (int iter = 0; iter < satelliteObservers.Count; iter++)
             {
-                satelliteObservers[iter].DeltaDistanceModify(newDeltaDistance,iter);
+                satelliteObservers[iter].satelliteObserver.DeltaDistanceModify(newDeltaDistance, iter);
             }
         }
 
         private void FixedUpdate()
         {
-            foreach(var satellit in satelliteObservers)
+            foreach (var satellit in satelliteObservers)
             {
-                satellit.Update();
+                satellit.satelliteObserver.Update();
             }
         }
     }

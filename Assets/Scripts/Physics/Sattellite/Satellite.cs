@@ -24,7 +24,8 @@ namespace Assets.Scripts.Physics.Sattellite
         private float _orbitDegreesPerSec = 30.0f;
 
         private Vector3 _relativeDistance = Vector3.zero;
-        private bool _once = true;
+        private bool _once = true; 
+
 
         public Satellite(Transform subject, Transform target)
         {

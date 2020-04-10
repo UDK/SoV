@@ -14,11 +14,6 @@ namespace Assets.Scripts.ObjectsBase.SpaceObject
         bool isCivilization { get; set; } = false;
 
         /// <summary>
-        /// Ссылки на спутнеики, чтобы их можно было съесть
-        /// </summary>
-        List<BodyBehaviourBase> bodyBehaviourBasesSattelites = new List<BodyBehaviourBase>();
-
-        /// <summary>
         /// Масса(хп) планеты
         /// </summary>
         uint Mass
@@ -35,8 +30,14 @@ namespace Assets.Scripts.ObjectsBase.SpaceObject
             }
         }
 
+        /// <summary>
+        /// Во что игровой объект превратится при апгрейде
+        /// </summary>
         public abstract void Upgrade();
 
+        /// <summary>
+        /// Во что игровой объект превратится при довнгрейде
+        /// </summary>
         public abstract void Downgrade();
 
 
