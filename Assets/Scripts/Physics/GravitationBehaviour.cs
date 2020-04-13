@@ -85,7 +85,13 @@ namespace Assets.Scripts.Physics
             //v = Math.Sqrt(u(2/r-1/a),3)
             //u - гравитационный параметр
             //r - расстояние между телами
-            //a - длина большой полуоси
+            //a - длина большой полуоси, a =u/2e,
+            //e - v^2 /2 - u / Abs(r)
+            //u - G(M + m)
+            //v - орбитальная скорость спутника, на основе вектора скорости
+            //r -  вектор положения спутника в координатах системы отсчёта, относительно которой должны быть вычислены элементы орбиты (например, геоцентрический в плоскости экватора — на орбите вокруг Земли, или гелиоцентрический в плоскости эклиптики — на орбите вокруг Солнца),
+            //G - гравитационная постоянная  6,674184(78) × 10−11
+            //ебать дроч, и это при том что все величины у нас условные
             Vector3 speed = possibleSatellite.MovementBehaviour.Velocity;
             if (Mathf.Abs((parentalObject.MovementBehaviour.Velocity - speed).x) < _inaccuracy.x &&
                 Mathf.Abs((parentalObject.MovementBehaviour.Velocity - speed).y) < _inaccuracy.y)
