@@ -20,7 +20,7 @@ namespace Assets.Scripts.Physics
 
         //2 - очень сильно зависти от скорости, надо будет её в конце или вывести или получить эмпирическим путем
         private readonly Vector2 _inaccuracy = new Vector2(2, 2);
-        private const int _iterateCheckEntryOfOrbit = 30;
+        private const int _iterateCheckEntryOfOrbit = 30000;
         private const double _boundPossibility = 0.75;
 
 
@@ -82,6 +82,10 @@ namespace Assets.Scripts.Physics
             IntSatData possibleSatellite,
             IntSatData parentalObject)
         {
+            //v = Math.Sqrt(u(2/r-1/a),3)
+            //u - гравитационный параметр
+            //r - расстояние между телами
+            //a - длина большой полуоси
             Vector3 speed = possibleSatellite.MovementBehaviour.Velocity;
             if (Mathf.Abs((parentalObject.MovementBehaviour.Velocity - speed).x) < _inaccuracy.x &&
                 Mathf.Abs((parentalObject.MovementBehaviour.Velocity - speed).y) < _inaccuracy.y)
