@@ -113,8 +113,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2552b7bedd4c81f4fad848e4d13c1aea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Mass: 0
-  Satellites: 0
+  mass: 0
 --- !u!114 &5326998679394715418
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -128,7 +127,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AccelarationDeltaTime: 0.01
-  MaxVelocity: 2
+  MaxVelocity: 10
 --- !u!50 &-5287210698986922439
 Rigidbody2D:
   serializedVersion: 4
@@ -162,6 +161,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f871dbd2ea4b37e48a79154de52d16ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  qqq: []
 --- !u!1001 &6150685166652044827
 PrefabInstance:
   m_ObjectHideFlags: 0

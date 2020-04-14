@@ -18,10 +18,15 @@ namespace Assets.Scripts.Physics
         private IntSatData _parent;
         private SatelliteManagerBehavior _satelliteManagerBehavior;
 
-        //2 - очень сильно зависти от скорости, надо будет её в конце или вывести или получить эмпирическим путем
-        private readonly Vector2 _inaccuracy = new Vector2(2, 2);
-        private const int _iterateCheckEntryOfOrbit = 30000;
-        private const double _boundPossibility = 0.75;
+        /// <summary>
+        /// Переменная разброса проверки выхода на орбиту, очень сильно зависти от скорости
+        /// </summary>
+        private Vector2 _inaccuracy;
+        /// <summary>
+        /// Сколько итераций проверки выхода на орбиту произойдет
+        /// </summary>
+        private const int _iterateCheckEntryOfOrbit = 300;
+        private const double _boundPossibility = 0.7;
 
 
         [SerializeField]
@@ -35,6 +40,11 @@ namespace Assets.Scripts.Physics
             _satelliteManagerBehavior = GetComponentInParent<SatelliteManagerBehavior>();
         }
 
+        private void Start()
+        {
+            //Примерно при _boundPossibility = 0,7 множитель 0,031f наилучшим образом подходит
+            _inaccuracy = new Vector2(GetComponentInParent<MovementBehaviour>().MaxVelocity * 0.031f, GetComponentInParent<MovementBehaviour>().MaxVelocity * 0.031f);
+        }
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
@@ -76,7 +86,7 @@ namespace Assets.Scripts.Physics
         /// 
         /// </summary>
         /// <param name="possibleSatellite">Объект который вошел в зону влияния(притяжения)</param>
-        /// <param name="parentalObject"></param>
+        /// <param name="parentalObject">Объект который тянет</param>
         /// <returns></returns>
         private bool CheckEntryIntoOrbit(
             IntSatData possibleSatellite,
@@ -93,6 +103,8 @@ namespace Assets.Scripts.Physics
             //G - гравитационная постоянная  6,674184(78) × 10−11
             //ебать дроч, и это при том что все величины у нас условные
             Vector3 speed = possibleSatellite.MovementBehaviour.Velocity;
+            Debug.Log(Mathf.Abs((parentalObject.MovementBehaviour.Velocity - speed).x) < _inaccuracy.x &&
+                Mathf.Abs((parentalObject.MovementBehaviour.Velocity - speed).y) < _inaccuracy.y);
             if (Mathf.Abs((parentalObject.MovementBehaviour.Velocity - speed).x) < _inaccuracy.x &&
                 Mathf.Abs((parentalObject.MovementBehaviour.Velocity - speed).y) < _inaccuracy.y)
             {
@@ -100,6 +112,7 @@ namespace Assets.Scripts.Physics
             }
 
             possibleSatellite.TempI++;
+            //Ждем пока объект попадет под влияние положеннное количество раз
             if (possibleSatellite.TempI < _iterateCheckEntryOfOrbit)
             {
                 return false;
