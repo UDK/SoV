@@ -78,16 +78,20 @@ namespace Assets.Scripts.Physics
             for (int i = 0; i < _registeredBodies.Count; i++)
             {
                 bool satelliteReady = false;
-                if (_satelliteManagerBehavior.IsntMaxSatCountReached())
+                if (!_satelliteManagerBehavior.IsMaxSatCountReached())
                 {
                     if (_registeredBodies[i].Collider2D.tag == EnumTags.Satellite ||
                         (satelliteReady = CheckEntryIntoOrbit(_registeredBodies[i], _parent)))
                     {
                         _registeredBodies.RemoveAt(i);
                         i--;
-                        if (satelliteReady || _satelliteManagerBehavior.IsntMaxSatCountReached())
+                        if (satelliteReady)
                         {
                             RefreshPossibleSatellites();
+                        }
+                        if (_satelliteManagerBehavior.IsMaxSatCountReached())
+                        {
+                            break;
                         }
                         continue;
                     }

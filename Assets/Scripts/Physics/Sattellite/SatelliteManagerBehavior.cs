@@ -53,9 +53,9 @@ namespace Assets.Scripts.Physics.Sattellite
             //
         }
 
-        public bool IsntMaxSatCountReached()
+        public bool IsMaxSatCountReached()
         {
-            if (satelliteObservers.Count >= maxCountSattelites)
+            if (satelliteObservers.Count < maxCountSattelites)
                 return false;
             return true;
         }
