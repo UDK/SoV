@@ -89,10 +89,6 @@ namespace Assets.Scripts.Physics
                         {
                             RefreshPossibleSatellites();
                         }
-                        if (_satelliteManagerBehavior.IsMaxSatCountReached())
-                        {
-                            break;
-                        }
                         continue;
                     }
                 }
