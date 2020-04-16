@@ -78,7 +78,7 @@ namespace Assets.Scripts.Physics
             for (int i = 0; i < _registeredBodies.Count; i++)
             {
                 bool satelliteReady = false;
-                if (_satelliteManagerBehavior.IsAddSattelie())
+                if (_satelliteManagerBehavior.MaxSatCountIsntReached())
                 {
                     if (_registeredBodies[i].Collider2D.tag == EnumTags.Satellite ||
                         (satelliteReady = CheckEntryIntoOrbit(_registeredBodies[i], _parent)))

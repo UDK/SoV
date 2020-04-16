@@ -53,7 +53,7 @@ namespace Assets.Scripts.Physics.Sattellite
             //
         }
 
-        public bool IsAddSattelie()
+        public bool MaxSatCountIsntReached()
         {
             if (satelliteObservers.Count >= maxCountSattelites)
                 return false;
