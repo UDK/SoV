@@ -19,7 +19,8 @@ namespace Assets.Scripts.Physics.Sattellite
 
         List<SatellitesContainer> satelliteObservers = new List<SatellitesContainer>();
 
-
+        public float LastRadius =>
+            _deltaOrbitsDistance * (satelliteObservers.Count + 1);
 
         public void AttacheSattelite(MonoBehaviour sattelite, MonoBehaviour parent)
         {

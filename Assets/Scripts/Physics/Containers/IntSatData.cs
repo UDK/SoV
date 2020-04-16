@@ -16,12 +16,9 @@ namespace Assets.Scripts.Physics.Containers
 
         public Collider2D Collider2D { get; set; }
 
-        /// <summary>
-        /// Последний ридиус между плаентой и спутником
-        /// </summary>
-        public float LastRadius { get; set; }
-
         public int HitsBeforeOrbit { get; set; }
+
+        public float TimeLeftTillNextCheck { get; set; }
 
         public int TempI { get; set; }
 

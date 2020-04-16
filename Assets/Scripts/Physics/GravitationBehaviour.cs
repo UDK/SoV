@@ -13,20 +13,26 @@ namespace Assets.Scripts.Physics
 {
     public class GravitationBehaviour : MonoBehaviour
     {
+        /// <summary>
+        /// Переменная разброса проверки выхода на орбиту, очень сильно зависти от скорости
+        /// </summary>
+        public float Inaccuracy = 0.3f;
+        /// <summary>
+        /// Переменная разброса проверки выхода на орбиту, очень сильно зависти от скорости
+        /// </summary>
+        public float DeltaTimeTillOrbit = 0.5f;
+
         private IForce _forcePhysics;
         private List<IntSatData> _registeredBodies;
         private MovementBehaviour _parent;
         private SatelliteManagerBehavior _satelliteManagerBehavior;
-
-        /// <summary>
-        /// Переменная разброса проверки выхода на орбиту, очень сильно зависти от скорости
-        /// </summary>
-        private float _inaccuracy;
         /// <summary>
         /// Сколько итераций проверки выхода на орбиту произойдет
         /// </summary>
-        private const int _iterateCheckEntryOfOrbit = 200;
-        private const double _boundPossibility = 0.78;
+        private const int _iterateCheckEntryOfOrbit = 3;
+
+        private float _minR = 0;
+        private float _maxR = 0;
 
 
         [SerializeField]
@@ -42,7 +48,7 @@ namespace Assets.Scripts.Physics
 
         private void Start()
         {
-            _inaccuracy = 0.1f;
+            CalcInflRadius();
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
@@ -50,10 +56,8 @@ namespace Assets.Scripts.Physics
             if (collision.CompareTag(EnumTags.FreeSpaceBody) &&
                 (transform.parent.GetComponent<BodyBehaviourBase>().Mass > collision.GetComponent<BodyBehaviourBase>().Mass))
             {
-                _registeredBodies.Add(collision.gameObject);
-                var spaceBody = _registeredBodies.Last();
-                spaceBody.LastRadius = Mathf.Sqrt(Mathf.Pow(_parent.transform.position.x - spaceBody.MovementBehaviour.transform.position.x, 2)
-                + Mathf.Pow(_parent.transform.position.y - spaceBody.MovementBehaviour.transform.position.y, 2));
+                IntSatData intSatData = collision.gameObject;
+                _registeredBodies.Add(intSatData);
             }
         }
 
@@ -73,15 +77,38 @@ namespace Assets.Scripts.Physics
         {
             for (int i = 0; i < _registeredBodies.Count; i++)
             {
-                if (_registeredBodies[i].Collider2D.tag == EnumTags.Satellite
-                    || CheckEntryIntoOrbit(_registeredBodies[i], _parent))
+                bool satelliteReady = false;
+                if (_registeredBodies[i].Collider2D.tag == EnumTags.Satellite ||
+                    (satelliteReady = CheckEntryIntoOrbit(_registeredBodies[i], _parent)))
                 {
                     _registeredBodies.RemoveAt(i);
                     i--;
+                    if (satelliteReady)
+                    {
+                        RefreshPossibleSatellites();
+                    }
                     continue;
                 }
+
                 Pull(_registeredBodies[i], _parent, _gravityForce);
             }
+        }
+
+        private void RefreshPossibleSatellites()
+        {
+            for (int j = 0; j < _registeredBodies.Count; j++)
+            {
+                _registeredBodies[j].TimeLeftTillNextCheck = 0;
+                _registeredBodies[j].HitsBeforeOrbit = 0;
+                _registeredBodies[j].TempI = 0;
+            }
+        }
+
+        private void CalcInflRadius()
+        {
+            var r = _satelliteManagerBehavior.LastRadius;
+            _minR = r - r * Inaccuracy;
+            _maxR = r + r * Inaccuracy;
         }
 
         /// <summary>
@@ -94,30 +121,38 @@ namespace Assets.Scripts.Physics
             IntSatData possibleSatellite,
             MovementBehaviour parentalObject)
         {
-            float distanceBeetwenPoints = Mathf.Sqrt(Mathf.Pow(parentalObject.transform.position.x - possibleSatellite.MovementBehaviour.transform.position.x, 2)
-                + Mathf.Pow(parentalObject.transform.position.y - possibleSatellite.MovementBehaviour.transform.position.y, 2));
-            if (Mathf.Abs(distanceBeetwenPoints - possibleSatellite.LastRadius) < _inaccuracy)
+            possibleSatellite.TimeLeftTillNextCheck -= Time.fixedDeltaTime;
+            if (possibleSatellite.TimeLeftTillNextCheck > 0)
             {
-                possibleSatellite.HitsBeforeOrbit++;
-                Debug.Log(Mathf.Abs(distanceBeetwenPoints - possibleSatellite.LastRadius));
+                return false;
             }
-            possibleSatellite.LastRadius = distanceBeetwenPoints;
+            possibleSatellite.TimeLeftTillNextCheck = DeltaTimeTillOrbit;
+
+            float distanceBeetwenPoints = Vector3.Distance(
+                parentalObject.transform.position,
+                possibleSatellite.MovementBehaviour.transform.position);
+            //Debug.Log($"{_minR} < {distanceBeetwenPoints} < {_maxR}");
+
+            if (!(_minR < distanceBeetwenPoints &&
+                _maxR > distanceBeetwenPoints))
+            {
+                possibleSatellite.TimeLeftTillNextCheck = 0;
+                possibleSatellite.HitsBeforeOrbit = 0;
+                possibleSatellite.TempI = 0;
+                return false;
+            }
             possibleSatellite.TempI++;
+            //Debug.Log("Hit: " + possibleSatellite.TempI);
             //Ждем пока объект попадет под влияние положеннное количество раз
             if (possibleSatellite.TempI < _iterateCheckEntryOfOrbit)
             {
                 return false;
             }
-            //если опрделенное количество проверок пройдено, то делаем его спутником
-            if (_iterateCheckEntryOfOrbit * _boundPossibility <= possibleSatellite.HitsBeforeOrbit)
-            {
-                _satelliteManagerBehavior.AttacheSattelite(possibleSatellite, parentalObject);
-                return true;
-            }
 
-            possibleSatellite.TempI = 0;
-            possibleSatellite.HitsBeforeOrbit = 0;
-            return false;
+            //если опрделенное количество проверок пройдено, то делаем его спутником
+            _satelliteManagerBehavior.AttacheSattelite(possibleSatellite, parentalObject);
+            CalcInflRadius();
+            return true;
 
         }
 
