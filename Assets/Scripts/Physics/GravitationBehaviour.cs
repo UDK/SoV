@@ -85,7 +85,7 @@ namespace Assets.Scripts.Physics
                     {
                         _registeredBodies.RemoveAt(i);
                         i--;
-                        if (satelliteReady)
+                        if (satelliteReady || _satelliteManagerBehavior.MaxSatCountIsntReached())
                         {
                             RefreshPossibleSatellites();
                         }
