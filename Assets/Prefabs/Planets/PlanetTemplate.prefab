@@ -161,6 +161,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f871dbd2ea4b37e48a79154de52d16ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  RadiusEntryOrbit: 3
+  maxCountSattelites: 1
   qqq: []
 --- !u!1001 &6150685166652044827
 PrefabInstance:

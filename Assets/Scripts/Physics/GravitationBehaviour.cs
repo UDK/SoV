@@ -14,9 +14,9 @@ namespace Assets.Scripts.Physics
     public class GravitationBehaviour : MonoBehaviour
     {
         /// <summary>
-        /// Переменная разброса проверки выхода на орбиту, очень сильно зависти от скорости
+        /// Переменная разброса(+-) проверки выхода на орбиту, очень сильно зависти от скорости
         /// </summary>
-        public float Inaccuracy = 0.3f;
+        public float Inaccuracy = 0.9f;
         /// <summary>
         /// Переменная разброса проверки выхода на орбиту, очень сильно зависти от скорости
         /// </summary>
@@ -78,18 +78,20 @@ namespace Assets.Scripts.Physics
             for (int i = 0; i < _registeredBodies.Count; i++)
             {
                 bool satelliteReady = false;
-                if (_registeredBodies[i].Collider2D.tag == EnumTags.Satellite ||
-                    (satelliteReady = CheckEntryIntoOrbit(_registeredBodies[i], _parent)))
+                if (_satelliteManagerBehavior.IsAddSattelie())
                 {
-                    _registeredBodies.RemoveAt(i);
-                    i--;
-                    if (satelliteReady)
+                    if (_registeredBodies[i].Collider2D.tag == EnumTags.Satellite ||
+                        (satelliteReady = CheckEntryIntoOrbit(_registeredBodies[i], _parent)))
                     {
-                        RefreshPossibleSatellites();
+                        _registeredBodies.RemoveAt(i);
+                        i--;
+                        if (satelliteReady)
+                        {
+                            RefreshPossibleSatellites();
+                        }
+                        continue;
                     }
-                    continue;
                 }
-
                 Pull(_registeredBodies[i], _parent, _gravityForce);
             }
         }
@@ -107,8 +109,8 @@ namespace Assets.Scripts.Physics
         private void CalcInflRadius()
         {
             var r = _satelliteManagerBehavior.LastRadius;
-            _minR = r - r * Inaccuracy;
-            _maxR = r + r * Inaccuracy;
+            _minR = r - Inaccuracy;
+            _maxR = r + Inaccuracy;
         }
 
         /// <summary>

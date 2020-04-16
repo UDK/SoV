@@ -9,11 +9,24 @@ using UnityEngine;
 
 namespace Assets.Scripts.Physics.Sattellite
 {
+    /// <summary>
+    /// Скорее всего перестанет наследоваться от MonoBehaviour????
+    /// </summary>
     class SatelliteManagerBehavior : MonoBehaviour
     {
         //Удалить и передавать при иницализации
+        [SerializeField]
         float _deltaOrbitsDistance = 3f;
 
+        /// <summary>
+        /// Максимальное количество возможных спутников, изменять в Upgrade/DownGrade, общего класса SpaceObject
+        /// </summary>
+        [SerializeField]
+        private int maxCountSattelites = 1;
+
+        /// <summary>
+        /// Это для тестов, надо будет удалить
+        /// </summary>
         [SerializeField]
         List<MonoBehaviour> qqq = new List<MonoBehaviour>();
 
@@ -37,6 +50,14 @@ namespace Assets.Scripts.Physics.Sattellite
             //Чисто для дебага делаем спутник красным
             sattelite.GetComponent<MeshRenderer>().material.color = Color.red;
             qqq.Add(sattelite);
+            //
+        }
+
+        public bool IsAddSattelie()
+        {
+            if (satelliteObservers.Count >= maxCountSattelites)
+                return false;
+            return true;
         }
 
         void DeAttacheSattelite()

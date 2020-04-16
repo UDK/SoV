@@ -60,4 +60,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3613bfbf9144d84b874c5b13011c2b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  RadiusEntryOrbit: 3
+  Inaccuracy: 0.9
+  DeltaTimeTillOrbit: 0.5
   _gravityForce: 0.5
