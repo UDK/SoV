@@ -14,10 +14,12 @@ namespace Assets.Scripts.Physics.Containers
     {
         public MovementBehaviour MovementBehaviour { get; set; }
 
-        //Нужно будет удалить
-        public MonoBehaviour RawMonoBehaviour { get; set; }
-
         public Collider2D Collider2D { get; set; }
+
+        /// <summary>
+        /// Последний ридиус между плаентой и спутником
+        /// </summary>
+        public float LastRadius { get; set; }
 
         public int HitsBeforeOrbit { get; set; }
 
@@ -38,7 +40,6 @@ namespace Assets.Scripts.Physics.Containers
             return new IntSatData
             {
                 MovementBehaviour = collider2D.GetComponent<MovementBehaviour>(),
-                RawMonoBehaviour = collider2D.GetComponent<MonoBehaviour>(),
                 Collider2D = collider2D.GetComponent<Collider2D>(),
 
             };

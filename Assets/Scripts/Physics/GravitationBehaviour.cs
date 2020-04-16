@@ -15,18 +15,18 @@ namespace Assets.Scripts.Physics
     {
         private IForce _forcePhysics;
         private List<IntSatData> _registeredBodies;
-        private IntSatData _parent;
+        private MovementBehaviour _parent;
         private SatelliteManagerBehavior _satelliteManagerBehavior;
 
         /// <summary>
         /// Переменная разброса проверки выхода на орбиту, очень сильно зависти от скорости
         /// </summary>
-        private Vector2 _inaccuracy;
+        private float _inaccuracy;
         /// <summary>
         /// Сколько итераций проверки выхода на орбиту произойдет
         /// </summary>
-        private const int _iterateCheckEntryOfOrbit = 300;
-        private const double _boundPossibility = 0.7;
+        private const int _iterateCheckEntryOfOrbit = 200;
+        private const double _boundPossibility = 0.78;
 
 
         [SerializeField]
@@ -36,14 +36,13 @@ namespace Assets.Scripts.Physics
         {
             _forcePhysics = new GravityForce();
             _registeredBodies = new List<IntSatData>();
-            _parent = transform.parent.gameObject;
+            _parent = transform.parent.GetComponent<MovementBehaviour>();
             _satelliteManagerBehavior = GetComponentInParent<SatelliteManagerBehavior>();
         }
 
         private void Start()
         {
-            //Примерно при _boundPossibility = 0,7 множитель 0,031f наилучшим образом подходит
-            _inaccuracy = new Vector2(GetComponentInParent<MovementBehaviour>().MaxVelocity * 0.031f, GetComponentInParent<MovementBehaviour>().MaxVelocity * 0.031f);
+            _inaccuracy = 0.1f;
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
@@ -52,6 +51,9 @@ namespace Assets.Scripts.Physics
                 (transform.parent.GetComponent<BodyBehaviourBase>().Mass > collision.GetComponent<BodyBehaviourBase>().Mass))
             {
                 _registeredBodies.Add(collision.gameObject);
+                var spaceBody = _registeredBodies.Last();
+                spaceBody.LastRadius = Mathf.Sqrt(Mathf.Pow(_parent.transform.position.x - spaceBody.MovementBehaviour.transform.position.x, 2)
+                + Mathf.Pow(_parent.transform.position.y - spaceBody.MovementBehaviour.transform.position.y, 2));
             }
         }
 
@@ -59,11 +61,11 @@ namespace Assets.Scripts.Physics
         {
             if (collision.CompareTag(EnumTags.FreeSpaceBody))
             {
-                if (!_registeredBodies.Any(x => x.RawMonoBehaviour.gameObject == collision.gameObject))
+                if (!_registeredBodies.Any(x => x.Collider2D.gameObject == collision.gameObject))
                     return;
 
                 collision.tag = EnumTags.FreeSpaceBody;
-                _registeredBodies.RemoveAll(x => x.RawMonoBehaviour.gameObject == collision.gameObject);
+                _registeredBodies.RemoveAll(x => x.Collider2D.gameObject == collision.gameObject);
             }
         }
 
@@ -71,7 +73,7 @@ namespace Assets.Scripts.Physics
         {
             for (int i = 0; i < _registeredBodies.Count; i++)
             {
-                if (_registeredBodies[i].RawMonoBehaviour.tag == EnumTags.Satellite
+                if (_registeredBodies[i].Collider2D.tag == EnumTags.Satellite
                     || CheckEntryIntoOrbit(_registeredBodies[i], _parent))
                 {
                     _registeredBodies.RemoveAt(i);
@@ -90,34 +92,23 @@ namespace Assets.Scripts.Physics
         /// <returns></returns>
         private bool CheckEntryIntoOrbit(
             IntSatData possibleSatellite,
-            IntSatData parentalObject)
+            MovementBehaviour parentalObject)
         {
-            //v = Math.Sqrt(u(2/r-1/a),3)
-            //u - гравитационный параметр
-            //r - расстояние между телами
-            //a - длина большой полуоси, a =u/2e,
-            //e - v^2 /2 - u / Abs(r)
-            //u - G(M + m)
-            //v - орбитальная скорость спутника, на основе вектора скорости
-            //r -  вектор положения спутника в координатах системы отсчёта, относительно которой должны быть вычислены элементы орбиты (например, геоцентрический в плоскости экватора — на орбите вокруг Земли, или гелиоцентрический в плоскости эклиптики — на орбите вокруг Солнца),
-            //G - гравитационная постоянная  6,674184(78) × 10−11
-            //ебать дроч, и это при том что все величины у нас условные
-            Vector3 speed = possibleSatellite.MovementBehaviour.Velocity;
-            Debug.Log(Mathf.Abs((parentalObject.MovementBehaviour.Velocity - speed).x) < _inaccuracy.x &&
-                Mathf.Abs((parentalObject.MovementBehaviour.Velocity - speed).y) < _inaccuracy.y);
-            if (Mathf.Abs((parentalObject.MovementBehaviour.Velocity - speed).x) < _inaccuracy.x &&
-                Mathf.Abs((parentalObject.MovementBehaviour.Velocity - speed).y) < _inaccuracy.y)
+            float distanceBeetwenPoints = Mathf.Sqrt(Mathf.Pow(parentalObject.transform.position.x - possibleSatellite.MovementBehaviour.transform.position.x, 2)
+                + Mathf.Pow(parentalObject.transform.position.y - possibleSatellite.MovementBehaviour.transform.position.y, 2));
+            if (Mathf.Abs(distanceBeetwenPoints - possibleSatellite.LastRadius) < _inaccuracy)
             {
                 possibleSatellite.HitsBeforeOrbit++;
+                Debug.Log(Mathf.Abs(distanceBeetwenPoints - possibleSatellite.LastRadius));
             }
-
+            possibleSatellite.LastRadius = distanceBeetwenPoints;
             possibleSatellite.TempI++;
             //Ждем пока объект попадет под влияние положеннное количество раз
             if (possibleSatellite.TempI < _iterateCheckEntryOfOrbit)
             {
                 return false;
             }
-
+            //если опрделенное количество проверок пройдено, то делаем его спутником
             if (_iterateCheckEntryOfOrbit * _boundPossibility <= possibleSatellite.HitsBeforeOrbit)
             {
                 _satelliteManagerBehavior.AttacheSattelite(possibleSatellite, parentalObject);
@@ -130,7 +121,7 @@ namespace Assets.Scripts.Physics
 
         }
 
-        private void Pull(IntSatData satellite, IntSatData parent, float gravityForce)
+        private void Pull(IntSatData satellite, MovementBehaviour parent, float gravityForce)
         {
             var force = _forcePhysics.PullForceFabricMethod(
                 parent,
