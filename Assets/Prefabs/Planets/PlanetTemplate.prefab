@@ -113,7 +113,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2552b7bedd4c81f4fad848e4d13c1aea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mass: 0
+  _mass: 0
 --- !u!114 &5326998679394715418
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -161,7 +161,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f871dbd2ea4b37e48a79154de52d16ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RadiusEntryOrbit: 3
+  _deltaOrbitsDistance: 3
   maxCountSattelites: 1
   qqq: []
 --- !u!1001 &6150685166652044827
@@ -189,7 +189,7 @@ PrefabInstance:
     - target: {fileID: 9023501368151451178, guid: 601d7fa4662711840bf29f33ba2237c6,
         type: 3}
       propertyPath: m_Name
-      value: Core
+      value: Magnet
       objectReference: {fileID: 0}
     - target: {fileID: 9023501368151451178, guid: 601d7fa4662711840bf29f33ba2237c6,
         type: 3}

@@ -35,7 +35,7 @@ namespace Assets.Scripts.Physics.Sattellite
         public float LastRadius =>
             _deltaOrbitsDistance * (satelliteObservers.Count + 1);
 
-        public void AttacheSattelite(MonoBehaviour sattelite, MonoBehaviour parent)
+        public void AttachSatellite(MonoBehaviour sattelite, MonoBehaviour parent)
         {
             Satellite satelliteBehaviour = new Satellite(sattelite.transform, parent.transform);
             satelliteObservers.Add(
@@ -45,8 +45,7 @@ namespace Assets.Scripts.Physics.Sattellite
                     satelliteBody = parent.GetComponent<BodyBehaviourBase>(),
                 });
             satelliteBehaviour.DeltaDistanceModify(_deltaOrbitsDistance, satelliteObservers.Count);
-            sattelite.tag = EnumTags.Satellite;
-            sattelite.gameObject.layer = LayerMask.NameToLayer("sattelite");
+            sattelite.gameObject.layer = LayerEnums.Satellite;
             //Чисто для дебага делаем спутник красным
             sattelite.GetComponent<MeshRenderer>().material.color = Color.red;
             qqq.Add(sattelite);

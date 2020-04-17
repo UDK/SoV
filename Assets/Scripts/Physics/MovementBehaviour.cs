@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Assets.Scripts.Helpers;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,7 +22,13 @@ namespace Assets.Scripts.Physics
         public Vector3 Velocity =>
             _velocity;
 
+        public float Magnitude =>
+            _magnitude;
+
         private Vector3 _velocity = Vector3.zero;
+        private float _magnitude = 0f;
+
+        private bool _block = false;
 
         /// <summary>
         /// Smoothly set velocity
@@ -28,6 +36,10 @@ namespace Assets.Scripts.Physics
         /// <param name="velocity">Normalized vector3 for pointing direction for moving</param>
         public void SmoothlySetVelocity(Vector3 velocity)
         {
+            if (_block)
+            {
+                return;
+            }
             //Debug.Log(physicsVelocity.Linear);
             /*var currentSpeed2 = math.sqrt(math.pow(velocity.x, 2) + math.pow(velocity.y, 2) + math.pow(velocity.z, 2));
             if(currentSpeed2 > MaxVelocity)
@@ -37,10 +49,10 @@ namespace Assets.Scripts.Physics
             }*/
             if (velocity.x != 0 || velocity.y != 0 || velocity.z != 0)
             {
-                var currentSpeed = math.sqrt(math.pow(_velocity.x, 2) + math.pow(_velocity.y, 2)+ math.pow(_velocity.z, 2));
+                _magnitude = math.sqrt(math.pow(_velocity.x, 2) + math.pow(_velocity.y, 2)+ math.pow(_velocity.z, 2));
                 
                 /*Debug.Log(currentSpeed);*/
-                if (currentSpeed > MaxVelocity)
+                if (_magnitude > MaxVelocity)
                 {
                     velocity = Vector3.zero;
                 }
@@ -53,9 +65,36 @@ namespace Assets.Scripts.Physics
         /// Rough set speed
         /// </summary>
         /// <param name="iv">Normalized vector3 for pointing direction for moving</param>
-        public void SetVelocity(Vector3 velocity)
+        public void SetVelocity(Vector3 velocity, bool block = false)
         {
             _velocity = velocity;
+            _magnitude = math.sqrt(math.pow(_velocity.x, 2) + math.pow(_velocity.y, 2) + math.pow(_velocity.z, 2));
+            if (block && !_block)
+            {
+                _block = true;
+                StartCoroutine(WaitBlock());
+            }
+        }
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if (!LayerEnums.IsBody(collision.gameObject.layer))
+            {
+                return;
+            }
+
+            var enemy = collision.GetComponent<MovementBehaviour>();
+            if(_magnitude > enemy.Magnitude)
+            {
+                var speed = _velocity.normalized * 0.02f;
+                SetVelocity(speed * -1, true);
+                enemy.SetVelocity(speed, true);
+            }
+        }
+
+        private IEnumerator WaitBlock()
+        {
+            yield return new WaitForSeconds(1f);
+            _block = false;
         }
 
         private void FixedUpdate()

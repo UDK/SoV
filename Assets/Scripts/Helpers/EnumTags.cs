@@ -11,8 +11,6 @@ namespace Assets.Scripts.Helpers
     /// </summary>
     public static class EnumTags
     {
-        static public string Satellite = "Satellite";
-        static public string Core = "Core Gravity";
-        static public string FreeSpaceBody = "Space body";
+        static public string Player = "Player";
     }
 }

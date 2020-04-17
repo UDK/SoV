@@ -1,4 +1,6 @@
-﻿using Assets.Scripts.Physics.Sattellite;
+﻿using Assets.Scripts.Helpers;
+using Assets.Scripts.Physics;
+using Assets.Scripts.Physics.Sattellite;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,50 +14,47 @@ public class BodyBehaviourBase : MonoBehaviour, ISatelliteBody
     [SerializeField]
     private float _mass;
 
+    [SerializeField]
     private float _incarancyEating;
 
     private float _incarancyTotalDestraction;
 
-    SatelliteManagerBehavior satelliteManager;
+    private SatelliteManagerBehavior _satelliteManager;
+    private MovementBehaviour _movementBehaviour;
 
     public float Mass => _mass;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.layer != LayerMask.NameToLayer("planetMagnet"))
-            RegisterDamage(collision);
+        /*if (LayerEnums.IsBody(collision.gameObject.layer))
+            RegisterDamage(collision);*/
     }
 
     private void RegisterDamage(Collider2D collision)
     {
-        var gameObject = collision.GetComponent<BodyBehaviourBase>();
-        var mass = Mass - gameObject.Mass;
+        var enemy = collision.GetComponent<BodyBehaviourBase>();
+        var mass = Mass - enemy.Mass;
         if (mass > 0)
         {
             var damage = _mass * _incarancyEating;
-            if (gameObject.MakeDamage(damage))
+            if (enemy.MakeDamage(damage))
             {
                 _mass += damage;
             }
             else
             {
-                MakeDamage(gameObject.Mass * 0.3f);
+                MakeDamage(enemy.Mass * 0.3f);
             }
-            //if(gameObject.Mass * _incarancyEating < _mass)
-            //{
-            //    _mass += gameObject.Mass;
-            //    gameObject.Destroy();
-            //}
-            //else if(gameObject.Mass * _incarancyTotalDestraction < _mass)
-            //{
-            //    _mass -= gameObject.Mass;
-            //    gameObject.Destroy();
-            //}
-            //else
-            //{
-
-            //    _mass -= gameObject.Mass;
-            //}
+        }
+        else if(mass == 0)
+        {
+            var damage = _mass * 0.25f;
+            enemy.MakeDamage(damage);
+            if(gameObject.CompareTag(EnumTags.Player))
+            {
+                damage *= 0.95f;
+            }
+            MakeDamage(damage);
         }
     }
 
@@ -72,12 +71,13 @@ public class BodyBehaviourBase : MonoBehaviour, ISatelliteBody
 
     private void Awake()
     {
-        satelliteManager = GetComponent<SatelliteManagerBehavior>();
-        _mass = Random.Range(1f, 500f);
+        _satelliteManager = GetComponent<SatelliteManagerBehavior>();
+        _movementBehaviour = GetComponent<MovementBehaviour>();
+        //_mass = Random.Range(1f, 500f);
     }
 
     public void Destroy()
     {
-        this.Destroy();
+        Destroy(gameObject);
     }
 }

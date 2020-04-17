@@ -53,8 +53,7 @@ namespace Assets.Scripts.Physics
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (collision.CompareTag(EnumTags.FreeSpaceBody) &&
-                (transform.parent.GetComponent<BodyBehaviourBase>().Mass > collision.GetComponent<BodyBehaviourBase>().Mass))
+            if (LayerEnums.IsFreeSpaceBody(collision.gameObject.layer))
             {
                 IntSatData intSatData = collision.gameObject;
                 _registeredBodies.Add(intSatData);
@@ -63,24 +62,28 @@ namespace Assets.Scripts.Physics
 
         private void OnTriggerExit2D(Collider2D collision)
         {
-            if (collision.CompareTag(EnumTags.FreeSpaceBody))
+            if (LayerEnums.IsFreeSpaceBody(collision.gameObject.layer))
             {
                 if (!_registeredBodies.Any(x => x.Collider2D.gameObject == collision.gameObject))
                     return;
 
-                collision.tag = EnumTags.FreeSpaceBody;
                 _registeredBodies.RemoveAll(x => x.Collider2D.gameObject == collision.gameObject);
             }
         }
 
         void FixedUpdate()
         {
+            if (_registeredBodies == null)
+            {
+                _registeredBodies = new List<IntSatData>();
+            }
+
             for (int i = 0; i < _registeredBodies.Count; i++)
             {
                 bool satelliteReady = false;
                 if (!_satelliteManagerBehavior.IsMaxSatCountReached())
                 {
-                    if (_registeredBodies[i].Collider2D.tag == EnumTags.Satellite ||
+                    if (_registeredBodies[i].Collider2D.gameObject.layer == LayerEnums.Satellite ||
                         (satelliteReady = CheckEntryIntoOrbit(_registeredBodies[i], _parent)))
                     {
                         _registeredBodies.RemoveAt(i);
@@ -152,7 +155,7 @@ namespace Assets.Scripts.Physics
             }
 
             //если опрделенное количество проверок пройдено, то делаем его спутником
-            _satelliteManagerBehavior.AttacheSattelite(possibleSatellite, parentalObject);
+            _satelliteManagerBehavior.AttachSatellite(possibleSatellite, parentalObject);
             CalcInflRadius();
             return true;
 
