@@ -53,9 +53,11 @@ namespace Assets.Scripts.Physics
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (LayerEnums.IsFreeSpaceBody(collision.gameObject.layer))
+            if (LayerEnums.IsFreeSpaceBody(collision.gameObject.layer)
+                && LayerEnums.Is1LowerOrEqualLevel(collision.gameObject.layer, _parent.gameObject.layer))
             {
                 IntSatData intSatData = collision.gameObject;
+                intSatData.TheSameLayer = collision.gameObject.layer == _parent.gameObject.layer;
                 _registeredBodies.Add(intSatData);
             }
         }
@@ -81,7 +83,8 @@ namespace Assets.Scripts.Physics
             for (int i = 0; i < _registeredBodies.Count; i++)
             {
                 bool satelliteReady = false;
-                if (!_satelliteManagerBehavior.IsMaxSatCountReached())
+                if (!_registeredBodies[i].TheSameLayer &&
+                    !_satelliteManagerBehavior.IsMaxSatCountReached())
                 {
                     if (_registeredBodies[i].Collider2D.gameObject.layer == LayerEnums.Satellite ||
                         (satelliteReady = CheckEntryIntoOrbit(_registeredBodies[i], _parent)))

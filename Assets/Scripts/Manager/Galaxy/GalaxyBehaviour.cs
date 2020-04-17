@@ -70,7 +70,7 @@ namespace Assets.Scripts.Manager.Galaxy
                             Quaternion.identity,
                             transform) as GameObject;
                         gameObject.GetComponent<MovementBehaviour>().SetVelocity(
-                            new Vector3(Random.Range(-1, 1), Random.Range(-1, 1)) * Random.Range(0.2f, 0.8f));
+                            new Vector3(Random.Range(-5, 5), Random.Range(-5, 5)) * Random.Range(3.2f, 4.8f));
                     }
                 }
             }

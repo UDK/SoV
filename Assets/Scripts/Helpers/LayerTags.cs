@@ -27,10 +27,41 @@ namespace Assets.Scripts.Helpers
             Asteroid, Planet, Satellite
         };
 
+        static private int[] _layersLevel =
+        {
+            Asteroid, Planet
+        };
+
         static public bool IsFreeSpaceBody(int layer) =>
             _freeSpaceBodies.Contains(layer);
 
         static public bool IsBody(int layer) =>
             _body.Contains(layer);
+        static public bool Is1LowerOrEqualLevel(int layer1, int layer2)
+        {
+            int index1 = -1;
+            int index2 = -1;
+            for(int i = 0; i < _layersLevel.Length; i++)
+            {
+                if(_layersLevel[i] == layer1)
+                {
+                    if (index2 != -1)
+                    {
+                        return index1 <= i;
+                    }
+                    index1 = i;
+                }
+                if(_layersLevel[i] == layer2)
+                {
+                    if (index1 != -1)
+                    {
+                        return index1 <= i;
+                    }
+                    index2 = i;
+                }
+            }
+
+            return index1 <= index2;
+        }
     }
 }

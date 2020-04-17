@@ -21,6 +21,7 @@ namespace Assets.Scripts.Physics.Containers
         public float TimeLeftTillNextCheck { get; set; }
 
         public int TempI { get; set; }
+        public bool TheSameLayer { get; set; }
 
         public static implicit operator MovementBehaviour(IntSatData satellite)
         {
