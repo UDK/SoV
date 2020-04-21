@@ -33,17 +33,19 @@ namespace Assets.Scripts.GlobalControllers
 		private void SetOffset(float x, float y)
 		{
 			MeshRenderer mr = GetComponent<MeshRenderer>();
-
+			
 			Material mat = mr.material;
 
-			Vector2 offset = mat.mainTextureOffset;
+			Vector2 offset = mat.GetTextureOffset("_BaseMap");
 
 			var lx = x / transform.localScale.x / Parralax;
 			var ly = y / transform.localScale.y / Parralax;
 
+			//mat.SetTextureOffset(
 			offset.x = lx;
 			offset.y = ly;
 			mat.mainTextureOffset = offset;
+			mat.SetTextureOffset("_BaseMap", offset);
 		}
 	}
 }

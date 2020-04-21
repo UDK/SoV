@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 5326998679394715418}
   - component: {fileID: -5287210698986922439}
   - component: {fileID: 2037273031957533503}
+  - component: {fileID: 3355436738119624692}
   m_Layer: 12
   m_Name: PlanetTemplate
   m_TagString: Untagged
@@ -64,7 +65,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 0d11d6f61b4e174408ac91ae5c27dbdd, type: 2}
+  - {fileID: 2100000, guid: 5693d6a4a6808fb4a9a67fa34dfe1cbe, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -129,6 +130,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AccelarationDeltaTime: 0.01
   MaxVelocity: 10
+  Block: 0
 --- !u!50 &-5287210698986922439
 Rigidbody2D:
   serializedVersion: 4
@@ -137,9 +139,9 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7262656473733311864}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
-  m_UseFullKinematicContacts: 0
+  m_UseFullKinematicContacts: 1
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
@@ -165,6 +167,18 @@ MonoBehaviour:
   _deltaOrbitsDistance: 3
   maxCountSattelites: 1
   qqq: []
+--- !u!114 &3355436738119624692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7262656473733311864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed73b2eae1049dd4580a75c3e8d7b744, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &6150685166652044827
 PrefabInstance:
   m_ObjectHideFlags: 0
