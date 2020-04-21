@@ -22,7 +22,7 @@ namespace Assets.Scripts.Physics.Sattellite
         /// Максимальное количество возможных спутников, изменять в Upgrade/DownGrade, общего класса SpaceObject
         /// </summary>
         [SerializeField]
-        private int maxCountSattelites = 1;
+        private int maxCountSattelites = 2;
 
         /// <summary>
         /// Это для тестов, надо будет удалить
@@ -35,9 +35,10 @@ namespace Assets.Scripts.Physics.Sattellite
         public float LastRadius =>
             _deltaOrbitsDistance * (satelliteObservers.Count + 1);
 
-        public void AttachSatellite(MonoBehaviour sattelite, MonoBehaviour parent)
+        public void AttachSatellite(MovementBehaviour sattelite, MovementBehaviour parent)
         {
-            Satellite satelliteBehaviour = new Satellite(sattelite.transform, parent.transform);
+            Satellite satelliteBehaviour = sattelite.GetComponent<Satellite>();
+            satelliteBehaviour.StartOrbiting(parent);
             satelliteObservers.Add(
                 new SatellitesContainer
                 {
@@ -77,10 +78,10 @@ namespace Assets.Scripts.Physics.Sattellite
 
         private void FixedUpdate()
         {
-            foreach (var satellit in satelliteObservers)
+            /*foreach (var satellit in satelliteObservers)
             {
                 satellit.satelliteObserver.Update();
-            }
+            }*/
         }
     }
 }

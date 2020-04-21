@@ -18,14 +18,14 @@ namespace Assets.Scripts.GlobalControllers
                 Player?.transform.position.x ?? 0,
                 Player?.transform.position.y ?? 0,
                 transform.position.z);
-            _offset = transform.position - Player.transform.position;
+            _offset = transform.position - Player?.transform.position ?? Vector3.zero;
         }
 
         // LateUpdate is called after Update each frame
         void LateUpdate()
         {
             // Set the position of the camera's transform to be the same as the player's, but offset by the calculated offset distance.
-            if(Player.ToString() != "null")
+            if(Player != null && Player.ToString() != "null")
             {
                 transform.position = Player.transform.position + _offset;
             }

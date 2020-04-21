@@ -12,7 +12,12 @@ namespace Assets.Scripts.Physics
 {
     public class MovementBehaviour : MonoBehaviour
     {
-        public float AccelarationDeltaTime = 0.1f;
+        public float AccelarationDeltaTime = 0.001f;
+
+        /// <summary>
+        /// points / s
+        /// </summary>
+        public float Magnitude { get; set; }
 
         /// <summary>
         /// points / s
@@ -20,46 +25,40 @@ namespace Assets.Scripts.Physics
         public float MaxVelocity = 2f;
 
         public Vector3 Velocity =>
-            _rigidbody2D.velocity;
+            _velocity;
 
-        public float Magnitude =>
-            _magnitude;
+        private Vector3 _velocity = Vector3.zero;
 
-        //private Vector3 _velocity = Vector3.zero;
-        private float _magnitude = 0f;
-
-        private bool _block = false;
-        private Rigidbody2D _rigidbody2D;
-
-        private void Awake()
-        {
-            _rigidbody2D = GetComponent<Rigidbody2D>();
-        }
+        public bool Block = false;
 
         /// <summary>
         /// Smoothly set velocity
         /// </summary>
-        /// <param name="force">Normalized vector3 for pointing direction for moving</param>
-        public void SmoothlySetVelocity(Vector3 force)
+        /// <param name="velocity">Normalized vector3 for pointing direction for moving</param>
+        public void SmoothlySetVelocity(Vector3 velocity)
         {
-            if (_block)
+            if (Block)
             {
                 return;
             }
-
-            if (force.x != 0 || force.y != 0 || force.z != 0)
+            //Debug.Log(physicsVelocity.Linear);
+            /*var currentSpeed2 = math.sqrt(math.pow(velocity.x, 2) + math.pow(velocity.y, 2) + math.pow(velocity.z, 2));
+            if(currentSpeed2 > MaxVelocity)
             {
-                _magnitude = _rigidbody2D.velocity.magnitude;
-                
+                Debug.LogError("Speed over");
+                return;
+            }*/
+            if (velocity.x != 0 || velocity.y != 0 || velocity.z != 0)
+            {
+                Magnitude = math.sqrt(math.pow(_velocity.x, 2) + math.pow(_velocity.y, 2) + math.pow(_velocity.z, 2));
+
                 /*Debug.Log(currentSpeed);*/
-                if (_magnitude > MaxVelocity)
+                if (Magnitude > MaxVelocity)
                 {
-                    _rigidbody2D.velocity = math.lerp(_rigidbody2D.velocity, Vector2.zero, 0.2f);
+                    velocity = Vector3.zero;
                 }
-                else
-                {
-                    _rigidbody2D.AddForce(force, ForceMode2D.Force);
-                }
+
+                _velocity = math.lerp(_velocity, velocity, AccelarationDeltaTime);
             }
         }
 
@@ -69,12 +68,59 @@ namespace Assets.Scripts.Physics
         /// <param name="iv">Normalized vector3 for pointing direction for moving</param>
         public void SetVelocity(Vector3 velocity)
         {
-            _rigidbody2D.velocity = velocity;
-            _magnitude = _rigidbody2D.velocity.magnitude;
+            if (Block)
+            {
+                return;
+            }
+            Magnitude = Vector3.Magnitude(velocity);// math.sqrt(math.pow(velocity.x, 2) + math.pow(velocity.y, 2) + math.pow(velocity.z, 2));
+            _velocity = velocity;
+        }
+
+        private void OnCollisionEnter2D(Collision2D collision)
+        {
+            if (!LayerEnums.IsBody(collision.gameObject.layer))
+            {
+                return;
+            }
+
+            MovementBehaviour enemy = collision.gameObject.GetComponent<MovementBehaviour>();
+            if (Magnitude > enemy.Magnitude)
+            {
+                var speed1 = Velocity.normalized * 0.1f;
+                Vector2 normal = collision.contacts[0].normal;
+                var reflect = Vector2.Reflect(speed1, normal);
+                var reflectEnemy = reflect * -0.99f;
+                SetVelocity(reflect * 0.01f);
+                enemy.SetVelocity(Vector3.zero);
+                Block = true;
+                enemy.Block = true;
+
+                /*SetVelocity(reflect);
+                enemy.SetVelocity(reflectEnemy);*/
+                StartCoroutine(SlowlySetSpeed(reflect, enemy, reflectEnemy));
+                //enemy.SetVelocity(reflectEnemy);
+            }
+        }
+
+        private IEnumerator SlowlySetSpeed(Vector3 ownSpeed, MovementBehaviour enemy, Vector3 enemySpeed)
+        {
+            var ownMagnitude = Vector3.Magnitude(ownSpeed);
+            var enemyMagnitude = Vector3.Magnitude(enemySpeed);
+            yield return new WaitForSeconds(0.2f);
+            Block = false;
+            enemy.Block = false;
+            SetVelocity(ownSpeed);
+            enemy.SetVelocity(enemySpeed);
+            Block = true;
+            enemy.Block = true;
+            yield return new WaitForSeconds(0.8f);
+            Block = false;
+            enemy.Block = false;
         }
 
         private void FixedUpdate()
         {
+            this.transform.Translate(_velocity);
         }
     }
 }
