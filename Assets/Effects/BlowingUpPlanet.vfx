@@ -1308,15 +1308,15 @@ VisualEffectResource:
         - m_ExpressionIndex: 67
           m_Value: 0.3
         - m_ExpressionIndex: 73
-          m_Value: 2
+          m_Value: 1
         - m_ExpressionIndex: 75
           m_Value: 0.16
         - m_ExpressionIndex: 77
-          m_Value: 7
+          m_Value: 4
         - m_ExpressionIndex: 78
           m_Value: 1
         - m_ExpressionIndex: 80
-          m_Value: 0.52
+          m_Value: 0.5
       m_Vector2f:
         m_Array:
         - m_ExpressionIndex: 18
@@ -1340,19 +1340,19 @@ VisualEffectResource:
             serializedVersion: 2
             m_Curve:
             - serializedVersion: 3
-              time: 0.015565366
-              value: 0.17324412
-              inSlope: -0.15420608
-              outSlope: -0.15420608
+              time: 0.0030646026
+              value: 0.5058094
+              inSlope: -0.21147591
+              outSlope: -0.21147591
               tangentMode: 34
               weightedMode: 0
               inWeight: 0
               outWeight: 0
             - serializedVersion: 3
-              time: 0.9432819
-              value: 0.030184597
-              inSlope: -0.15420608
-              outSlope: -0.15420608
+              time: 0.980788
+              value: 0.2990445
+              inSlope: -0.21147591
+              outSlope: -0.21147591
               tangentMode: 34
               weightedMode: 0
               inWeight: 0
@@ -1365,8 +1365,8 @@ VisualEffectResource:
         - m_ExpressionIndex: 62
           m_Value:
             serializedVersion: 2
-            key0: {r: 1, g: 0.39937478, b: 0, a: 1}
-            key1: {r: 1, g: 0.39937478, b: 0, a: 1}
+            key0: {r: 1, g: 0.8269742, b: 0.6179246, a: 1}
+            key1: {r: 0.6698113, g: 0.38391122, b: 0.028435374, a: 1}
             key2: {r: 0, g: 0, b: 0, a: 0}
             key3: {r: 0, g: 0, b: 0, a: 0}
             key4: {r: 0, g: 0, b: 0, a: 0}
@@ -1381,8 +1381,8 @@ VisualEffectResource:
             ctime5: 0
             ctime6: 0
             ctime7: 0
-            atime0: 8674
-            atime1: 56283
+            atime0: 19468
+            atime1: 42405
             atime2: 0
             atime3: 0
             atime4: 0
@@ -1395,7 +1395,7 @@ VisualEffectResource:
       m_NamedObject:
         m_Array:
         - m_ExpressionIndex: 85
-          m_Value: {fileID: 2800000, guid: 49cb5aa34272b034d8b754c65d9cdbfa, type: 3}
+          m_Value: {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
       m_Bool:
         m_Array: []
     m_ExposedExpressions: []
@@ -2151,7 +2151,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEditor.VFX.ArcSphere, Unity.VisualEffectGraph.Editor,
           Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"sphere":{"center":{"x":0.0,"y":0.0,"z":0.0},"radius":0.5199999809265137},"arc":6.2831854820251469}'
+      m_SerializableObject: '{"sphere":{"center":{"x":0.0,"y":0.0,"z":0.0},"radius":0.5},"arc":6.2831854820251469}'
     m_Space: 0
   m_Property:
     name: ArcSphere
@@ -2525,7 +2525,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
           PublicKeyToken=b77a5c561934e089
-      m_SerializableObject: 7
+      m_SerializableObject: 4
     m_Space: 2147483647
   m_Property:
     name: B
@@ -3192,7 +3192,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
           PublicKeyToken=b77a5c561934e089
-      m_SerializableObject: 2
+      m_SerializableObject: 1
     m_Space: 2147483647
   m_Property:
     name: frequency
@@ -3419,7 +3419,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEngine.Texture2D, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"obj":{"fileID":2800000,"guid":"49cb5aa34272b034d8b754c65d9cdbfa","type":3}}'
+      m_SerializableObject: '{"obj":{"fileID":10300,"guid":"0000000000000000f000000000000000","type":0}}'
     m_Space: 2147483647
   m_Property:
     name: mainTexture
@@ -3570,7 +3570,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEngine.AnimationCurve, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"frames":[{"time":0.015565365552902222,"value":0.17324411869049073,"inTangent":-0.1542060822248459,"outTangent":-0.1542060822248459,"tangentMode":0,"leftTangentMode":1,"rightTangentMode":1,"broken":false},{"time":0.943281888961792,"value":0.03018459677696228,"inTangent":-0.1542060822248459,"outTangent":-0.1542060822248459,"tangentMode":0,"leftTangentMode":1,"rightTangentMode":1,"broken":false}],"preWrapMode":8,"postWrapMode":8,"version":1}'
+      m_SerializableObject: '{"frames":[{"time":0.0030646026134490968,"value":0.5058094263076782,"inTangent":-0.2114759087562561,"outTangent":-0.2114759087562561,"tangentMode":0,"leftTangentMode":1,"rightTangentMode":1,"broken":false},{"time":0.980787992477417,"value":0.29904448986053469,"inTangent":-0.2114759087562561,"outTangent":-0.2114759087562561,"tangentMode":0,"leftTangentMode":1,"rightTangentMode":1,"broken":false}],"preWrapMode":8,"postWrapMode":8,"version":1}'
     m_Space: 2147483647
   m_Property:
     name: Scale
@@ -3740,7 +3740,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEngine.Gradient, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"colorKeys":[{"color":{"r":1.0,"g":0.399374783039093,"b":0.0,"a":1.0},"time":0.0},{"color":{"r":1.0,"g":0.399374783039093,"b":0.0,"a":1.0},"time":1.0}],"alphaKeys":[{"alpha":1.0,"time":0.13235676288604737},{"alpha":1.0,"time":0.8588235378265381}],"gradientMode":0}'
+      m_SerializableObject: '{"colorKeys":[{"color":{"r":1.0,"g":0.8269742131233215,"b":0.6179245710372925,"a":1.0},"time":0.0},{"color":{"r":0.6698113083839417,"g":0.38391122221946719,"b":0.028435373678803445,"a":1.0},"time":1.0}],"alphaKeys":[{"alpha":1.0,"time":0.29706263542175295},{"alpha":1.0,"time":0.6470588445663452}],"gradientMode":0}'
     m_Space: 2147483647
   m_Property:
     name: Color
