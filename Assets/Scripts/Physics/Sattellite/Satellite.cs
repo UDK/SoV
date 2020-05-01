@@ -75,7 +75,7 @@ namespace Assets.Scripts.Physics.Sattellite
         {
             var temp = _target;
             _target = null;
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(0.2f);
             _rotationVector *= -1;
             StartOrbiting(temp);
         }

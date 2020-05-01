@@ -90,32 +90,9 @@ namespace Assets.Scripts.Physics
                 Vector2 normal = collision.contacts[0].normal;
                 var reflect = Vector2.Reflect(speed1, normal);
                 var reflectEnemy = reflect * -0.99f;
-                SetVelocity(reflect * 0.01f);
-                enemy.SetVelocity(Vector3.zero);
-                Block = true;
-                enemy.Block = true;
-
-                /*SetVelocity(reflect);
-                enemy.SetVelocity(reflectEnemy);*/
-                StartCoroutine(SlowlySetSpeed(reflect, enemy, reflectEnemy));
-                //enemy.SetVelocity(reflectEnemy);
+                SetVelocity(reflect);
+                enemy.SetVelocity(reflectEnemy);
             }
-        }
-
-        private IEnumerator SlowlySetSpeed(Vector3 ownSpeed, MovementBehaviour enemy, Vector3 enemySpeed)
-        {
-            var ownMagnitude = Vector3.Magnitude(ownSpeed);
-            var enemyMagnitude = Vector3.Magnitude(enemySpeed);
-            yield return new WaitForSeconds(0.2f);
-            Block = false;
-            enemy.Block = false;
-            SetVelocity(ownSpeed);
-            enemy.SetVelocity(enemySpeed);
-            Block = true;
-            enemy.Block = true;
-            yield return new WaitForSeconds(0.8f);
-            Block = false;
-            enemy.Block = false;
         }
 
         private void FixedUpdate()
