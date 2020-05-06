@@ -42,31 +42,72 @@ namespace Assets.Scripts.Helpers
 
         PropertySpriteGeometry CreateShape()
         {
-            UnityEngine.Random.Range();
+            var vertices = new Vector2[CountPoligons];
             //Смотрит ввехр и постоянно идет вправо, пока не сделает фулл оборот
-            Vector2 startVector = new Vector2(0f,90f);
-            for (int iter = 0; iter < CountPoligons; iter++)
+            float defaultAngle = 90f;
+            float defaultRadius = 128f;
+            for (int iter = 1; iter <= CountPoligons; iter++)
             {
-                
+                float dispersionRadius = UnityEngine.Random.Range(-(defaultRadius / 5), defaultRadius / 5);
+                float dispersionAngleCircle = UnityEngine.Random.Range(-(360 / ((float)CountPoligons * 2.5f)), 360 / ((float)CountPoligons * 2.5f));
+                var angle = AngleCircle(defaultAngle - (360 * (iter / (float)CountPoligons)) + dispersionAngleCircle);
+                var radius = defaultRadius + dispersionRadius;
+                float x = radius * Mathf.Cos(DegressToRadian(angle));
+                float y = radius * Mathf.Sin(DegressToRadian(angle));
+                vertices[iter - 1] = new Vector2(x + defaultRadius * 1.5f, y + defaultRadius * 1.5f);
             }
             return new PropertySpriteGeometry
             {
-                vertices = new Vector2[]
-                {
-                    new Vector2(0,0),
-                    new Vector2(0,128),
-                    new Vector2(18,34),
-                    new Vector2(12,0)
-                },
-                triangles = new ushort[]
-                {
-                    0,1,2,
-                    1,2,3,
-                    2,3,0
-                }
+                vertices = vertices,
+                triangles = GenerateTriangles(CountPoligons)
             };
         }
 
+        ushort[] GenerateTriangles(int count)
+        {
+            ushort[] result = new ushort[(count-2)*3];
+            result[0] = 0;
+            result[1] = 1;
+            result[2] = 2;
+            for (int iter = 1; iter < count - 2; iter++)
+            {
+                result[iter*3] = 0;
+                result[iter*3 + 1] = (ushort)(iter + 1);
+                result[iter*3 + 2] = (ushort)(iter + 2);
+            }
+            //for (int iter = 0; iter < count - 2; iter++)
+            //{
+            //    result[iter * 3] = (ushort)(iter);
+            //    result[iter * 3 + 1] = (ushort)(iter + 1);
+            //    result[iter * 3 + 2] = (ushort)(iter + 2);
+            //}
+            //result[(count - 2) * 3] = (ushort)(count - 2);
+            //result[(count - 2) * 3 + 1] = (ushort)(count - 1);
+            //result[(count - 2) * 3 + 2] = 0;
+            //result[(count - 1) * 3] = (ushort)(count - 1);
+            //result[(count - 1) * 3 + 1] = 0;
+            //result[(count - 1) * 3 + 2] = 1;
+            return result;
+        }
+
+        float DegressToRadian(float degress) => (degress * Mathf.PI) / 180;
+
+        float AngleCircle(float value)
+        {
+            if (value < 0)
+            {
+                value = 360 - Mathf.Abs(value);
+            }
+            else if (value > 360)
+            {
+                value = value - 360;
+            }
+            else
+            {
+                return value;
+            }
+            return AngleCircle(value);
+        }
 
         Sprite UpdateMesh(PropertySpriteGeometry propertySprite, Texture2D texture, Sprite sprite)
         {
