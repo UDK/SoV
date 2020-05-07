@@ -25,7 +25,7 @@ namespace Assets.Scripts.Physics
         private IForce _forcePhysics;
         private List<IntSatData> _registeredBodies;
         private MovementBehaviour _parent;
-        private SatelliteManagerBehavior _satelliteManagerBehavior;
+        private SatelliteManager _satelliteManagerBehavior;
         /// <summary>
         /// Сколько итераций проверки выхода на орбиту произойдет
         /// </summary>
@@ -42,19 +42,19 @@ namespace Assets.Scripts.Physics
         {
             _forcePhysics = new GravityForce();
             _registeredBodies = new List<IntSatData>();
-            _parent = transform.parent.GetComponent<MovementBehaviour>();
-            _satelliteManagerBehavior = GetComponentInParent<SatelliteManagerBehavior>();
+            _parent = transform.GetComponentInParent<MovementBehaviour>();
+            _satelliteManagerBehavior = GetComponentInParent<SatelliteManager>();
         }
 
         private void Start()
         {
-            CalcInflRadius();
+            CalculateInfluenceRadius();
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (LayerEnums.IsFreeSpaceBody(collision.gameObject.layer)
-                && LayerEnums.Is1LowerOrEqualLevel(collision.gameObject.layer, _parent.gameObject.layer))
+            if (!LayerHelper.IsSatellite(collision.gameObject.layer)
+                && LayerHelper.IsLower(collision.gameObject.layer, _parent.gameObject.layer))
             {
                 IntSatData intSatData = collision.gameObject;
                 intSatData.TheSameLayer = collision.gameObject.layer == _parent.gameObject.layer;
@@ -64,7 +64,7 @@ namespace Assets.Scripts.Physics
 
         private void OnTriggerExit2D(Collider2D collision)
         {
-            if (LayerEnums.IsFreeSpaceBody(collision.gameObject.layer))
+            if (!LayerHelper.IsSatellite(collision.gameObject.layer))
             {
                 if (!_registeredBodies.Any(x => x.Collider2D.gameObject == collision.gameObject))
                     return;
@@ -86,7 +86,7 @@ namespace Assets.Scripts.Physics
                 if (!_registeredBodies[i].TheSameLayer &&
                     !_satelliteManagerBehavior.IsMaxSatCountReached())
                 {
-                    if (_registeredBodies[i].Collider2D.gameObject.layer == LayerEnums.Satellite ||
+                    if (_registeredBodies[i].Collider2D.gameObject.layer == LayerHelper.Satellite ||
                         (satelliteReady = CheckEntryIntoOrbit(_registeredBodies[i], _parent)))
                     {
                         _registeredBodies.RemoveAt(i);
@@ -112,7 +112,7 @@ namespace Assets.Scripts.Physics
             }
         }
 
-        private void CalcInflRadius()
+        private void CalculateInfluenceRadius()
         {
             var r = _satelliteManagerBehavior.LastRadius;
             _minR = r - Inaccuracy;
@@ -159,7 +159,7 @@ namespace Assets.Scripts.Physics
 
             //если опрделенное количество проверок пройдено, то делаем его спутником
             _satelliteManagerBehavior.AttachSatellite(possibleSatellite, parentalObject);
-            CalcInflRadius();
+            CalculateInfluenceRadius();
             return true;
 
         }

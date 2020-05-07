@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Scripts.Manager.ClassSystem;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ namespace Assets.Scripts.Physics.Sattellite
 {
     public interface ISatelliteBody
     {
-        float Mass { get; }
+        SpaceClasses SpaceClass { get; set; }
         void Destroy();
     }
 }

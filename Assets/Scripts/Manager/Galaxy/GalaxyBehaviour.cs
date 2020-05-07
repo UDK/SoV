@@ -1,15 +1,10 @@
-﻿using Assets.Scripts.GlobalControllers;
-using Assets.Scripts.GlobalControllers.Control;
+﻿using Assets.Scripts.Gameplay;
+using Assets.Scripts.GlobalControllers;
 using Assets.Scripts.Manager.Background;
-using Assets.Scripts.Manager.Galaxy;
-using Assets.Scripts.Manager.Generator;
+using Assets.Scripts.Manager.ClassSystem;
+using Assets.Scripts.Manager.Galaxy.Generator;
 using Assets.Scripts.Maths.NoiseFabrics;
 using Assets.Scripts.Physics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -18,7 +13,7 @@ namespace Assets.Scripts.Manager.Galaxy
     public class GalaxyBehaviour : MonoBehaviour
     {
         [SerializeField]
-        public int TargetSpeedForPlayers;
+        public int MaxSpeedForObjects;
 
         [SerializeField]
         public int Height;
@@ -33,21 +28,21 @@ namespace Assets.Scripts.Manager.Galaxy
         public int PlanetNoiseScale;
 
         [SerializeField]
-        public TileType[] TileTypes;
+        public GalaxyObject[] SpaceObjects;
 
         [SerializeField]
         public BackgroundQuad[] BackgroundQuads;
 
-        private ITileGenerator _tileGenerator;
+        private IGalaxyGenerator _tileGenerator;
 
         private void Awake()
         {
             _tileGenerator =
-                   new TileGenerator<
-                       PerlinNoise<TileType>>(
-                           TileTypes);
+                   new GalaxyGenerator<
+                       PerlinNoise<GalaxyObject>>(
+                           SpaceObjects);
         }
-        public void Init()
+        public void Init(IUpgradeManager upgradeManager)
         {
             var height = (int)(Height / PointsOnOnePlanet);
             var width = (int)(Width / PointsOnOnePlanet);
@@ -57,47 +52,36 @@ namespace Assets.Scripts.Manager.Galaxy
             {
                 for (int x = 0; x < width; x++)
                 {
-                    TileType tileType = tileMap[y, x];
+                    GalaxyObject tileType = tileMap[y, x];
 
-                    if(tileType != Tile.Nothing)
+                    if(tileType.SpaceClass != SpaceClasses.Nothing)
                     {
-                        var gameObject = Instantiate(
-                            tileType,
+                        var spaceBody = upgradeManager.GetFullObject(tileType.SpaceClass);
+                        spaceBody.transform.parent = transform;
+                        spaceBody.transform.position =
                             new Vector3(
                                 x * PointsOnOnePlanet,
                                 y * PointsOnOnePlanet,
-                                0f),
-                            Quaternion.identity,
-                            transform) as GameObject;
-                        gameObject.GetComponent<MovementBehaviour>().SetVelocity(
-                            new Vector3(Random.Range(-0.1f, 0.2f), Random.Range(-0.1f, 0.2f)) * Random.Range(2f, 3f));
+                                0f);
+                        var movement = spaceBody.GetComponent<MovementBehaviour>();
+                        movement.MaxVelocity = MaxSpeedForObjects;
+                        movement.SetVelocity(
+                            new Vector3(Random.Range(-0.2f, 0.2f), Random.Range(-0.2f, 0.2f)));
                     }
                 }
             }
         }
 
-        public MonoBehaviour InitPlayer()
+        public void PlaceGameObject(
+            SpaceBody gameObject,
+            Vector3? placePosition = null)
         {
-            BodyBehaviourBase player = null;
-            foreach (var tileType in TileTypes)
-            {
-                if (tileType == Tile.Planet)
-                {
-                    var body = AddBody(tileType, Random.Range(0f, Width), Random.Range(0f, Height));
-                    player = body.GetComponent<BodyBehaviourBase>();
-                    break;
-                }
-            }
+            var movement = gameObject.GetComponent<MovementBehaviour>();
+            movement.MaxVelocity = MaxSpeedForObjects;
 
-            if (player == null)
-            {
-                throw new InvalidOperationException("Tile type for player wasn't set");
-            }
-
-            SetControlForGameObject<PlayerControlBehaviour>(
-                player.gameObject);
-
-            return player;
+            gameObject.transform.parent = transform;
+            gameObject.transform.position = placePosition ??
+                new Vector3(Random.Range(0f, Width), Random.Range(0f, Height), 0f);
         }
 
         public void InitBackground(
@@ -157,26 +141,6 @@ namespace Assets.Scripts.Manager.Galaxy
             border.PushDirection = pushDirection;
             gameObject.transform.SetParent(transform);
             gameObject.transform.localPosition = position;
-        }
-
-        private GameObject AddBody(GameObject gameObject, float x, float y)
-        {
-            var body = Instantiate(
-                gameObject,
-                new Vector3(
-                    x,
-                    y,
-                    0f),
-                Quaternion.identity,
-                transform) as GameObject;
-            return body;
-        }
-        private void SetControlForGameObject<TControl>(
-            GameObject player)
-            where TControl : ControlBehaviourBase
-        {
-            var control = player.AddComponent<TControl>();
-            control.TargetVelocity = TargetSpeedForPlayers;
         }
     }
 }

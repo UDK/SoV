@@ -9,7 +9,7 @@ namespace Assets.Scripts.GlobalControllers.Control
 {
     public abstract class ControlBehaviourBase : MonoBehaviour
     {
-        public float TargetVelocity = 1f;
+        public float Acceleration = 1f;
 
         private MovementBehaviour _movement { get; set; }
         private Actions _currentAction { get; set; } = Actions.EmptyInstance;
@@ -57,7 +57,7 @@ namespace Assets.Scripts.GlobalControllers.Control
                     direction.x = -1;
                 }
 
-                _movement.SmoothlySetVelocity(direction * TargetVelocity);
+                _movement.SmoothlySetVelocity(direction * Acceleration);
             }
             catch
             {

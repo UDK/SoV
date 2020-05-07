@@ -62,7 +62,7 @@ namespace Assets.Scripts.Physics.Sattellite
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
-            if (!LayerEnums.IsBody(collision.gameObject.layer))
+            if (!LayerHelper.IsBody(collision.gameObject.layer))
             {
                 return;
             }
