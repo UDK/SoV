@@ -9,6 +9,7 @@ namespace Assets.Scripts.Helpers
 {
 
     [RequireComponent(typeof(SpriteRenderer))]
+    [RequireComponent(typeof(PolygonCollider2D))]
     class GenerateAsteroidsMesh : MonoBehaviour
     {
         [SerializeField]
@@ -35,17 +36,19 @@ namespace Assets.Scripts.Helpers
         private void Start()
         {
             var sprites = GetComponent<SpriteRenderer>();
-            var geometryRandomSprite = CreateShape();
+            var collider = GetComponent<PolygonCollider2D>();
+            var geometryRandomSprite = CreateShape(collider);
             var newSprite = UpdateMesh(geometryRandomSprite, texture, sprites.sprite);
             sprites.sprite = newSprite;
         }
 
-        PropertySpriteGeometry CreateShape()
+        PropertySpriteGeometry CreateShape(PolygonCollider2D collider2D)
         {
             var vertices = new Vector2[CountPoligons];
             //Смотрит ввехр и постоянно идет вправо, пока не сделает фулл оборот
             float defaultAngle = 90f;
             float defaultRadius = 128f;
+            List<Vector2> vectors = new List<Vector2>();
             for (int iter = 1; iter <= CountPoligons; iter++)
             {
                 float dispersionRadius = UnityEngine.Random.Range(-(defaultRadius / 5), defaultRadius / 5);
@@ -54,8 +57,10 @@ namespace Assets.Scripts.Helpers
                 var radius = defaultRadius + dispersionRadius;
                 float x = radius * Mathf.Cos(DegressToRadian(angle));
                 float y = radius * Mathf.Sin(DegressToRadian(angle));
+                vectors.Add(new Vector2((x / 100f) - 3.2f, (y / 100f) - 3.2f));
                 vertices[iter - 1] = new Vector2(x + defaultRadius * 1.5f, y + defaultRadius * 1.5f);
             }
+            collider2D.SetPath(0, vectors.ToArray());
             return new PropertySpriteGeometry
             {
                 vertices = vertices,
@@ -65,28 +70,16 @@ namespace Assets.Scripts.Helpers
 
         ushort[] GenerateTriangles(int count)
         {
-            ushort[] result = new ushort[(count-2)*3];
+            ushort[] result = new ushort[(count - 2) * 3];
             result[0] = 0;
             result[1] = 1;
             result[2] = 2;
             for (int iter = 1; iter < count - 2; iter++)
             {
-                result[iter*3] = 0;
-                result[iter*3 + 1] = (ushort)(iter + 1);
-                result[iter*3 + 2] = (ushort)(iter + 2);
+                result[iter * 3] = 0;
+                result[iter * 3 + 1] = (ushort)(iter + 1);
+                result[iter * 3 + 2] = (ushort)(iter + 2);
             }
-            //for (int iter = 0; iter < count - 2; iter++)
-            //{
-            //    result[iter * 3] = (ushort)(iter);
-            //    result[iter * 3 + 1] = (ushort)(iter + 1);
-            //    result[iter * 3 + 2] = (ushort)(iter + 2);
-            //}
-            //result[(count - 2) * 3] = (ushort)(count - 2);
-            //result[(count - 2) * 3 + 1] = (ushort)(count - 1);
-            //result[(count - 2) * 3 + 2] = 0;
-            //result[(count - 1) * 3] = (ushort)(count - 1);
-            //result[(count - 1) * 3 + 1] = 0;
-            //result[(count - 1) * 3 + 2] = 1;
             return result;
         }
 

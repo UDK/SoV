@@ -5419,7 +5419,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   texture: {fileID: 2800000, guid: 3c5a65d160589c64fae2d5036cc32d4d, type: 3}
   countBulges: 0
-  countPoligons: 5
+  countPoligons: 30
 --- !u!1 &879913916
 GameObject:
   m_ObjectHideFlags: 0
