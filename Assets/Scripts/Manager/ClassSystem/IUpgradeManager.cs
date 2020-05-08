@@ -9,7 +9,7 @@ namespace Assets.Scripts.Manager.ClassSystem
 {
     public interface IUpgradeManager
     {
-        void Upgrade(SpaceBody spaceBody);
+        void Upgrade(SpaceClasses spaceClass, SpaceBody spaceBody);
 
         SpaceBody GetFullObject(SpaceClasses spaceClass);
     }

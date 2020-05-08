@@ -19,12 +19,12 @@ namespace Assets.Scripts.Helpers
         static public int Magnet = LayerMask.NameToLayer("planetMagnet");
         static public int Satellite = LayerMask.NameToLayer("satellite");
 
-        static public int[] SpaceLayers =
+        /*static public int[] SpaceLayers =
         {
             Asteroid,
             Planet,
             Sun
-        };
+        };*/
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static public bool IsSatellite(int layer) =>

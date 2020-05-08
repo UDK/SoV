@@ -24,9 +24,9 @@ namespace Assets.Scripts.Manager
         [SerializeField]
         public UpgradeContainer[] AvailableUpgrades;
 
-        public void Upgrade(SpaceBody spaceBody)
+        public void Upgrade(SpaceClasses spaceClass, SpaceBody spaceBody)
         {
-            AvailableUpgrades.First(x => x.SpaceClasses == spaceBody.SpaceClass)
+            AvailableUpgrades.First(x => x.SpaceClasses == spaceClass)
                 .UpgradeBase.Upgrade(this, spaceBody);
         }
 
@@ -34,7 +34,7 @@ namespace Assets.Scripts.Manager
         {
             SpaceBody spaceBody = GenerateSpaceBody;
             spaceBody.SpaceClass = spaceClass;
-            Upgrade(spaceBody);
+            Upgrade(spaceClass, spaceBody);
             return spaceBody;
         }
     }
