@@ -6,7 +6,6 @@ using UnityEngine.VFX;
 public class CollisionEffect : MonoBehaviour
 {
     public VisualEffect collisionEffect;
-    public VisualEffect collisionAfterEffect;
 
     private void OnCollisionEnter2D(Collision2D collision)
     {

@@ -11,6 +11,8 @@ namespace Assets.Scripts.Physics.Sattellite
     {        
         void DeltaDistanceModify(float deltaDistance, int orbitsNumber);
 
+        void Detach();
+
         //void Update();
     }
 }

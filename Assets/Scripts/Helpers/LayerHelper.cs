@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Scripts.Manager.ClassSystem;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -13,22 +14,32 @@ namespace Assets.Scripts.Helpers
     /// </summary>
     public static class LayerHelper
     {
-        static public int Asteroid = LayerMask.NameToLayer("asteroid");
-        static public int Planet = LayerMask.NameToLayer("planet");
-        static public int Sun = LayerMask.NameToLayer("sun");
-        static public int Magnet = LayerMask.NameToLayer("planetMagnet");
-        static public int Satellite = LayerMask.NameToLayer("satellite");
+        public static int Asteroid = LayerMask.NameToLayer("asteroid");
+        public static int Planet = LayerMask.NameToLayer("planet");
+        public static int Sun = LayerMask.NameToLayer("sun");
+        public static int Magnet = LayerMask.NameToLayer("planetMagnet");
+        public static int planetSatellite = LayerMask.NameToLayer("planetSatellite");
+        public static int sunSatellite = LayerMask.NameToLayer("sunSatellite");
 
-        /*static public int[] SpaceLayers =
+        public static Dictionary<SpaceClasses, int> ClassMap2Layer =
+            new Dictionary<SpaceClasses, int>
         {
-            Asteroid,
-            Planet,
-            Sun
-        };*/
+            { SpaceClasses.Asteroid, Asteroid },
+            { SpaceClasses.Planet, Planet },
+            { SpaceClasses.Sun, Sun },
+        };
+
+        public static Dictionary<SpaceClasses, int> ClassSatMap2Layer =
+            new Dictionary<SpaceClasses, int>
+        {
+            { SpaceClasses.Asteroid, planetSatellite },
+            { SpaceClasses.Planet, planetSatellite },
+            { SpaceClasses.Sun, sunSatellite },
+        };
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static public bool IsSatellite(int layer) =>
-            layer == Satellite;
+            layer == planetSatellite || layer == sunSatellite;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static public bool IsLower(int layer1, int layer2)
@@ -46,7 +57,8 @@ namespace Assets.Scripts.Helpers
         static public bool IsBody(int layer)
         {
             return (Asteroid <= layer && layer <= Sun)
-                || layer == Satellite;
+                || layer == planetSatellite
+                || layer == sunSatellite;
         }
     }
 }

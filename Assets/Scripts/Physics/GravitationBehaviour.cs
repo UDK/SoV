@@ -86,7 +86,7 @@ namespace Assets.Scripts.Physics
                 if (!_registeredBodies[i].TheSameLayer &&
                     !_satelliteManagerBehavior.IsMaxSatCountReached())
                 {
-                    if (_registeredBodies[i].Collider2D.gameObject.layer == LayerHelper.Satellite ||
+                    if (LayerHelper.IsSatellite(_registeredBodies[i].Collider2D.gameObject.layer) ||
                         (satelliteReady = CheckEntryIntoOrbit(_registeredBodies[i], _parent)))
                     {
                         _registeredBodies.RemoveAt(i);

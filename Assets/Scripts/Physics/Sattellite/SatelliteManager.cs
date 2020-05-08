@@ -22,12 +22,6 @@ namespace Assets.Scripts.Physics.Sattellite
         /// </summary>
         public int MaxCountSattelites = 0;
 
-        /// <summary>
-        /// Это для тестов, надо будет удалить
-        /// </summary>
-        [SerializeField]
-        List<MonoBehaviour> qqq = new List<MonoBehaviour>();
-
         List<SatellitesContainer> satelliteObservers = new List<SatellitesContainer>();
 
         public float LastRadius =>
@@ -37,19 +31,16 @@ namespace Assets.Scripts.Physics.Sattellite
         {
             Satellite satelliteBehaviour = sattelite.GetComponent<Satellite>();
             satelliteBehaviour.StartOrbiting(parent);
-            satelliteObservers.Add(
-                new SatellitesContainer
-                {
-                    satelliteObserver = satelliteBehaviour,
-                    satelliteBody = parent.GetComponent<SpaceBody>(),
-                });
+            var container = new SatellitesContainer
+            {
+                satelliteObserver = satelliteBehaviour,
+                satelliteBody = satelliteBehaviour.GetComponent<SpaceBody>(),
+                gameObject = satelliteBehaviour.gameObject,
+            };
+            satelliteObservers.Add(container);
             satelliteBehaviour.DeltaDistanceModify(DeltaOrbitsDistance, satelliteObservers.Count);
-            sattelite.gameObject.layer = LayerHelper.Satellite;
-
-            //Чисто для дебага делаем спутник красным
-            sattelite.GetComponent<MeshRenderer>().material.color = Color.red;
-            qqq.Add(sattelite);
-            //
+            sattelite.gameObject.layer =
+                LayerHelper.ClassSatMap2Layer[container.satelliteBody.SpaceClass];
         }
 
         public bool IsMaxSatCountReached()
@@ -59,9 +50,33 @@ namespace Assets.Scripts.Physics.Sattellite
             return true;
         }
 
-        void DetachSattelite()
+        public void DetachSattelites()
         {
+            for (int iter = 0; iter < satelliteObservers.Count; iter++)
+            {
+                RemoveSatellite(iter);
+            }
+        }
 
+        public void DetachSattelite(GameObject gameObject)
+        {
+            for (int iter = 0; iter < satelliteObservers.Count; iter++)
+            {
+                if(satelliteObservers[iter].gameObject == gameObject)
+                {
+                    RemoveSatellite(iter);
+                    break;
+                }
+            }
+            NotifySetDistance(DeltaOrbitsDistance);
+        }
+
+        private void RemoveSatellite(int iter)
+        {
+            satelliteObservers[iter].satelliteObserver.Detach();
+            satelliteObservers[iter].gameObject.layer =
+                LayerHelper.ClassMap2Layer[satelliteObservers[iter].satelliteBody.SpaceClass];
+            satelliteObservers.RemoveAt(iter);
         }
 
         /// <summary>
@@ -69,6 +84,7 @@ namespace Assets.Scripts.Physics.Sattellite
         /// </summary>
         public void NotifySetDistance(float newDeltaDistance)
         {
+            DeltaOrbitsDistance = newDeltaDistance;
             for (int iter = 0; iter < satelliteObservers.Count; iter++)
             {
                 satelliteObservers[iter].satelliteObserver.DeltaDistanceModify(newDeltaDistance, iter);

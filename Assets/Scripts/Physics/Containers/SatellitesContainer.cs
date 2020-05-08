@@ -16,5 +16,7 @@ namespace Assets.Scripts.Physics.Containers
         public ISatelliteBody satelliteBody;
 
         public ISatelliteObserver satelliteObserver;
+
+        public GameObject gameObject;
     }
 }

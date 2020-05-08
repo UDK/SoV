@@ -5,6 +5,7 @@ using Assets.Scripts.Physics.Sattellite;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VFX;
 using Random = UnityEngine.Random;
 
 namespace Assets.Scripts.Gameplay
@@ -18,46 +19,44 @@ namespace Assets.Scripts.Gameplay
 
         public SpaceClasses SpaceClass { get; set; }
 
-        [SerializeField]
-        private float _incarancyEating;
+        public VisualEffect DestroyEffect;
 
-        private float _incarancyTotalDestraction;
+        public bool JustEat = false;
+
+        [SerializeField]
+        private float _DamagePercent = 0.5f;
 
         private SatelliteManager _satelliteManager;
 
         private MovementBehaviour _movementBehaviour;
 
-        private void OnTriggerEnter2D(Collider2D collision)
+        private void OnCollisionEnter2D(Collision2D collision)
         {
-            /*if (LayerEnums.IsBody(collision.gameObject.layer))
-                RegisterDamage(collision);*/
+            if (LayerHelper.IsBody(collision.gameObject.layer))
+                RegisterDamage(
+                    collision.gameObject.GetComponent<SpaceBody>());
         }
 
-        private void RegisterDamage(Collider2D collision)
+        private void RegisterDamage(SpaceBody enemy)
         {
-            var enemy = collision.GetComponent<SpaceBody>();
             var mass = Mass - enemy.Mass;
-            if (mass > 0)
+            if (mass >= 0)
             {
-                var damage = Mass * _incarancyEating;
-                if (enemy.MakeDamage(damage))
+                if (JustEat)
                 {
-                    Mass += damage;
+                    Mass += enemy.EatMe();
                 }
                 else
                 {
-                    MakeDamage(enemy.Mass * 0.3f);
-                }
-            }
-            else if (mass == 0)
-            {
-                var damage = Mass * 0.25f;
-                enemy.MakeDamage(damage);
-                if (gameObject.CompareTag(EnumTags.Player))
-                {
+                    var damage = Mass * _DamagePercent;
+                    enemy.MakeDamage(damage);
                     damage *= 0.95f;
+                    if (gameObject.CompareTag(EnumTags.Player))
+                    {
+                        damage *= 0.5f;
+                    }
+                    MakeDamage(damage);
                 }
-                MakeDamage(damage);
             }
         }
 
@@ -72,16 +71,30 @@ namespace Assets.Scripts.Gameplay
             return false;
         }
 
+        public float EatMe()
+        {
+            _satelliteManager.DetachSattelites();
+            Destroy(gameObject);
+            return Mass;
+        }
+
         private void Awake()
         {
             _satelliteManager = GetComponent<SatelliteManager>();
             _movementBehaviour = GetComponent<MovementBehaviour>();
-            //_mass = Random.Range(1f, 500f);
         }
 
         public void Destroy()
         {
+            _satelliteManager.DetachSattelites();
+            var position = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+            var destroyEffect = Instantiate(
+                DestroyEffect,
+                position,
+                Quaternion.identity);
+            destroyEffect.SetFloat("Radius", transform.localScale.x);
             Destroy(gameObject);
+            Destroy(destroyEffect.gameObject, 5);
         }
     }
 }

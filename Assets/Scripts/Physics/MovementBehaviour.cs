@@ -86,7 +86,7 @@ namespace Assets.Scripts.Physics
             MovementBehaviour enemy = collision.gameObject.GetComponent<MovementBehaviour>();
             if (Magnitude > enemy.Magnitude)
             {
-                var speed1 = Velocity.normalized * 0.1f;
+                var speed1 = Velocity.normalized * 0.05f;
                 Vector2 normal = collision.contacts[0].normal;
                 var reflect = Vector2.Reflect(speed1, normal);
                 var reflectEnemy = reflect * -0.99f;

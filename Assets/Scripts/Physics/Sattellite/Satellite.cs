@@ -31,13 +31,6 @@ namespace Assets.Scripts.Physics.Sattellite
         private float _minDistance;
         private float _maxDistance;
 
-        /*public Satellite(Transform subject, Transform target)
-        {
-            _target = target;
-            _subject = subject;
-            _relativeDistance = _subject.position - _target.position;
-        }*/
-
         public void StartOrbiting(MovementBehaviour target)
         {
             _target = target;
@@ -45,7 +38,7 @@ namespace Assets.Scripts.Physics.Sattellite
             _getToTarget = true;
         }
 
-        public void Stop(Transform target)
+        public void Detach()
         {
             _target = null;
         }
@@ -92,7 +85,7 @@ namespace Assets.Scripts.Physics.Sattellite
                 _subject.SetVelocity(Vector3.zero);
                 var newPos = (this.transform.position - _target.transform.position).normalized * _orbitDistance;
                 newPos += _target.transform.position;
-                transform.position = Vector3.MoveTowards(transform.position, newPos, 0.05f + _target.Magnitude);
+                transform.position = Vector3.MoveTowards(transform.position, newPos, 0.02f + _target.Magnitude);
                 var distance = Vector3.Distance(transform.position, _target.transform.position);
                 if (_minDistance < distance && distance < _maxDistance)
                 {
