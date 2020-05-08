@@ -58,5 +58,3 @@ MonoBehaviour:
   BackgroundQuads:
   - Back: {fileID: 6823495696098249772, guid: 294efa9da8a75ee4aaeace7cd3e66f8e, type: 3}
     Parallax: 5
-  - Back: {fileID: 6823495696098249772, guid: 294efa9da8a75ee4aaeace7cd3e66f8e, type: 3}
-    Parallax: 2
