@@ -47,7 +47,7 @@ namespace Assets.Scripts.Helpers
             var vertices = new Vector2[CountPoligons];
             //Смотрит ввехр и постоянно идет вправо, пока не сделает фулл оборот
             float defaultAngle = 90f;
-            float defaultRadius = 128f;
+            float defaultRadius = 64f;
             List<Vector2> vectors = new List<Vector2>();
             for (int iter = 1; iter <= CountPoligons; iter++)
             {
@@ -57,7 +57,7 @@ namespace Assets.Scripts.Helpers
                 var radius = defaultRadius + dispersionRadius;
                 float x = radius * Mathf.Cos(DegressToRadian(angle));
                 float y = radius * Mathf.Sin(DegressToRadian(angle));
-                vectors.Add(new Vector2((x / 100f) - 3.2f, (y / 100f) - 3.2f));
+                vectors.Add(new Vector2(x + defaultRadius * 1.5f, y + defaultRadius * 1.5f));
                 vertices[iter - 1] = new Vector2(x + defaultRadius * 1.5f, y + defaultRadius * 1.5f);
             }
             collider2D.SetPath(0, vectors.ToArray());
