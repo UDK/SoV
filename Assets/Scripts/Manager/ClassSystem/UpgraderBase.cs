@@ -13,5 +13,11 @@ namespace Assets.Scripts.Manager.ClassSystem
         public virtual void Upgrade(ITemplateManager templateManager, SpaceBody spaceBody)
         {
         }
+
+        protected void ClearMesh(SpaceBody spaceBody)
+        {
+            Destroy(spaceBody.GetComponent<MeshRenderer>());
+            Destroy(spaceBody.GetComponent<MeshFilter>());
+        }
     }
 }

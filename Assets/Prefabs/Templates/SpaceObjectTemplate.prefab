@@ -66,7 +66,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DeltaOrbitsDistance: 3
   MaxCountSattelites: 0
-  qqq: []
 --- !u!114 &4590489942530076636
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -80,7 +79,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Mass: 0
-  _incarancyEating: 0
+  DestroyEffect: {fileID: 0}
+  JustEat: 0
+  _DamagePercent: 0.5
 --- !u!33 &6308597186227575612
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -107,7 +108,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 670224309865224971, guid: 54d00eb661284c74ca678dba1f399722, type: 3}
+  - {fileID: 2100000, guid: a7f01048541bd4e4bb05d36bf870c239, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
