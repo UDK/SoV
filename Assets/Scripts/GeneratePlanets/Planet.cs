@@ -57,6 +57,12 @@ public class Planet : MonoBehaviour
             bool renderFace = faceRenderMask == FaceRenderMask.All || (int)faceRenderMask - 1 == i;
             meshFilters[i].gameObject.SetActive(renderFace);
         }
+
+    }
+
+    void Start()
+    {
+        GeneratePlanet();
     }
 
     public void GeneratePlanet()
