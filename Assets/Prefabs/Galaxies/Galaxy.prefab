@@ -43,21 +43,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd12bf17acf820b4ab9faa9b55d99a45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetSpeedForPlayers: 1
-  Height: 2048
-  Width: 2048
+  MaxSpeedForObjects: 1
+  Height: 512
+  Width: 512
   PointsOnOnePlanet: 40
   PlanetNoiseScale: 4
-  TileTypes:
-  - Tile: 0
-    Template: {fileID: 0}
-    Probability: 0.6
-  - Tile: 1
-    Template: {fileID: 7262656473733311864, guid: e8e1044ee80f9964391be1d13a1ce69e,
-      type: 3}
-    Probability: 1
+  SpaceObjects:
+  - SpaceClass: -1
+    UpperProbabilityGround: 0.5
+  - SpaceClass: 0
+    UpperProbabilityGround: 0.7
+  - SpaceClass: 0
+    UpperProbabilityGround: 1
   BackgroundQuads:
   - Back: {fileID: 6823495696098249772, guid: 294efa9da8a75ee4aaeace7cd3e66f8e, type: 3}
     Parallax: 5
-  - Back: {fileID: 6823495696098249772, guid: 294efa9da8a75ee4aaeace7cd3e66f8e, type: 3}
-    Parallax: 2

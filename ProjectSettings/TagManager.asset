@@ -5,7 +5,6 @@ TagManager:
   serializedVersion: 2
   tags:
   - Core Gravity
-  - Satellite
   - Space body
   layers:
   - Default
@@ -18,12 +17,12 @@ TagManager:
   - 
   - background
   - planetMagnet
+  - shield
+  - asteroid
+  - planetSatellite
   - planet
-  - sattelite
-  - 
-  - 
-  - 
-  - 
+  - sunSatellite
+  - sun
   - 
   - 
   - 

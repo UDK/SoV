@@ -25,8 +25,7 @@ namespace Assets.Scripts.Manager.Galaxy
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if(collision.tag == EnumTags.FreeSpaceBody/* &&
-                !_registeredGameObjects.ContainsKey(collision)*/)
+            if (!LayerHelper.IsSatellite(collision.gameObject.layer))
             {
                 var movement = collision.GetComponent<MovementBehaviour>();
                 movement.SetVelocity(PushDirection * 0.5f);
@@ -38,7 +37,7 @@ namespace Assets.Scripts.Manager.Galaxy
 
         private void OnTriggerExit2D(Collider2D collision)
         {
-            if (collision.tag == EnumTags.FreeSpaceBody)
+            if (!LayerHelper.IsSatellite(collision.gameObject.layer))
             {
                 var movement = collision.GetComponent<MovementBehaviour>();
 
