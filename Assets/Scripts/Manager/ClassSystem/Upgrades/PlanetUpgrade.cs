@@ -23,7 +23,7 @@ namespace Assets.Scripts.Manager.ClassSystem.Upgrades
             int colourSettingsRandom = UnityEngine.Random.Range(0,planetSettings.colourSettings.Length);
             int shapeSettingsRandom = UnityEngine.Random.Range(0,planetSettings.shapeSettings.Length);
             Planet planet = spaceBody.gameObject.AddComponent<Planet>();
-            planet.Init(planetSettings.shapeSettings[shapeSettingsRandom], planetSettings.colourSettings[colourSettingsRandom]);
+            planet.Init(planetSettings.shapeSettings[shapeSettingsRandom], planetSettings.colourSettings[colourSettingsRandom], planetSettings.resolution);
             var graviatation = templateManager.SetUpGravitation(spaceBody);
             spaceBody.Mass += 10;
             var satelliteManager = spaceBody.GetComponent<SatelliteManager>();
@@ -39,6 +39,7 @@ namespace Assets.Scripts.Manager.ClassSystem.Upgrades
         public ShapeSettings[] shapeSettings;
         [SerializeField]
         public ColourSettings[] colourSettings;
-
+        [SerializeField]
+        public int resolution;
     }
 }
