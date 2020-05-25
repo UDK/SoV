@@ -50,8 +50,9 @@ namespace GeneratePlanet
         MeshFilter[] meshFilters;
         TerrainFace[] terrainFaces;
 
-        public void Init(ShapeSettings shapeSettingss, ColourSettings colourSettingss)
+        public void Init(ShapeSettings shapeSettingss, ColourSettings colourSettingss, int resolution)
         {
+            this.resolution = resolution;
             shapeSettings = shapeSettingss;
             colourSettings = colourSettingss;
             GeneratePlanet();

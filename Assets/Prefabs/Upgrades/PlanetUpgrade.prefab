@@ -46,5 +46,12 @@ MonoBehaviour:
   planetSettings:
     shapeSettings:
     - {fileID: 11400000, guid: bb563e90654574d4cb7d931456630f79, type: 2}
+    - {fileID: 11400000, guid: d113edf46ad26754c8828c92a53d5500, type: 2}
+    - {fileID: 11400000, guid: 825b13e291c3a1a4b89461e193c4e5fd, type: 2}
+    - {fileID: 11400000, guid: 18ce5d7750c92ec4faca920d93d65cf6, type: 2}
     colourSettings:
     - {fileID: 11400000, guid: 4d2914748ff1c4089acd77328cfcb02e, type: 2}
+    - {fileID: 11400000, guid: 60e2c9ddde349ee41840db3f28118d38, type: 2}
+    - {fileID: 11400000, guid: 79dfa6108cb4d2f4bafd543ccb2adc14, type: 2}
+    - {fileID: 11400000, guid: e8754cf1d29713f4f8df0a88930da36e, type: 2}
+    resolution: 32
