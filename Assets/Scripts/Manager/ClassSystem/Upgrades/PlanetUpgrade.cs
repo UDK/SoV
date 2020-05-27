@@ -28,8 +28,18 @@ namespace Assets.Scripts.Manager.ClassSystem.Upgrades
             spaceBody.Mass += 10;
             var satelliteManager = spaceBody.GetComponent<SatelliteManager>();
             satelliteManager.MaxCountSattelites = 2;
-
             spaceBody.gameObject.layer = LayerHelper.Planet;
+            spaceBody = SpinPlanet(spaceBody);
+        }
+        /// <summary>
+        /// Крутим планету при инициализации(ебашу чистые функции чтобы попасть в рай
+        /// </summary>
+        /// <param name="spaceBody">Объект планеты</param>
+        /// <returns></returns>
+        private SpaceBody SpinPlanet(SpaceBody spaceBody)
+        {
+            spaceBody.gameObject.transform.Rotate(new Vector3(0, UnityEngine.Random.Range(0f, 359f), 0));
+            return spaceBody;
         }
     }
     [Serializable]
