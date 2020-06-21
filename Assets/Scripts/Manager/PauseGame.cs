@@ -5,6 +5,12 @@ using UnityEngine;
 public class PauseGame : MonoBehaviour
 {
     private bool gameIsPause = false;
+
+    public delegate void TextAlphaUnsigned(float alpha);
+    /// <summary>
+    /// Евент чтобы показывать/прятать главное меню при паузе 
+    /// </summary>
+    static public event TextAlphaUnsigned Notify;
     public bool GameIsPause {
         get => gameIsPause;
         set
@@ -13,23 +19,17 @@ public class PauseGame : MonoBehaviour
             {
                 Time.timeScale = 0;
                 gameIsPause = value;
+                Notify(1);
             }
             else
             {
                 Time.timeScale = 1;
                 gameIsPause = value;
+                Notify(0);
             }
 
         }
     }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
     void Update()
     {
         //Esc всегда escape и переопределения, вряд ли, будет
