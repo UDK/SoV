@@ -74,8 +74,11 @@ namespace Assets.Scripts.Physics.Sattellite
         private void RemoveSatellite(int iter)
         {
             satelliteObservers[iter].satelliteObserver.Detach();
-            satelliteObservers[iter].gameObject.layer =
-                LayerHelper.ClassMap2Layer[satelliteObservers[iter].satelliteBody.SpaceClass];
+            if (satelliteObservers[iter].gameObject != null)
+            {
+                satelliteObservers[iter].gameObject.layer =
+                    LayerHelper.ClassMap2Layer[satelliteObservers[iter].satelliteBody.SpaceClass];
+            }
             satelliteObservers.RemoveAt(iter);
         }
 
