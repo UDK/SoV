@@ -13,7 +13,7 @@ namespace Assets.Scripts.Manager.ClassSystem.Upgrades
         protected override void UpgradeClass(ITemplateManager templateManager, SpaceBody spaceBody)
         {
             spaceBody.gameObject.layer = LayerHelper.Asteroid;
-            base.Upgrade(templateManager, spaceBody);
+            //base.Upgrade(templateManager, spaceBody);
         }
     }
 }
