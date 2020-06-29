@@ -48,7 +48,7 @@ namespace Assets.Scripts.Physics
                 Debug.LogError("Speed over");
                 return;
             }*/
-            if (velocity.x != 0 || velocity.y != 0 || velocity.z != 0)
+            if (velocity.x != 0 || velocity.y != 0)
             {
                 Magnitude = math.sqrt(math.pow(_velocity.x, 2) + math.pow(_velocity.y, 2) + math.pow(_velocity.z, 2));
 
@@ -97,7 +97,7 @@ namespace Assets.Scripts.Physics
 
         private void FixedUpdate()
         {
-            this.transform.Translate(_velocity);
+            this.transform.Translate(_velocity, Space.World);
         }
     }
 }
