@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using Assets.Scripts.Helpers;
 
 namespace Assets.Scripts.Manager
 {
@@ -61,6 +62,7 @@ namespace Assets.Scripts.Manager
             GameObject player)
             where TControl : ControlBehaviourBase
         {
+            player.tag = EnumTags.Player;
             var control = player.AddComponent<TControl>();
             control.Acceleration = PlayerAcceleration;
         }
