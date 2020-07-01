@@ -15,11 +15,10 @@ namespace Assets.Scripts.Manager.ClassSystem.Upgrades
     {
         [SerializeField]
         public PlanetSettings planetSettings;
-        public override void Upgrade(
+        protected override void UpgradeClass(
             ITemplateManager templateManager,
             SpaceBody spaceBody)
         {
-            ClearMesh(spaceBody);
             int colourSettingsRandom = UnityEngine.Random.Range(0,planetSettings.colourSettings.Length);
             int shapeSettingsRandom = UnityEngine.Random.Range(0,planetSettings.shapeSettings.Length);
             Planet planet = spaceBody.gameObject.AddComponent<Planet>();

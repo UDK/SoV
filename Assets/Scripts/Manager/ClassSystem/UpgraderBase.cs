@@ -10,14 +10,29 @@ namespace Assets.Scripts.Manager.ClassSystem
 {
     public abstract class UpgraderBase : MonoBehaviour
     {
-        public virtual void Upgrade(ITemplateManager templateManager, SpaceBody spaceBody)
+        public void Upgrade(ITemplateManager templateManager, SpaceBody spaceBody)
+        {
+            ClearMesh(spaceBody);
+            UpgradeClass(templateManager, spaceBody);
+        }
+
+        protected virtual void UpgradeClass(ITemplateManager templateManager, SpaceBody spaceBody)
         {
         }
 
         protected void ClearMesh(SpaceBody spaceBody)
         {
-            Destroy(spaceBody.GetComponent<MeshRenderer>());
-            Destroy(spaceBody.GetComponent<MeshFilter>());
+            DeleteComponent<MeshRenderer>(spaceBody);
+            DeleteComponent<MeshFilter>(spaceBody);
+        }
+
+        private void DeleteComponent<T>(SpaceBody spaceBody)
+            where T : UnityEngine.Object
+        {
+            if (spaceBody.TryGetComponent<T>(out var component))
+            {
+                Destroy(component);
+            }
         }
     }
 }
