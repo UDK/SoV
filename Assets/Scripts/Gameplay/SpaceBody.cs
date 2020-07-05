@@ -21,7 +21,7 @@ namespace Assets.Scripts.Gameplay
         /// </summary>
         public event ChangeMass NotifyChangeMass;
 
-        public float mass;
+        private float mass;
 
         public float Mass
         {

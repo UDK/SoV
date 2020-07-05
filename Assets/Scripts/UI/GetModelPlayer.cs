@@ -4,13 +4,17 @@ using UnityEngine;
 using Assets.Scripts.Helpers;
 using System.Linq;
 using Assets.Scripts.Gameplay;
-using System.Linq;
 
 public class GetModelPlayer : MonoBehaviour
 {
-    List<GameObject> meshRendersIcon = new List<GameObject>(7);
+    private List<GameObject> meshRendersIcon = new List<GameObject>(7);
 
-    private SpaceBody BodyPlanet { get; set; }
+    //Для тестов сделал публичным, но его надо будет приватным сделать
+    public SpaceBody BodyPlanet { get; set; }
+
+    private bool scaleFunc = false;
+
+    private float incrementationLerp = 0.5f;
 
     // Start is called before the first frame update
     void Start()
@@ -31,12 +35,23 @@ public class GetModelPlayer : MonoBehaviour
 
     private void ChangeSizeIconPlanet()
     {
-        meshRendersIcon.Select(k => k.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f));
+        scaleFunc = true;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
+        if (scaleFunc)
+        {
+            foreach (var mesh in meshRendersIcon)
+            {
+                mesh.transform.localScale = new Vector3(Mathf.Lerp(mesh.transform.localScale.x, 50f, incrementationLerp * Time.deltaTime),
+                                                        Mathf.Lerp(mesh.transform.localScale.y, 50f, incrementationLerp * Time.deltaTime),
+                                                        Mathf.Lerp(mesh.transform.localScale.z, 50f, incrementationLerp * Time.deltaTime));
+            }
+            if (meshRendersIcon[0].transform.localScale.x < 50.5f)
+            {
 
+            }
+        }
     }
 }
