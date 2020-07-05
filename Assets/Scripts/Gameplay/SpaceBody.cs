@@ -15,7 +15,26 @@ namespace Assets.Scripts.Gameplay
     /// </summary>
     public class SpaceBody : MonoBehaviour, ISatelliteBody
     {
-        public float Mass;
+        public delegate void ChangeMass();
+        /// <summary>
+        /// Евент изменения массы
+        /// </summary>
+        public event ChangeMass NotifyChangeMass;
+
+        public float mass;
+
+        public float Mass
+        {
+            get
+            {
+                return mass;
+            }
+            set
+            {
+                mass = value;
+                NotifyChangeMass?.Invoke();
+            }
+        }
 
         public SpaceClasses SpaceClass { get; set; }
 
