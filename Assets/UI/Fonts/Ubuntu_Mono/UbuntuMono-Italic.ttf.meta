@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 585188cdc4600544eb408bee749e4b3a
+guid: 59c786c44eff38843a30b3c1f4fc4314
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -8,14 +8,16 @@ TrueTypeFontImporter:
   characterSpacing: 0
   characterPadding: 1
   includeFontData: 1
-  fontName: ThaleahFat
+  fontName: Ubuntu Mono
   fontNames:
-  - ThaleahFat
-  fallbackFontReferences: []
+  - Ubuntu Mono
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 617c879f991adf44ba818e338d9208c6, type: 3}
   customCharacters: 
   fontRenderingMode: 0
   ascentCalculationMode: 1
   useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
   userData: 
   assetBundleName: 
   assetBundleVariant: 
