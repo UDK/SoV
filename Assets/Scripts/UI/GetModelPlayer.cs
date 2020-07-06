@@ -16,12 +16,14 @@ public class GetModelPlayer : MonoBehaviour
 
     private float incrementationLerp = 0.5f;
 
+    private float rotateIconPlanet = -0.75f;
+
     // Start is called before the first frame update
     void Start()
     {
         GameObject PlayerPlanet = GameObject.FindGameObjectWithTag(EnumTags.Player);
         BodyPlanet = PlayerPlanet.GetComponent<SpaceBody>();
-        BodyPlanet.NotifyChangeMass += ChangeSizeIconPlanet;
+        BodyPlanet.NotifyChangeMass += EventChangeSizeIconPlanet;
         MeshRenderer[] meshRenderers = PlayerPlanet.GetComponentsInChildren<MeshRenderer>().Skip(1).ToArray();
         foreach (var meshPlayerPlanet in meshRenderers)
         {
@@ -33,15 +35,30 @@ public class GetModelPlayer : MonoBehaviour
         }
     }
 
-    private void ChangeSizeIconPlanet()
+    private void EventChangeSizeIconPlanet()
     {
         scaleFunc = true;
     }
 
     private void Update()
     {
+        ChangeSizqIconPlanet();
+        RotateIconPlanet();
+    }
+
+    private void RotateIconPlanet()
+    {
+        foreach (var mesh in meshRendersIcon)
+        {
+            mesh.transform.Rotate(new Vector3(0, rotateIconPlanet, 0));
+        }
+    }
+
+    private void ChangeSizqIconPlanet()
+    {
         if (scaleFunc)
         {
+            //Все константы должны быть заменены11!!!1
             foreach (var mesh in meshRendersIcon)
             {
                 mesh.transform.localScale = new Vector3(Mathf.Lerp(mesh.transform.localScale.x, 50f, incrementationLerp * Time.deltaTime),
@@ -49,9 +66,7 @@ public class GetModelPlayer : MonoBehaviour
                                                         Mathf.Lerp(mesh.transform.localScale.z, 50f, incrementationLerp * Time.deltaTime));
             }
             if (meshRendersIcon[0].transform.localScale.x < 50.5f)
-            {
-
-            }
+                scaleFunc = false;
         }
     }
 }
