@@ -13,6 +13,7 @@ namespace Assets.Scripts.Physics.Sattellite
     /// <summary>
     /// Скорее всего перестанет наследоваться от MonoBehaviour????
     /// </summary>
+    [RequireComponent(typeof(SpaceBody))]
     class SatelliteManager : MonoBehaviour
     {
         public float DeltaOrbitsDistance = 3f;
