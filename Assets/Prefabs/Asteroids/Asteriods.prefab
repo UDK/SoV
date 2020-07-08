@@ -12,11 +12,11 @@ GameObject:
   - component: {fileID: 6563288934490194247}
   - component: {fileID: 4479459665989442784}
   - component: {fileID: 2478604265234904790}
-  - component: {fileID: 311948947236929275}
   - component: {fileID: 2413994933919833467}
   - component: {fileID: 6831251899276264536}
-  - component: {fileID: 7524800885019503715}
-  m_Layer: 12
+  - component: {fileID: 8726113945314499163}
+  - component: {fileID: 1999183433308992815}
+  m_Layer: 11
   m_Name: Asteriods
   m_TagString: Space body
   m_Icon: {fileID: 0}
@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c307f7428b265e54a83b083efd002860, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -100,19 +100,6 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
---- !u!114 &311948947236929275
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 911791028636153625}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2552b7bedd4c81f4fad848e4d13c1aea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mass: 0
 --- !u!114 &2413994933919833467
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -127,6 +114,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AccelarationDeltaTime: 0.01
   MaxVelocity: 10
+  Block: 0
 --- !u!50 &6831251899276264536
 Rigidbody2D:
   serializedVersion: 4
@@ -148,7 +136,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &7524800885019503715
+--- !u!114 &8726113945314499163
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -157,7 +145,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 911791028636153625}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cbc285de19bdff24c83905a621ade47f, type: 3}
+  m_Script: {fileID: 11500000, guid: ed73b2eae1049dd4580a75c3e8d7b744, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetVelocity: 1
+--- !u!114 &1999183433308992815
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 911791028636153625}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af3297b847c2d4e4ab72431557b2085c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DestroyEffect: {fileID: 0}
+  JustEat: 0
+  _DamagePercent: 0.5
