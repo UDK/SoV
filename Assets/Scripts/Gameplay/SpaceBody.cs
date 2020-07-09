@@ -1,7 +1,9 @@
-﻿using Assets.Scripts.Helpers;
+﻿using Assets.Scripts.Gameplay.SpaceObject;
+using Assets.Scripts.Helpers;
 using Assets.Scripts.Manager.ClassSystem;
 using Assets.Scripts.Physics;
 using Assets.Scripts.Physics.Sattellite;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,11 +15,13 @@ namespace Assets.Scripts.Gameplay
     /// <summary>
     /// Игровой объект
     /// </summary>
-    public class SpaceBody : MonoBehaviour, ISatelliteBody
+    public class SpaceBody : MonoBehaviour, ISatelliteBody, IGameplayObject
     {
         public float Mass;
 
         public SpaceClasses SpaceClass { get; set; }
+
+        public Guid AllianceGuid { get; set; }
 
         public VisualEffect DestroyEffect;
 

@@ -1,4 +1,7 @@
-﻿using Assets.Scripts.Helpers;
+﻿using Assets.Scripts.Gameplay.Cilivization.AI.States;
+using Assets.Scripts.Gameplay.Cilivization.AI.Weapons;
+using Assets.Scripts.Gameplay.SpaceObject;
+using Assets.Scripts.Helpers;
 using Assets.Scripts.Physics;
 using System;
 using System.Collections.Generic;
@@ -9,64 +12,116 @@ using UnityEngine;
 
 namespace Assets.Scripts.Gameplay.Cilivization.AI
 {
-    public class ShipAIBase : MonoBehaviour
+    public class ShipAIBase : MonoBehaviour, IGameplayObject
     {
-        // for debug
-        public float heightMultiplier;
+        // used for visual detection of enemies
         public float visionAngle = 45;
         public int rayCount = 3;
+        public float sightDist = 10f;
 
-        public float sightDist;
+        public Guid AllianceGuid { get; set; }
+
+        // determines distance for attack
+        public float attackDist = 3f;
 
         public GameObject _target;
+
+        // for debug
         public GameObject[] _targets;
 
+        public GameObject[] Weapons;
+
+        public IWeapon[] _weapons;
+
         private MovementBehaviour _movementBehaviour;
-        private bool turnBack = false;
+
+        // state machine
+        private AStateMachine<ShipStates> _sm;
+
+        public ShipAIBase()
+        {
+        }
 
         private void Start()
         {
+            _weapons = Weapons.Select(x =>
+                x.GetComponent<MonoBehaviour>() as IWeapon)
+                    .ToArray();
+            AllianceGuid = Guid.NewGuid();
+            _sm = new AStateMachine<ShipStates>();
+            _sm.Publish(ShipStates.Moving, Move)
+                .Publish(ShipStates.SearchingOfTarget, SearchTarget)
+                .Publish(ShipStates.Attacking, Attack);
+            _sm.Push(ShipStates.Moving);
             _movementBehaviour = GetComponent<MovementBehaviour>();
-
-            heightMultiplier = 1.36f;
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
-            Move();
+            RotateBySpeed();
+            _sm.Update();
+        }
+
+        private void RotateBySpeed()
+        {
+            float angle = Mathf.Atan2(_movementBehaviour.Velocity.y,
+                _movementBehaviour.Velocity.x) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
         }
 
         private void Move()
         {
-            //RayCasts();
-            if(_target == null)
-            {
-                return;
-            }
-
-            if (turnBack)
-            {
-
-                return;
-            }
-
+            var distance = Vector2.Distance(_target.transform.position, transform.position);
             var heading = _target.transform.position - transform.position;
-            var dot = Vector2.Dot(heading, transform.forward);
-            _movementBehaviour.SmoothlySetVelocity(heading);
-            float angle = Mathf.Atan2(_movementBehaviour.Velocity.y,
-                _movementBehaviour.Velocity.x) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-            /*if(dot < 0)
+
+            if(distance < attackDist)
             {
-                turnBack = true;
+                _sm.Push(
+                    ShipStates.Attacking);
             }
             else
             {
-                
-            }*/
+                _movementBehaviour.SmoothlySetVelocity(heading.normalized * _movementBehaviour.MaxVelocity);
+            }
         }
 
-        private void RayCasts()
+        private void Attack()
+        {
+            foreach(var weapon in _weapons)
+            {
+                weapon.Attack(_target, AllianceGuid);
+            }
+
+            var distance = Vector2.Distance(_target.transform.position, transform.position);
+            if (distance > attackDist)
+            {
+                _sm.Push(
+                    ShipStates.Moving);
+                return;
+            }
+
+            // get current magnitude
+            var magnitude = _movementBehaviour.Magnitude;
+
+            // get vector center <- obj
+            var gravityVector = _target.transform.position - transform.position;
+
+            // check whether left or right of target
+            var left = Vector2.SignedAngle(_movementBehaviour.Velocity, gravityVector) > 0;
+
+            // get new vector which is 90° on gravityDirection 
+            // and world Z (since 2D game)
+            // normalize so it has magnitude = 1
+            var newDirection = Vector3.Cross(gravityVector, Vector3.forward).normalized;
+
+            // invert the newDirection in case user is touching right of movement direction
+            if (!left) newDirection *= -1;
+
+            // set new direction but keep speed(previously stored magnitude)
+            _movementBehaviour.SmoothlySetVelocity(newDirection * magnitude);
+        }
+
+        private void SearchTarget()
         {
 
             Ray enemyRay = new Ray(transform.position, transform.forward * sightDist);

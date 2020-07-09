@@ -18,8 +18,9 @@ namespace Assets.Scripts.Helpers
         public static int Planet = LayerMask.NameToLayer("planet");
         public static int Sun = LayerMask.NameToLayer("sun");
         public static int Magnet = LayerMask.NameToLayer("planetMagnet");
-        public static int planetSatellite = LayerMask.NameToLayer("planetSatellite");
-        public static int sunSatellite = LayerMask.NameToLayer("sunSatellite");
+        public static int PlanetSatellite = LayerMask.NameToLayer("planetSatellite");
+        public static int SunSatellite = LayerMask.NameToLayer("sunSatellite");
+        public static int Shell = LayerMask.NameToLayer("shell");
 
         public static Dictionary<SpaceClasses, int> ClassMap2Layer =
             new Dictionary<SpaceClasses, int>
@@ -32,14 +33,14 @@ namespace Assets.Scripts.Helpers
         public static Dictionary<SpaceClasses, int> ClassSatMap2Layer =
             new Dictionary<SpaceClasses, int>
         {
-            { SpaceClasses.Asteroid, planetSatellite },
-            { SpaceClasses.Planet, planetSatellite },
-            { SpaceClasses.Sun, sunSatellite },
+            { SpaceClasses.Asteroid, PlanetSatellite },
+            { SpaceClasses.Planet, PlanetSatellite },
+            { SpaceClasses.Sun, SunSatellite },
         };
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static public bool IsSatellite(int layer) =>
-            layer == planetSatellite || layer == sunSatellite;
+            layer == PlanetSatellite || layer == SunSatellite;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static public bool IsLower(int layer1, int layer2)
@@ -57,8 +58,8 @@ namespace Assets.Scripts.Helpers
         static public bool IsBody(int layer)
         {
             return (Asteroid <= layer && layer <= Sun)
-                || layer == planetSatellite
-                || layer == sunSatellite;
+                || layer == PlanetSatellite
+                || layer == SunSatellite;
         }
     }
 }

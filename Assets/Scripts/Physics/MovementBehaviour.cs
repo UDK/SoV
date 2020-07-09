@@ -24,6 +24,11 @@ namespace Assets.Scripts.Physics
         /// </summary>
         public float MaxVelocity = 2f;
 
+        /// <summary>
+        /// Can make collisions
+        /// </summary>
+        public bool CollisionEnabled = true;
+
         public Vector3 Velocity =>
             _velocity;
 
@@ -78,7 +83,8 @@ namespace Assets.Scripts.Physics
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
-            if (!LayerHelper.IsBody(collision.gameObject.layer))
+            if (!CollisionEnabled ||
+                !LayerHelper.IsBody(collision.gameObject.layer))
             {
                 return;
             }
