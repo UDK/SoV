@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
 using Random = UnityEngine.Random;
+using static Assets.Scripts.Manager.GameManager;
 
 namespace Assets.Scripts.Gameplay
 {
@@ -23,18 +24,9 @@ namespace Assets.Scripts.Gameplay
 
         private float mass;
 
-        public float Mass
-        {
-            get
-            {
-                return mass;
-            }
-            set
-            {
-                mass = value;
-                NotifyChangeMass?.Invoke();
-            }
-        }
+        public IUpgradeManager upgradeManager;
+
+        public Mapping mappingUpgradeSpaceObject;
 
         public SpaceClasses SpaceClass { get; set; }
 
@@ -48,6 +40,21 @@ namespace Assets.Scripts.Gameplay
         private SatelliteManager _satelliteManager;
 
         private MovementBehaviour _movementBehaviour;
+
+        [SerializeField]
+        public float Mass
+        {
+            get
+            {
+                return mass;
+            }
+            set
+            {
+                mass = value;
+                upgradeManager.Upgrade(this, mappingUpgradeSpaceObject);
+                NotifyChangeMass?.Invoke();
+            }
+        }
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
