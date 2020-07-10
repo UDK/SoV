@@ -57,3 +57,9 @@ MonoBehaviour:
   - SpaceClasses: 1
     UpgradeBase: {fileID: 5132102267406975341, guid: 63c110414b90c4d47abce4a47f70fd01,
       type: 3}
+  AvailableMapping:
+  - Downgrade: 0
+    Source: 1
+    Upgrade: 2
+    criticalMassUpgrade: 49
+    criticalMassDowngrade: 0

@@ -21,20 +21,56 @@ namespace Assets.Scripts.Manager
             public UpgraderBase UpgradeBase;
         }
 
+        [Serializable]
+        public struct Mapping
+        {
+            public SpaceClasses Downgrade;
+            public SpaceClasses Source;
+            public SpaceClasses Upgrade;
+            public int criticalMassUpgrade;
+            public int criticalMassDowngrade;
+        }
+
         [SerializeField]
         public UpgradeContainer[] AvailableUpgrades;
 
-        public void Upgrade(SpaceClasses spaceClass, SpaceBody spaceBody)
+        [SerializeField]
+        public Mapping[] AvailableMapping;
+
+        public void Upgrade(SpaceBody spaceBody, Mapping mapping)
         {
-            AvailableUpgrades.First(x => x.SpaceClasses == spaceClass)
-                .UpgradeBase.Upgrade(this, spaceBody);
+            if(mapping.criticalMassUpgrade < spaceBody.Mass)
+            {
+                Upgrade(mapping.Upgrade, spaceBody);
+            }
+            else if(mapping.criticalMassDowngrade > spaceBody.Mass)
+            {
+                Upgrade(mapping.Downgrade, spaceBody);
+            }
+        }
+
+        private void Upgrade(SpaceClasses spaceClass, SpaceBody spaceBody)
+        {
+            //AvailableUpgrades.First(x => x.SpaceClasses == spaceClass)
+            //    .UpgradeBase.Upgrade(this, spaceBody);
+            foreach(var element in AvailableUpgrades)
+            {
+                if(element.SpaceClasses == spaceClass)
+                {
+                    element.UpgradeBase.Upgrade(this, spaceBody);
+                    break;
+                }
+            }
+            spaceBody.mappingUpgradeSpaceObject = AvailableMapping.First(x => x.Source == spaceBody.SpaceClass);
         }
 
         public SpaceBody GetFullObject(SpaceClasses spaceClass)
         {
             SpaceBody spaceBody = GenerateSpaceBody;
             spaceBody.SpaceClass = spaceClass;
+            spaceBody.upgradeManager = this;
             Upgrade(spaceClass, spaceBody);
+            spaceBody.mappingUpgradeSpaceObject = AvailableMapping.First(x => x.Source == spaceBody.SpaceClass);
             return spaceBody;
         }
     }

@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
 using Random = UnityEngine.Random;
+using static Assets.Scripts.Manager.GameManager;
+using System;
 
 namespace Assets.Scripts.Gameplay
 {
@@ -15,7 +17,7 @@ namespace Assets.Scripts.Gameplay
     /// </summary>
     public class SpaceBody : MonoBehaviour, ISatelliteBody
     {
-        public delegate void ChangeMass();
+        public delegate void ChangeMass(int mass);
         /// <summary>
         /// Евент изменения массы
         /// </summary>
@@ -23,18 +25,9 @@ namespace Assets.Scripts.Gameplay
 
         private float mass;
 
-        public float Mass
-        {
-            get
-            {
-                return mass;
-            }
-            set
-            {
-                mass = value;
-                NotifyChangeMass?.Invoke();
-            }
-        }
+        public IUpgradeManager upgradeManager;
+
+        public Mapping mappingUpgradeSpaceObject;
 
         public SpaceClasses SpaceClass { get; set; }
 
@@ -48,6 +41,21 @@ namespace Assets.Scripts.Gameplay
         private SatelliteManager _satelliteManager;
 
         private MovementBehaviour _movementBehaviour;
+
+        [SerializeField]
+        public float Mass
+        {
+            get
+            {
+                return mass;
+            }
+            set
+            {
+                mass = value;
+                upgradeManager.Upgrade(this, mappingUpgradeSpaceObject);
+                NotifyChangeMass?.Invoke(Convert.ToInt32(value));
+            }
+        }
 
         private void OnCollisionEnter2D(Collision2D collision)
         {

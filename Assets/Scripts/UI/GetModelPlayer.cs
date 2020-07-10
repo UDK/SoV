@@ -35,7 +35,7 @@ public class GetModelPlayer : MonoBehaviour
         }
     }
 
-    private void EventChangeSizeIconPlanet()
+    private void EventChangeSizeIconPlanet(int mass)
     {
         scaleFunc = true;
     }
