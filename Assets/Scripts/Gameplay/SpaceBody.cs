@@ -8,6 +8,7 @@ using UnityEngine;
 using UnityEngine.VFX;
 using Random = UnityEngine.Random;
 using static Assets.Scripts.Manager.GameManager;
+using System;
 
 namespace Assets.Scripts.Gameplay
 {
@@ -16,7 +17,7 @@ namespace Assets.Scripts.Gameplay
     /// </summary>
     public class SpaceBody : MonoBehaviour, ISatelliteBody
     {
-        public delegate void ChangeMass();
+        public delegate void ChangeMass(int mass);
         /// <summary>
         /// Евент изменения массы
         /// </summary>
@@ -52,7 +53,7 @@ namespace Assets.Scripts.Gameplay
             {
                 mass = value;
                 upgradeManager.Upgrade(this, mappingUpgradeSpaceObject);
-                NotifyChangeMass?.Invoke();
+                NotifyChangeMass?.Invoke(Convert.ToInt32(value));
             }
         }
 

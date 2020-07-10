@@ -51,8 +51,16 @@ namespace Assets.Scripts.Manager
 
         private void Upgrade(SpaceClasses spaceClass, SpaceBody spaceBody)
         {
-            AvailableUpgrades.First(x => x.SpaceClasses == spaceClass)
-                .UpgradeBase.Upgrade(this, spaceBody);
+            //AvailableUpgrades.First(x => x.SpaceClasses == spaceClass)
+            //    .UpgradeBase.Upgrade(this, spaceBody);
+            foreach(var element in AvailableUpgrades)
+            {
+                if(element.SpaceClasses == spaceClass)
+                {
+                    element.UpgradeBase.Upgrade(this, spaceBody);
+                    break;
+                }
+            }
             spaceBody.mappingUpgradeSpaceObject = AvailableMapping.First(x => x.Source == spaceBody.SpaceClass);
         }
 
