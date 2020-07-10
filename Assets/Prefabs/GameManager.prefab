@@ -58,8 +58,18 @@ MonoBehaviour:
     UpgradeBase: {fileID: 5132102267406975341, guid: 63c110414b90c4d47abce4a47f70fd01,
       type: 3}
   AvailableMapping:
+  - Downgrade: -1
+    Source: 0
+    Upgrade: 1
+    criticalMassUpgrade: 10
+    criticalMassDowngrade: 0
   - Downgrade: 0
     Source: 1
     Upgrade: 2
     criticalMassUpgrade: 49
-    criticalMassDowngrade: 0
+    criticalMassDowngrade: 10
+  - Downgrade: 1
+    Source: 2
+    Upgrade: 3
+    criticalMassUpgrade: 50
+    criticalMassDowngrade: 100
