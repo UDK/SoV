@@ -13,11 +13,13 @@ namespace Assets.Scripts.Helpers
     /// <typeparam name="S">State</typeparam>
     public class AStateMachine<S>
     {
-        private Dictionary<S, Action> _states = new Dictionary<S, Action>();
+        private readonly Dictionary<S, Action> _states =
+            new Dictionary<S, Action>();
 
         private S _state;
         private Action _action;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public AStateMachine<S> Push(
             S state)
         {
@@ -26,14 +28,23 @@ namespace Assets.Scripts.Helpers
             return this;
         }
 
-        public AStateMachine<S> Publish(
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public AStateMachine<S> Set(
             S state,
             Action action)
         {
-            _states.Add(state, action);
+            if (_states.ContainsKey(state))
+            {
+                _states[state] = action;
+            }
+            else
+            {
+                _states.Add(state, action);
+            }
             return this;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public AStateMachine<S> Update()
         {
             _action();
