@@ -29,11 +29,11 @@ namespace Assets.Scripts.Manager
 
         public void Upgrade(SpaceBody spaceBody, Mapping mapping)
         {
-            if(mapping.criticalMassUpgrade < spaceBody.Mass)
+            if (mapping.criticalMassUpgrade < spaceBody.Mass)
             {
                 Upgrade(mapping.Upgrade, spaceBody);
             }
-            else if(mapping.criticalMassDowngrade > spaceBody.Mass)
+            else if (mapping.criticalMassDowngrade > spaceBody.Mass)
             {
                 Upgrade(mapping.Downgrade, spaceBody);
             }
@@ -50,9 +50,9 @@ namespace Assets.Scripts.Manager
             {
 
             }
-            foreach(var element in AvailableUpgrades)
+            foreach (var element in AvailableUpgrades)
             {
-                if(element.SpaceClasses == spaceClass)
+                if (element.SpaceClasses == spaceClass)
                 {
                     element.UpgradeBase.Upgrade(this, spaceBody, upgradeMapping);
                     break;

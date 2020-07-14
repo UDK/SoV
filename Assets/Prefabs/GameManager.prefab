@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &2388369831426101679
+--- !u!1 &3618812809561066454
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,8 +8,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3433677711152454340}
-  - component: {fileID: 2301805394904129129}
+  - component: {fileID: 3618812809231998491}
+  - component: {fileID: 3618812809561066455}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -17,13 +17,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3433677711152454340
+--- !u!4 &3618812809231998491
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2388369831426101679}
+  m_GameObject: {fileID: 3618812809561066454}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -31,13 +31,13 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2301805394904129129
+--- !u!114 &3618812809561066455
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2388369831426101679}
+  m_GameObject: {fileID: 3618812809561066454}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 97ab910fcb3f7a44a89a16664cd8a54f, type: 3}
@@ -57,19 +57,22 @@ MonoBehaviour:
   - SpaceClasses: 1
     UpgradeBase: {fileID: 5132102267406975341, guid: 63c110414b90c4d47abce4a47f70fd01,
       type: 3}
+  - SpaceClasses: 2
+    UpgradeBase: {fileID: 1541119603482770578, guid: 6e32836109fd5b44aabb6b52fb3244b0,
+      type: 3}
   AvailableMapping:
   - Downgrade: -1
     Source: 0
     Upgrade: 1
-    criticalMassUpgrade: 10
-    criticalMassDowngrade: 0
+    criticalMassUpgrade: 15
+    criticalMassDowngrade: 1
   - Downgrade: 0
     Source: 1
     Upgrade: 2
     criticalMassUpgrade: 49
-    criticalMassDowngrade: 10
-  - Downgrade: 1
+    criticalMassDowngrade: 15
+  - Downgrade: 0
     Source: 2
     Upgrade: 3
-    criticalMassUpgrade: 50
-    criticalMassDowngrade: 100
+    criticalMassUpgrade: 100
+    criticalMassDowngrade: 49

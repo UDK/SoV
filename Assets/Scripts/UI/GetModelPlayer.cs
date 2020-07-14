@@ -19,8 +19,19 @@ public class GetModelPlayer : MonoBehaviour
     private float rotateIconPlanet = -0.75f;
 
     private const float _maxSizePlanet = 45f;
+    /// <summary>
+    /// Нужна, что при достижении максимальной массы 
+    /// </summary>
+    private const float _upMaxPrecent = 3f;
 
     private float _lastSize;
+
+    private float _pastMass;
+    /// <summary>
+    /// Определяет масса увеличилась или уменьшилась
+    /// </summary>
+    private bool _weightGain;
+
 
     // Start is called before the first frame update
     void Start()
@@ -28,12 +39,14 @@ public class GetModelPlayer : MonoBehaviour
         GameObject PlayerPlanet = GameObject.FindGameObjectWithTag(EnumTags.Player);
         BodyPlanet = PlayerPlanet.GetComponent<SpaceBody>();
         BodyPlanet.NotifyChangeMass += EventChangeSizeIconPlanet;
+        _pastMass = BodyPlanet.Mass;
         MeshRenderer[] meshRenderers = PlayerPlanet.GetComponentsInChildren<MeshRenderer>().Skip(1).ToArray();
         foreach (var meshPlayerPlanet in meshRenderers)
         {
             GameObject meshRenderIcon = Instantiate(meshPlayerPlanet.gameObject);
             meshRenderIcon.transform.SetParent(transform);
             meshRenderIcon.transform.localPosition = new Vector3(0, 0, 0);
+            meshRenderIcon.transform.localScale = new Vector3(10f, 10f, 10f);
             meshRenderIcon.layer = LayerHelper.UI;
             meshRendersIcon.Add(meshRenderIcon);
         }
@@ -42,8 +55,14 @@ public class GetModelPlayer : MonoBehaviour
     private void EventChangeSizeIconPlanet(int mass)
     {
         scaleFunc = true;
-        float percentsMaximum = mass / (BodyPlanet.mappingUpgradeSpaceObject.criticalMassUpgrade / 100);
-        _lastSize = percentsMaximum * _maxSizePlanet;
+        float percentsMaximum = mass / ((BodyPlanet.mappingUpgradeSpaceObject.criticalMassUpgrade + _upMaxPrecent) / 100);
+        _lastSize = percentsMaximum / 100 * _maxSizePlanet;
+        if (mass > _pastMass)
+            _weightGain = true;
+        else
+            _weightGain = false;
+        _pastMass = mass;
+
     }
 
     private void Update()
@@ -71,8 +90,11 @@ public class GetModelPlayer : MonoBehaviour
                                                         Mathf.Lerp(mesh.transform.localScale.z, _lastSize, incrementationLerp * Time.deltaTime));
             }
             //Проверяем, что мы +- достигли нужного размера
-            if (meshRendersIcon[0].transform.localScale.x < _lastSize + 0.5f ||
-                meshRendersIcon[0].transform.localScale.x > _lastSize - 0.5f)
+            if (meshRendersIcon[0].transform.localScale.x < _lastSize + 0.5f &&
+                _weightGain == false)
+                scaleFunc = false;
+            else if (meshRendersIcon[0].transform.localScale.x > _lastSize - 0.5f &&
+                    _weightGain == true)
                 scaleFunc = false;
         }
     }
