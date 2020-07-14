@@ -7,9 +7,11 @@ using UnityEngine;
 
 public class StarUpgrade : UpgraderBase
 {
-    protected override void UpgradeClass(ITemplateManager templateManager, SpaceBody spaceBody)
+    protected override void UpgradeClass(ITemplateManager templateManager,
+        SpaceBody spaceBody,
+        Mapping upgradeMapping)
     {
         spaceBody.gameObject.layer = LayerHelper.Sun;
-        //base.Upgrade(templateManager, spaceBody);
+        spaceBody.mappingUpgradeSpaceObject = upgradeMapping;
     }
 }

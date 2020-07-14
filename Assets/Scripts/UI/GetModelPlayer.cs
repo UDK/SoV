@@ -18,6 +18,10 @@ public class GetModelPlayer : MonoBehaviour
 
     private float rotateIconPlanet = -0.75f;
 
+    private const float _maxSizePlanet = 45f;
+
+    private float _lastSize;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -38,6 +42,8 @@ public class GetModelPlayer : MonoBehaviour
     private void EventChangeSizeIconPlanet(int mass)
     {
         scaleFunc = true;
+        float percentsMaximum = mass / (BodyPlanet.mappingUpgradeSpaceObject.criticalMassUpgrade / 100);
+        _lastSize = percentsMaximum * _maxSizePlanet;
     }
 
     private void Update()
@@ -58,14 +64,15 @@ public class GetModelPlayer : MonoBehaviour
     {
         if (scaleFunc)
         {
-            //Все константы должны быть заменены11!!!1
             foreach (var mesh in meshRendersIcon)
             {
-                mesh.transform.localScale = new Vector3(Mathf.Lerp(mesh.transform.localScale.x, 50f, incrementationLerp * Time.deltaTime),
-                                                        Mathf.Lerp(mesh.transform.localScale.y, 50f, incrementationLerp * Time.deltaTime),
-                                                        Mathf.Lerp(mesh.transform.localScale.z, 50f, incrementationLerp * Time.deltaTime));
+                mesh.transform.localScale = new Vector3(Mathf.Lerp(mesh.transform.localScale.x, _lastSize, incrementationLerp * Time.deltaTime),
+                                                        Mathf.Lerp(mesh.transform.localScale.y, _lastSize, incrementationLerp * Time.deltaTime),
+                                                        Mathf.Lerp(mesh.transform.localScale.z, _lastSize, incrementationLerp * Time.deltaTime));
             }
-            if (meshRendersIcon[0].transform.localScale.x < 50.5f)
+            //Проверяем, что мы +- достигли нужного размера
+            if (meshRendersIcon[0].transform.localScale.x < _lastSize + 0.5f ||
+                meshRendersIcon[0].transform.localScale.x > _lastSize - 0.5f)
                 scaleFunc = false;
         }
     }
