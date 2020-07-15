@@ -19,13 +19,13 @@ public class PauseGame : MonoBehaviour
             {
                 Time.timeScale = 0;
                 gameIsPause = value;
-                Notify(1);
+                Notify?.Invoke(1);
             }
             else
             {
                 Time.timeScale = 1;
                 gameIsPause = value;
-                Notify(0);
+                Notify?.Invoke(0);
             }
 
         }

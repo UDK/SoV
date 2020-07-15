@@ -16,9 +16,7 @@ namespace Assets.Scripts.Manager.ClassSystem
             UpgradeClass(templateManager, spaceBody);
         }
 
-        protected virtual void UpgradeClass(ITemplateManager templateManager, SpaceBody spaceBody)
-        {
-        }
+        protected abstract void UpgradeClass(ITemplateManager templateManager, SpaceBody spaceBody);
 
         protected void ClearMesh(SpaceBody spaceBody)
         {

@@ -20,6 +20,7 @@ namespace Assets.Scripts.Helpers
         public static int Magnet = LayerMask.NameToLayer("planetMagnet");
         public static int PlanetSatellite = LayerMask.NameToLayer("planetSatellite");
         public static int SunSatellite = LayerMask.NameToLayer("sunSatellite");
+        public static int UI = LayerMask.NameToLayer("UI");
         public static int Shell = LayerMask.NameToLayer("shell");
 
         public static Dictionary<SpaceClasses, int> ClassMap2Layer =
