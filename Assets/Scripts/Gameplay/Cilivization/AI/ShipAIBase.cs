@@ -63,5 +63,9 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI
                 StrategyType);
             Container.StateMachine.Update();
         }
+
+        public void MakeDamage(float damage)
+        {
+        }
     }
 }

@@ -64,15 +64,13 @@ namespace Assets.Scripts.Gameplay
             }
         }
 
-        public bool MakeDamage(float healtDamage)
+        public void MakeDamage(float healtDamage)
         {
             Mass -= healtDamage;
             if (Mass <= 0)
             {
                 Destroy();
-                return true;
             }
-            return false;
         }
 
         public float EatMe()

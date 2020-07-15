@@ -7,10 +7,12 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Assets.Scripts.Gameplay.Cilivization.AI.Bullets
+namespace Assets.Scripts.Gameplay.Cilivization.AI.Shells
 {
     public class UsualBullet : MonoBehaviour, IGameplayObject, IShell
     {
+        public float BaseDamage = 0.1f;
+
         public float LifeDistance { get; set; } = 10f;
 
         public GameObject Target { get; set; }
@@ -40,9 +42,13 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Bullets
 
         private void Update()
         {
+            if(Target == null)
+            {
+                ShellCollection<UsualBullet>.Destroy(gameObject);
+            }
             if(Vector3.Distance(transform.position, _startPosition) > LifeDistance)
             {
-                Destroy(gameObject);
+                ShellCollection<UsualBullet>.Destroy(gameObject);
             }
         }
 
@@ -55,7 +61,12 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Bullets
                 return;
             }
 
-            Destroy(gameObject);
+            go.MakeDamage(BaseDamage);
+            ShellCollection<UsualBullet>.Destroy(gameObject);
+        }
+
+        public void MakeDamage(float damage)
+        {
         }
     }
 }

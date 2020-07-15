@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Scripts.Gameplay.SpaceObject;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,13 +15,9 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Strategies
             SpaceShipContainer container) =>
             () =>
             {
-
                 Ray enemyRay = new Ray(
                     self.transform.position,
                     self.transform.forward * container.SightDist);
-                //Debug.DrawRay(transform.position + Vector3.up * heightMultiplier, transform.forward * sightDist, rayColor);
-                //Debug.DrawRay(transform.position + Vector3.up * heightMultiplier, (transform.forward + transform.right).normalized * sightDist, rayColor);
-                //Debug.DrawRay(transform.position + Vector3.up * heightMultiplier, (transform.forward - transform.right).normalized * sightDist, rayColor);
 
                 float halfAngle = container.VisionAngle / container.RayCount * (container.RayCount * 0.5f);
                 for (int i = 0; i < container.RayCount; i++)
@@ -40,14 +37,24 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Strategies
                         filter,
                         raycastHits,
                         container.SightDist);
-                    //_target = rayHit.collider.gameObject;
+
                     container.Targets = raycastHits.Select(x => x.collider?.gameObject).ToArray();
-                    //if (rayHit.collider.gameObject.tag == "Player")
-                    //{
-                    //    agent.SetDestination(him.transform.position);
-                    //    _target = rayHit.collider.gameObject;
-                    //}
+                    foreach(var t in container.Targets)
+                    {
+                        var go = t?.GetComponent<IGameplayObject>();
+                        if(go != null &&
+                            go.AllianceGuid != container.AllianceGuid)
+                        {
+                            container.Target = t;
+                            container.StateMachine.Push(
+                                States.ShipStates.Attacking);
+                            return;
+                        }
+                    }
                 }
+
+                Movements.CircleAroundTarget(self, container.Homing, container);
+                Rotations.RotateBySpeed(self, container);
             };
     }
 }

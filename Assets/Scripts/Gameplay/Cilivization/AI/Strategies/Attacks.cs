@@ -15,7 +15,6 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Strategies
             SpaceShipContainer container) =>
             () =>
             {
-                Rotations.RotateBySpeed(self, container);
                 foreach (var weapon in container.Weapons)
                 {
                     weapon.Attack(container.Target, container.AllianceGuid);
@@ -31,25 +30,8 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Strategies
                     return;
                 }
 
-                // get current magnitude
-                var magnitude = container.MovementBehaviour.Magnitude;
-
-                // get vector center <- obj
-                var gravityVector = container.Target.transform.position - self.transform.position;
-
-                // check whether left or right of target
-                var left = Vector2.SignedAngle(container.MovementBehaviour.Velocity, gravityVector) > 0;
-
-                // get new vector which is 90° on gravityDirection 
-                // and world Z (since 2D game)
-                // normalize so it has magnitude = 1
-                var newDirection = Vector3.Cross(gravityVector, Vector3.forward).normalized;
-
-                // invert the newDirection in case user is touching right of movement direction
-                if (!left) newDirection *= -1;
-
-                // set new direction but keep speed(previously stored magnitude)
-                container.MovementBehaviour.SmoothlySetVelocity(newDirection * magnitude);
+                Movements.MoveByCircle(self, container.Target, container);
+                Rotations.RotateBySpeed(self, container);
             };
 
         public static Action Back(
@@ -57,41 +39,41 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Strategies
             SpaceShipContainer container) =>
             () =>
             {
-                Rotations.RotateBySpeed(self, container);
+                Vector3 toTarget = (container.Target.transform.position - self.transform.position).normalized;
+                var dot = Vector3.Dot(
+                    self.transform.right,
+                    toTarget);
+
                 foreach (var weapon in container.Weapons)
                 {
                     weapon.Attack(container.Target, container.AllianceGuid);
                 }
-
                 var distance = Vector2.Distance(
                     container.Target.transform.position,
                     self.transform.position);
-                if (distance > container.AttackDistance)
+
+                if (dot < -0.60 &&
+                    distance > container.AttackDistance * 2)
                 {
                     container.StateMachine.Push(
                         ShipStates.Moving);
-                    return;
+                }
+                else if (dot < 0)
+                {
+                    if (dot < -0.5)
+                    {
+                        Movements.MoveByCircle(self, container.Target, container);
+                    }
+                    container.MovementBehaviour.SmoothlySetVelocity(
+                        container.MovementBehaviour.Velocity.normalized *
+                        container.MovementBehaviour.MaxVelocity);
+                }
+                else
+                {
+                    Movements.MoveByCircle(self, container.Target, container);
                 }
 
-                // get current magnitude
-                var magnitude = container.MovementBehaviour.Magnitude;
-
-                // get vector center <- obj
-                var gravityVector = container.Target.transform.position - self.transform.position;
-
-                // check whether left or right of target
-                var left = Vector2.SignedAngle(container.MovementBehaviour.Velocity, gravityVector) > 0;
-
-                // get new vector which is 90° on gravityDirection 
-                // and world Z (since 2D game)
-                // normalize so it has magnitude = 1
-                var newDirection = Vector3.Cross(gravityVector, Vector3.forward).normalized;
-
-                // invert the newDirection in case user is touching right of movement direction
-                if (!left) newDirection *= -1;
-
-                // set new direction but keep speed(previously stored magnitude)
-                container.MovementBehaviour.SmoothlySetVelocity(newDirection * magnitude);
+                Rotations.RotateBySpeed(self, container);
             };
 
         public static Action Distance(
@@ -118,5 +100,7 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Strategies
 
                 container.MovementBehaviour.SetVelocity(Vector3.zero);
             };
+
+
     }
 }

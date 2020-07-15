@@ -25,6 +25,8 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI
         // determines distance for attack
         public float AttackDistance = 3f;
 
+        public GameObject Homing;
+
         public GameObject Target;
 
         [NonSerialized]

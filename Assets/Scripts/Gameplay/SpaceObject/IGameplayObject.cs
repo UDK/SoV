@@ -9,5 +9,7 @@ namespace Assets.Scripts.Gameplay.SpaceObject
     public interface IGameplayObject
     {
         Guid AllianceGuid { get; set; }
+
+        void MakeDamage(float damage);
     }
 }

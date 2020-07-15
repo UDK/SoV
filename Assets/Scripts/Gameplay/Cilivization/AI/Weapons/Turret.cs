@@ -1,5 +1,6 @@
-﻿using Assets.Scripts.Gameplay.Cilivization.AI.Bullets;
+﻿using Assets.Scripts.Gameplay.Cilivization.AI.Shells;
 using Assets.Scripts.Gameplay.SpaceObject;
+using Assets.Scripts.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +23,7 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Weapons
         }
 
         public void Attack(
-            GameObject gameObject,
+            GameObject target,
             Guid allianceGuid)
         {
             _timeLeft -= Time.fixedDeltaTime;
@@ -31,12 +32,14 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Weapons
                 return;
             }
 
-            var shell = Instantiate(Shell, transform.position, Quaternion.identity);
-            var iShell = shell.GetComponent<IShell>();
-            var iGameplayObject = shell.GetComponent<IGameplayObject>();
-            iGameplayObject.AllianceGuid = allianceGuid;
-            iShell.Target = gameObject;
-            iShell.Initiate();
+            Shell.CheckComponent<UsualBullet>(_ =>
+                ShellHelper.InitShell<UsualBullet>(
+                        Shell,
+                        target,
+                        transform.position,
+                        allianceGuid))
+                ?.CheckComponent<MonoBehaviour>(_ =>
+                    throw new ArgumentException("Unknown shell", nameof(RocketLauncher)));
             _timeLeft = ReloadTime;
         }
     }

@@ -44,45 +44,88 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Strategies
             GameObject self,
             SpaceShipContainer container)
         {
-            container.StateMachine.Set(
+            container.StateMachine
+                .Set(
                     ShipStates.Moving,
-                    Movements.GoAfterTarget(self, container))
+                    Middleware(
+                        TargetCheckMiddleware(container),
+                        Movements.GoAfterTarget(self, container)))
                 .Set(
                     ShipStates.SearchingOfTarget,
                     TargetSearchings.SearchTarget(self, container))
                 .Set(
                     ShipStates.Attacking,
-                    Attacks.CircleAround(self, container));
+                    Middleware(
+                        TargetCheckMiddleware(container),
+                        Attacks.CircleAround(self, container)));
         }
 
         private static void DistanceAttackStrategy(
             GameObject self,
             SpaceShipContainer container)
         {
-            container.StateMachine.Set(
+            container.StateMachine
+                .Set(
                     ShipStates.Moving,
-                    Movements.GoAfterTarget(self, container))
+                    Middleware(
+                        TargetCheckMiddleware(container),
+                        Movements.GoAfterTarget(self, container)))
                 .Set(
                     ShipStates.SearchingOfTarget,
                     TargetSearchings.SearchTarget(self, container))
                 .Set(
                     ShipStates.Attacking,
-                    Attacks.Distance(self, container));
+                    Middleware(
+                        TargetCheckMiddleware(container),
+                        Attacks.Distance(self, container)));
         }
 
         private static void BombingAttackStrategy(
             GameObject self,
             SpaceShipContainer container)
         {
-            container.StateMachine.Set(
+            container.StateMachine
+                .Set(
                     ShipStates.Moving,
-                    Movements.GoAfterTarget(self, container))
+                    Middleware(
+                        TargetCheckMiddleware(container),
+                        Movements.GoAfterTarget(self, container)))
                 .Set(
                     ShipStates.SearchingOfTarget,
                     TargetSearchings.SearchTarget(self, container))
                 .Set(
                     ShipStates.Attacking,
-                    Attacks.Back(self, container));
+                    Middleware(
+                        TargetCheckMiddleware(container),
+                        Attacks.Back(self, container)));
         }
+
+
+        private static Func<bool> TargetCheckMiddleware(SpaceShipContainer container) =>
+            () =>
+            {
+                if (container.Target == null)
+                {
+                    container.StateMachine.Push(ShipStates.SearchingOfTarget);
+                    return false;
+                }
+
+                return true;
+            };
+
+        /// <summary>
+        /// Middleware for actions
+        /// </summary>
+        /// <param name="preAction">returns true if postAction can be continued</param>
+        /// <param name="postAction">some postaction</param>
+        /// <returns></returns>
+        private static Action Middleware(Func<bool> preAction, Action postAction) =>
+            () =>
+            {
+                if (preAction())
+                {
+                    postAction();
+                }
+            };
     }
 }
