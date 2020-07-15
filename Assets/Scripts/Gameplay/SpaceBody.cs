@@ -1,7 +1,9 @@
-﻿using Assets.Scripts.Helpers;
+﻿using Assets.Scripts.Gameplay.SpaceObject;
+using Assets.Scripts.Helpers;
 using Assets.Scripts.Manager.ClassSystem;
 using Assets.Scripts.Physics;
 using Assets.Scripts.Physics.Sattellite;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,7 +17,7 @@ namespace Assets.Scripts.Gameplay
     /// <summary>
     /// Игровой объект
     /// </summary>
-    public class SpaceBody : MonoBehaviour, ISatelliteBody
+    public class SpaceBody : MonoBehaviour, ISatelliteBody, IGameplayObject
     {
         public delegate void ChangeMass(int mass);
         /// <summary>
@@ -30,6 +32,8 @@ namespace Assets.Scripts.Gameplay
         public Mapping mappingUpgradeSpaceObject;
 
         public SpaceClasses SpaceClass { get; set; }
+
+        public Guid AllianceGuid { get; set; }
 
         public VisualEffect DestroyEffect;
 
@@ -87,15 +91,13 @@ namespace Assets.Scripts.Gameplay
             }
         }
 
-        public bool MakeDamage(float healtDamage)
+        public void MakeDamage(float healtDamage)
         {
             Mass -= healtDamage;
             if (Mass <= 0)
             {
                 Destroy();
-                return true;
             }
-            return false;
         }
 
         public float EatMe()
