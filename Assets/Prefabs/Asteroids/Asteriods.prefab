@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 6831251899276264536}
   - component: {fileID: 8726113945314499163}
   - component: {fileID: 1999183433308992815}
+  - component: {fileID: 6160239780514229897}
   m_Layer: 11
   m_Name: Asteriods
   m_TagString: Space body
@@ -160,6 +161,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af3297b847c2d4e4ab72431557b2085c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mappingUpgradeSpaceObject:
+    Downgrade: 0
+    Source: 0
+    Upgrade: 0
+    criticalMassUpgrade: 0
+    criticalMassDowngrade: 0
   DestroyEffect: {fileID: 0}
   JustEat: 0
   _DamagePercent: 0.5
+--- !u!114 &6160239780514229897
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 911791028636153625}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 032cda3cb5aa847b0a635bd4b95e2e16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resolution: 10
+  autoUpdate: 1
+  faceRenderMask: 0
+  shapeSettings: {fileID: 11400000, guid: bfa96f22053142b46b57dda811c5e86e, type: 2}
+  colourSettings: {fileID: 11400000, guid: 5edc1b07f1b7f9e40a89411dd177b775, type: 2}
+  shapeSettingsFoldout: 0
+  colourSettingsFoldout: 0
+  meshFilters:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}

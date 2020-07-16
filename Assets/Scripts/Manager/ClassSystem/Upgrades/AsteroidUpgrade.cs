@@ -10,7 +10,7 @@ namespace Assets.Scripts.Manager.ClassSystem.Upgrades
 {
     public class AsteroidUpgrade : UpgraderBase
     {
-        protected override void UpgradeClass(ITemplateManager templateManager, SpaceBody spaceBody)
+        protected override void UpgradeClass(ITemplateManager templateManager, SpaceBody spaceBody, Mapping UpgradeMapping)
         {
             spaceBody.gameObject.layer = LayerHelper.Asteroid;
             //base.Upgrade(templateManager, spaceBody);

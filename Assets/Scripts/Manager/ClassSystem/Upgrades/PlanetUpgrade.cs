@@ -17,7 +17,8 @@ namespace Assets.Scripts.Manager.ClassSystem.Upgrades
         public PlanetSettings planetSettings;
         protected override void UpgradeClass(
             ITemplateManager templateManager,
-            SpaceBody spaceBody)
+            SpaceBody spaceBody,
+            Mapping upgradeMapping)
         {
             int colourSettingsRandom = UnityEngine.Random.Range(0,planetSettings.colourSettings.Length);
             int shapeSettingsRandom = UnityEngine.Random.Range(0,planetSettings.shapeSettings.Length);
@@ -29,6 +30,8 @@ namespace Assets.Scripts.Manager.ClassSystem.Upgrades
             satelliteManager.MaxCountSattelites = 2;
             spaceBody.gameObject.layer = LayerHelper.Planet;
             spaceBody = SpinPlanet(spaceBody);
+            spaceBody.mappingUpgradeSpaceObject = upgradeMapping;
+
         }
         /// <summary>
         /// Крутим планету при инициализации(ебашу чистые функции чтобы попасть в рай

@@ -20,9 +20,13 @@ public class NewBehaviourScript : Editor
             }
         }
 
-        if (GUILayout.Button("Change mass"))
+        if (GUILayout.Button("Change mass 50f"))
         {
             modelPlayer.BodyPlanet.Mass = 50f;
+        }
+        if (GUILayout.Button("Change mass 30f"))
+        {
+            modelPlayer.BodyPlanet.Mass = 30f;
         }
 
 
