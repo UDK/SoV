@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(GetModelPlayer))]
-public class GetModelPlanetEditor : Editor
+[CustomEditor(typeof(ScaleToSizeCamera))]
+public class ScaleToSizeCameraEditor : Editor
 {
-    GetModelPlayer modelPlayer;
+    ScaleToSizeCamera scaleToSizeCamera;
 
     public override void OnInspectorGUI()
     {
-        
+
         using (var check = new EditorGUI.ChangeCheckScope())
         {
             base.OnInspectorGUI();
@@ -20,20 +20,15 @@ public class GetModelPlanetEditor : Editor
             }
         }
 
-        if (GUILayout.Button("Change mass 50f"))
+        if (GUILayout.Button("ChangeScale"))
         {
-            modelPlayer.BodyPlanet.Mass = 50f;
+            
         }
-        if (GUILayout.Button("Change mass 30f"))
-        {
-            modelPlayer.BodyPlanet.Mass = 30f;
-        }
-
 
     }
     private void OnEnable()
     {
-        if(modelPlayer == null)
-            modelPlayer = (GetModelPlayer)target;
+        if (scaleToSizeCamera == null)
+            scaleToSizeCamera = (ScaleToSizeCamera)target;
     }
 }
