@@ -16,7 +16,6 @@ public class ScaleToSizeCameraEditor : Editor
             base.OnInspectorGUI();
             if (check.changed)
             {
-                //planet.GeneratePlanet();
             }
         }
 
