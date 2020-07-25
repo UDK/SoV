@@ -12,5 +12,7 @@ namespace Assets.Scripts.Helpers
     public static class EnumTags
     {
         static public string Player = "Player";
+        static public string RocketLot = "RocketLot";
+        static public string TurretLot = "TurretLot";
     }
 }

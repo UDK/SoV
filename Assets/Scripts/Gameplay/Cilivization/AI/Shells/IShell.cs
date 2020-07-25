@@ -9,6 +9,8 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Shells
 {
     public interface IShell
     {
+        float ReloadTime { get; set; }
+
         GameObject Target { get; set; }
 
         void Initiate();

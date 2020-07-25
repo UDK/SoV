@@ -14,8 +14,6 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Weapons
     {
         public GameObject Shell;
 
-        public float ReloadTime;
-
         private float _timeLeft;
 
         public Turret()
@@ -32,15 +30,18 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Weapons
                 return;
             }
 
-            Shell.CheckComponent<UsualBullet>(_ =>
-                ShellHelper.InitShell<UsualBullet>(
-                        Shell,
-                        target,
-                        transform.position,
-                        allianceGuid))
+            Shell.CheckComponent<UsualBullet>(usualBullet =>
+                {
+                    _timeLeft = usualBullet.ReloadTime;
+                    ShellHelper.InitShell<UsualBullet>(
+                                Shell,
+                                target,
+                                transform.position,
+                                allianceGuid);
+                    _timeLeft = usualBullet.ReloadTime;
+                })
                 ?.CheckComponent<MonoBehaviour>(_ =>
                     throw new ArgumentException("Unknown shell", nameof(RocketLauncher)));
-            _timeLeft = ReloadTime;
         }
     }
 

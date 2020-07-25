@@ -14,8 +14,6 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Weapons
     {
         public GameObject Shell;
 
-        public float ReloadTime;
-
         private float _timeLeft;
 
         public RocketLauncher()
@@ -39,15 +37,17 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Weapons
             var angle = Vector3.Angle(right, heading);
             if (angle < 20)
             {
-                Shell.CheckComponent<UsualRocket>(_ =>
-                    ShellHelper.InitShell<UsualRocket>(
-                            Shell,
-                            target,
-                            transform.position,
-                            allianceGuid))
+                Shell.CheckComponent<UsualRocket>(usualRocket =>
+                    {
+                        _timeLeft = usualRocket.ReloadTime;
+                        ShellHelper.InitShell<UsualRocket>(
+                                Shell,
+                                target,
+                                transform.position,
+                                allianceGuid);
+                    })
                     ?.CheckComponent<MonoBehaviour>(_ =>
                         throw new ArgumentException("Unknown shell", nameof(RocketLauncher)));
-                _timeLeft = ReloadTime;
             }
         }
     }

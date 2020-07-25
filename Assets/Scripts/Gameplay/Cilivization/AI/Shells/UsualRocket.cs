@@ -13,11 +13,21 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Shells
     {
         public float BaseDamage = 0.1f;
 
+        public float ReloadTimeOfBullet;
+
         public float LifeDistance { get; set; } = 10f;
 
         public GameObject Target { get; set; }
 
         public Guid AllianceGuid { get; set; }
+
+        public float ReloadTime
+        {
+            get =>
+                ReloadTimeOfBullet;
+            set =>
+                ReloadTimeOfBullet = value;
+        }
 
         private MovementBehaviour _movementBehaviour;
 
@@ -25,12 +35,14 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Shells
 
         private Vector3 _startPosition { get; set; }
 
+
         public UsualRocket()
         {
         }
 
         public void Initiate()
         {
+            _startPosition = transform.position;
             _movementBehaviour = GetComponent<MovementBehaviour>();
             var heading = Target.transform.position - transform.position;
             _movementBehaviour.SetVelocity(heading.normalized * _movementBehaviour.MaxVelocity);

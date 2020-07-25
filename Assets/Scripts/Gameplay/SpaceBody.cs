@@ -56,7 +56,7 @@ namespace Assets.Scripts.Gameplay
             set
             {
                 mass = value;
-                upgradeManager.Upgrade(this, mappingUpgradeSpaceObject);
+                upgradeManager?.Upgrade(this, mappingUpgradeSpaceObject);
                 NotifyChangeMass?.Invoke(Convert.ToInt32(value));
             }
         }
@@ -116,14 +116,17 @@ namespace Assets.Scripts.Gameplay
         public void Destroy()
         {
             _satelliteManager.DetachSattelites();
-            var position = new Vector3(transform.position.x, transform.position.y, transform.position.z);
-            var destroyEffect = Instantiate(
-                DestroyEffect,
-                position,
-                Quaternion.identity);
-            destroyEffect.SetFloat("Radius", transform.localScale.x);
+            if(DestroyEffect != null)
+            {
+                var position = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+                var destroyEffect = Instantiate(
+                    DestroyEffect,
+                    position,
+                    Quaternion.identity);
+                destroyEffect.SetFloat("Radius", transform.localScale.x);
+                Destroy(destroyEffect.gameObject, 5);
+            }
             Destroy(gameObject);
-            Destroy(destroyEffect.gameObject, 5);
         }
     }
 }

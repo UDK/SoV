@@ -13,11 +13,21 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Shells
     {
         public float BaseDamage = 0.1f;
 
+        public float ReloadTimeOfBullet;
+
         public float LifeDistance { get; set; } = 10f;
 
         public GameObject Target { get; set; }
 
         public Guid AllianceGuid { get; set; }
+
+        public float ReloadTime
+        {
+            get =>
+                ReloadTimeOfBullet;
+            set =>
+                ReloadTimeOfBullet = value;
+        }
 
         private MovementBehaviour _movementBehaviour;
 
