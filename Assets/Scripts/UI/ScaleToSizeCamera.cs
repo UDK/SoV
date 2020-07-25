@@ -7,7 +7,11 @@ public class ScaleToSizeCamera : MonoBehaviour
 {
     void Start()
     {
-        Camera camera = Camera.main;
+        ScaleObject(Camera.main);
+    }
+
+    private void ScaleObject(Camera camera)
+    {
         Mesh mesh = gameObject.GetComponent<MeshFilter>().mesh;
         Rect rect = BoundsToScreenRect(gameObject.GetComponent<MeshRenderer>().bounds);
         float xScale = (float)Camera.main.pixelWidth / rect.width;
