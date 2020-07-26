@@ -81,7 +81,7 @@ namespace Assets.Scripts.Helpers
                 camera.cullingMask = 1 << LayerHelper.RenderedObjects;
                 camera.gameObject.layer = LayerHelper.RenderedObjects;
                 _virtualCamera = camera;
-                RenderTexture renderTexture = new RenderTexture(512, 256, 24, RenderTextureFormat.ARGB32)
+                RenderTexture renderTexture = new RenderTexture(512, 512, 24, RenderTextureFormat.ARGB32)
                 {
                     name = "render" + _renders.Count,
                     graphicsFormat = UnityEngine.Experimental.Rendering.GraphicsFormat.R8G8B8A8_UNorm,
@@ -107,7 +107,7 @@ namespace Assets.Scripts.Helpers
             RenderTexture.active = null;
             _virtualCamera.gameObject.SetActive(false);
 
-            Texture2D texture = new Texture2D(512, 256, TextureFormat.ARGB32, false)
+            Texture2D texture = new Texture2D(512, 512, TextureFormat.ARGB32, false)
             {
                 name = "Rendered" + template.name
             };
