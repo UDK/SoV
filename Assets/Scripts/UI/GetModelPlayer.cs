@@ -79,7 +79,6 @@ public class GetModelPlayer : MonoBehaviour
         {
             mesh.transform.Rotate(new Vector3(0, rotateIconPlanet, 0));
             await Task.Yield();
-            //Debug.Log(Thread.);
         }
     }
 
