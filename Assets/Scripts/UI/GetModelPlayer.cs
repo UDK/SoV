@@ -70,7 +70,7 @@ public class GetModelPlayer : MonoBehaviour
     private async void Update()
     {
         ChangeSizqIconPlanet();
-        await RotateIconPlanet();
+        await RotateIconPlanetAsync();
     }
 
     private async Task RotateIconPlanetAsync()
