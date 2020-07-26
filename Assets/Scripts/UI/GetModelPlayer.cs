@@ -69,11 +69,11 @@ public class GetModelPlayer : MonoBehaviour
 
     private async void Update()
     {
-        await ChangeSizqIconPlanet();
+        ChangeSizqIconPlanet();
         await RotateIconPlanet();
     }
 
-    private async Task RotateIconPlanet()
+    private async Task RotateIconPlanetAsync()
     {
         foreach (var mesh in meshRendersIcon)
         {
@@ -82,7 +82,7 @@ public class GetModelPlayer : MonoBehaviour
         }
     }
 
-    private async Task ChangeSizqIconPlanet()
+    private void ChangeSizqIconPlanet()
     {
         if (scaleFunc)
         {
@@ -91,7 +91,6 @@ public class GetModelPlayer : MonoBehaviour
                  mesh.transform.localScale = new Vector3(Mathf.Lerp(mesh.transform.localScale.x, _lastSize, incrementationLerp * Time.deltaTime),
                                                         Mathf.Lerp(mesh.transform.localScale.y, _lastSize, incrementationLerp * Time.deltaTime),
                                                         Mathf.Lerp(mesh.transform.localScale.z, _lastSize, incrementationLerp * Time.deltaTime));
-                await Task.Yield();
             }
             //Проверяем, что мы +- достигли нужного размера
             if (meshRendersIcon[0].transform.localScale.x < _lastSize + 0.5f &&
