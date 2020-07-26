@@ -4,6 +4,8 @@ using UnityEngine;
 using Assets.Scripts.Helpers;
 using System.Linq;
 using Assets.Scripts.Gameplay;
+using System.Threading.Tasks;
+using System.Threading;
 
 public class GetModelPlayer : MonoBehaviour
 {
@@ -65,29 +67,32 @@ public class GetModelPlayer : MonoBehaviour
 
     }
 
-    private void Update()
+    private async void Update()
     {
-        ChangeSizqIconPlanet();
-        RotateIconPlanet();
+        await ChangeSizqIconPlanet();
+        await RotateIconPlanet();
     }
 
-    private void RotateIconPlanet()
+    private async Task RotateIconPlanet()
     {
         foreach (var mesh in meshRendersIcon)
         {
             mesh.transform.Rotate(new Vector3(0, rotateIconPlanet, 0));
+            await Task.Yield();
+            //Debug.Log(Thread.);
         }
     }
 
-    private void ChangeSizqIconPlanet()
+    private async Task ChangeSizqIconPlanet()
     {
         if (scaleFunc)
         {
             foreach (var mesh in meshRendersIcon)
             {
-                mesh.transform.localScale = new Vector3(Mathf.Lerp(mesh.transform.localScale.x, _lastSize, incrementationLerp * Time.deltaTime),
+                 mesh.transform.localScale = new Vector3(Mathf.Lerp(mesh.transform.localScale.x, _lastSize, incrementationLerp * Time.deltaTime),
                                                         Mathf.Lerp(mesh.transform.localScale.y, _lastSize, incrementationLerp * Time.deltaTime),
                                                         Mathf.Lerp(mesh.transform.localScale.z, _lastSize, incrementationLerp * Time.deltaTime));
+                await Task.Yield();
             }
             //Проверяем, что мы +- достигли нужного размера
             if (meshRendersIcon[0].transform.localScale.x < _lastSize + 0.5f &&
