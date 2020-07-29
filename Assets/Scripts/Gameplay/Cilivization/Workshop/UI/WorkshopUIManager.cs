@@ -1,5 +1,8 @@
 ﻿using Assets.Scripts.Helpers;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -31,25 +34,44 @@ namespace Assets.Scripts.Gameplay.Cilivization.Workshop.UI
 
         public GameObject WeaponsStack;
 
-        public GameObject ResourcesStack;
+        public Resources ResourcesStack;
+
+        public Overview OverviewStack;
         #endregion
 
-        private List<StackMapping> _templateStack =
-            new List<StackMapping>();
+        #region Template manager
+        public GameObject NameInput;
 
-        private List<StackMapping> _hullsStack =
-            new List<StackMapping>();
+        #endregion
 
-        private List<StackMapping> _weaponsStack =
-            new List<StackMapping>();
+        private List<StackMapping<ShipTemplate>> _templateStack =
+            new List<StackMapping<ShipTemplate>>();
 
-        private GameObject _chosenTemplate;
+        private List<StackMapping<GameObject>> _hullsStack =
+            new List<StackMapping<GameObject>>();
 
-        private GameObject _chosenHull;
+        #region Button mapper
+        /// <summary>
+        /// key is stack
+        /// value is chosen button
+        /// </summary>
+        private Dictionary<GameObject, GameObject> _chosenButtons =
+            new Dictionary<GameObject, GameObject>();
+        #endregion
 
         private List<ShipTemplate> _currentReadyTemplates;
 
         private ShipsDatabase _shipsDatabase;
+
+        public void AddNewTemplate()
+        {
+
+        }
+
+        public void RemoveTemplate()
+        {
+
+        }
 
         public void Enable(
             List<ShipTemplate> ReadyTemplates,
@@ -58,94 +80,155 @@ namespace Assets.Scripts.Gameplay.Cilivization.Workshop.UI
             this.gameObject.SetActive(true);
             _currentReadyTemplates = ReadyTemplates;
             _shipsDatabase = shipsDatabase;
-            foreach(var template in _currentReadyTemplates)
+            AddHulls(shipsDatabase);
+            SetUpNameField();
+            AddTemplatesAndGetFirst(shipsDatabase);
+        }
+
+        private void SetUpNameField()
+        {
+            var tmp = NameInput.GetComponent<TMP_InputField>();
+            tmp.onValueChanged.AddListener((text) =>
+            {
+                var chosenTemplate = _chosenButtons[TemplatesStack];
+                _templateStack.First(x =>
+                    x.TemplateAtStack == chosenTemplate)
+                        .Source.Name = text;
+                GetTMPText(chosenTemplate.transform.GetChild(0).gameObject).text = text;
+            });
+        }
+
+        private void AddTemplatesAndGetFirst(
+            ShipsDatabase shipsDatabase)
+        {
+            foreach (var template in _currentReadyTemplates)
             {
                 var templatePanel = Instantiate(TemplatePanelOrigin, TemplatesStack.transform);
                 var panel = templatePanel.transform.GetChild(0).gameObject;
                 panel.GetComponent<TextMeshPro>().text = template.Name;
-                _templateStack.Add(new StackMapping
+                _templateStack.Add(new StackMapping<ShipTemplate>
                 {
-                    TemplateAtStack = panel,
-                    SourceGameObject = template.ShipBase,
+                    TemplateAtStack = templatePanel,
+                    Source = template,
                 });
+                var button = FirstSetUpOfButtonOnTempalte(templatePanel, template.Hull);
+                if(_templateStack.Count == 1)
+                {
+                    button.onClick.Invoke();
+                }
             }
-            foreach(var hull in shipsDatabase.Hulls)
+            if(_templateStack.Count == 0)
+            {
+                var templatePanel = Instantiate(TemplatePanelOrigin, TemplatesStack.transform);
+                var hull = shipsDatabase.Hulls.First();
+                _templateStack.Add(new StackMapping<ShipTemplate>
+                {
+                    TemplateAtStack = templatePanel,
+                    Source = new ShipTemplate(),
+                });
+                var button = FirstSetUpOfButtonOnTempalte(templatePanel, hull);
+                button.onClick.Invoke();
+                GetTMPInput(NameInput).text = "My first spaceship";
+            }
+        }
+
+        private Button FirstSetUpOfButtonOnTempalte(GameObject templatePanel, GameObject hull)
+        {
+            var button = templatePanel.GetComponent<Button>();
+            button.onClick.AddListener(() =>
+            {
+                MakeButtonActive(TemplatesStack, button);
+                _hullsStack.First(x => x.Source == hull)
+                    .TemplateAtStack.GetComponent<Button>().onClick.Invoke();
+            });
+
+            return button;
+        }
+
+        private void AddHulls(
+            ShipsDatabase shipsDatabase)
+        {
+            foreach (var hull in shipsDatabase.Hulls)
             {
                 var hullPanel = Instantiate(HullPanelOrigin, HullsStack.transform);
                 var panel = hullPanel.transform.GetChild(0).gameObject;
                 panel.GetComponent<RawImage>().texture =
                     Library.GetTexture(hull).RenderedTexture;
-                _hullsStack.Add(new StackMapping
+                _hullsStack.Add(new StackMapping<GameObject>
                 {
-                    TemplateAtStack = panel,
-                    SourceGameObject = hull,
+                    TemplateAtStack = hullPanel,
+                    Source = hull,
                 });
-
-                PlaceSpaceship(hull);
+                var button = hullPanel.GetComponent<Button>();
+                button.onClick.AddListener(() =>
+                {
+                    MakeButtonActive(HullsStack, button);
+                    var chosenTemplate = _chosenButtons[TemplatesStack];
+                    var currentShipTemplate = _templateStack.First(x =>
+                        x.TemplateAtStack == chosenTemplate)
+                            .Source;
+                    currentShipTemplate.SetNewHull(hull);
+                    PlaceSpaceship(hull, currentShipTemplate, shipsDatabase);
+                });
             }
         }
 
-        private void PlaceSpaceship(GameObject hull)
+        private void PlaceSpaceship(
+            GameObject hull,
+            ShipTemplate shipTemplate,
+            ShipsDatabase shipsDatabase)
         {
             var shipGraphicContainer =
                 Library.GetTexture(hull, scale =>
                 {
                     Dictionary<GameObject, Vector2> weapons =
                         new Dictionary<GameObject, Vector2>();
-                    foreach (Transform child in hull.transform)
+                    foreach (WeaponTemplate wt in shipTemplate.Weapons)
                     {
-                        Vector3 position = child.position * scale;
+                        Vector3 position = wt.Weapon.transform.position * scale;
                         position = Library.WorldToCameraTexture(position).Value;
-                        weapons.Add(child.gameObject, position);
+                        weapons.Add(wt.Weapon.gameObject, position);
                     }
                     return weapons;
                 });
             ShipPlacement.GetComponent<RawImage>().texture =
                 shipGraphicContainer.RenderedTexture;
 
-            List<Button> buttons = new List<Button>();
+            ShipPlacement.DestroyAllChilds();
+            WeaponsStack.DestroyAllChilds();
             foreach (var places in shipGraphicContainer.Storage)
             {
-                var item = Instantiate(Slot, ShipPlacement.transform);
-                var rTransform = item.GetComponent<RectTransform>();
+                var slot = Instantiate(Slot, ShipPlacement.transform);
+                var rTransform = slot.GetComponent<RectTransform>();
                 rTransform.anchoredPosition = places.Value;
                 var button = rTransform.GetComponent<Button>();
-                buttons.Add(button);
+                var panel = slot.transform.GetChild(0).gameObject;
+                var image = panel.GetComponent<RawImage>();
+
+                // choose shell if there is no
+                var weaponOfShipTemplate = shipTemplate.Weapons.First(x => x.Weapon == places.Key);
+                if (weaponOfShipTemplate.ChosenShell == null)
+                {
+                    weaponOfShipTemplate.ChosenShell = shipsDatabase.WeaponMappings
+                                .First(x => x.Weapon.tag == places.Key.tag).AvailableShells[0];
+                }
+
                 button.onClick.AddListener(() =>
                 {
-                    button.colors = new ColorBlock
-                    {
-                        normalColor = button.colors.selectedColor,
-                        highlightedColor = button.colors.selectedColor,
-                        pressedColor = button.colors.selectedColor,
-                        disabledColor = Color.white,
-                        colorMultiplier = 1,
-                        selectedColor = button.colors.selectedColor,
-                    };
-                    buttons.ForEach(b =>
-                    {
-                        if (b != button)
-                        {
-                            b.colors = new ColorBlock
-                            {
-                                normalColor = Color.white,
-                                highlightedColor = Color.white,
-                                pressedColor = Color.white,
-                                disabledColor = Color.white,
-                                colorMultiplier = 1,
-                                selectedColor = button.colors.selectedColor,
-                            };
-                        }
-                    });
-                    SlotClick(places.Key);
+                    MakeButtonActive(ShipPlacement, button);
+                    SlotClick(places.Key, weaponOfShipTemplate, image);
                 });
+                image.texture =
+                    Library.GetTexture(weaponOfShipTemplate.ChosenShell).RenderedTexture;
             }
         }
 
-        private void SlotClick(GameObject weapon)
+        private void SlotClick(
+            GameObject weapon,
+            WeaponTemplate weaponTemplate,
+            RawImage slotImage)
         {
             WeaponsStack.DestroyAllChilds();
-            _weaponsStack.Clear();
             var shells = _shipsDatabase.GetShells(weapon);
             foreach (var shell in shells)
             {
@@ -153,32 +236,99 @@ namespace Assets.Scripts.Gameplay.Cilivization.Workshop.UI
                 var panel = weaponPanel.transform.GetChild(0).gameObject;
                 panel.GetComponent<RawImage>().texture =
                     Library.GetTexture(shell).RenderedTexture;
-                _weaponsStack.Add(new StackMapping
+
+                var button = weaponPanel.GetComponent<Button>();
+                button.onClick.AddListener(() =>
                 {
-                    TemplateAtStack = panel,
-                    SourceGameObject = shell,
+                    MakeButtonActive(WeaponsStack, button);
+                    slotImage.texture = Library.GetTexture(shell).RenderedTexture;
+                    weaponTemplate.ChosenShell = shell;
                 });
+                if(weaponTemplate.ChosenShell == shell)
+                {
+                    button.onClick.Invoke();
+                }
             }
         }
 
-        private class Resources
+        private void MakeButtonActive(
+            GameObject stack,
+            Button button)
         {
-            public TextMeshPro Money;
-
-            public TextMeshPro Merilium;
-
-            public TextMeshPro Titan;
-
-            public TextMeshPro Uranus;
-
-            public TextMeshPro Time;
+            if (!_chosenButtons.ContainsKey(stack))
+            {
+                _chosenButtons.Add(stack, button.gameObject);
+            }
+            else
+            {
+                if(_chosenButtons[stack].ToString() != "null")
+                {
+                    _chosenButtons[stack].GetComponent<Button>().colors = new ColorBlock
+                    {
+                        normalColor = Color.white,
+                        highlightedColor = Color.white,
+                        pressedColor = Color.white,
+                        disabledColor = Color.white,
+                        colorMultiplier = 1,
+                        selectedColor = button.colors.selectedColor,
+                    };
+                }
+                _chosenButtons[stack] = button.gameObject;
+            }
+            button.colors = new ColorBlock
+            {
+                normalColor = button.colors.selectedColor,
+                highlightedColor = button.colors.selectedColor,
+                pressedColor = button.colors.selectedColor,
+                disabledColor = Color.white,
+                colorMultiplier = 1,
+                selectedColor = button.colors.selectedColor,
+            };
         }
 
-        private class StackMapping
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private TMP_Text GetTMPText(
+            GameObject go) =>
+            go.GetComponent<TMP_Text>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private TMP_InputField GetTMPInput(
+            GameObject go) =>
+            go.GetComponent<TMP_InputField>();
+
+        [Serializable]
+        public class Resources
+        {
+            public GameObject Money;
+
+            public GameObject Merilium;
+
+            public GameObject Titan;
+
+            public GameObject Uranus;
+
+            public GameObject Time;
+        }
+
+        [Serializable]
+        public class Overview
+        {
+            public GameObject HP;
+
+            public GameObject Speed;
+
+            public GameObject Distance;
+
+            public GameObject AttackPower;
+
+            public GameObject Type;
+        }
+
+        private class StackMapping<TSource>
         {
             public GameObject TemplateAtStack;
 
-            public GameObject SourceGameObject;
+            public TSource Source;
         }
     }
 }

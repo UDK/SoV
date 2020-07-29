@@ -72,6 +72,7 @@ namespace Assets.Scripts.Helpers
             {
                 GameObject gameObject = new GameObject();
                 Camera camera = gameObject.AddComponent<Camera>();
+                camera.transform.position = new Vector3(0, 0, 0);
                 camera.name = $"Camera for renderings";
                 camera.orthographic = true;
                 camera.transform.SetPositionAndRotation(
@@ -89,6 +90,15 @@ namespace Assets.Scripts.Helpers
                     filterMode = FilterMode.Bilinear,
                     dimension = UnityEngine.Rendering.TextureDimension.Tex2D
                 };
+                GameObject gameObjectLight = new GameObject();
+                Light light = gameObjectLight.AddComponent<Light>();
+                light.type = LightType.Point;
+                light.transform.parent = gameObject.transform;
+                light.cullingMask = 1 << LayerHelper.RenderedObjects;
+                gameObjectLight.layer = LayerHelper.RenderedObjects;
+                light.range = 150;
+                light.intensity = 150;
+                light.transform.localPosition = new Vector3(0, 0, 0);
                 _virtualCamera.targetTexture = renderTexture;
             }
             else
@@ -98,7 +108,7 @@ namespace Assets.Scripts.Helpers
 
             var gameobject = UnityEngine.Object.Instantiate(template);
             gameobject.transform.parent = _virtualCamera.transform;
-            gameobject.transform.position = new Vector3(0, 0, 10);
+            gameobject.transform.localPosition = new Vector3(0, 0, 10);
             gameobject.layer = LayerHelper.RenderedObjects;
             var scale = UnityHelpers.StretchGameobjectToCamera(gameobject, _virtualCamera);
             _virtualCamera.Render();

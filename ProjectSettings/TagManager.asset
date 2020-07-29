@@ -8,6 +8,8 @@ TagManager:
   - Space body
   - TurretLot
   - RocketLot
+  - Destroyer
+  - Shine
   layers:
   - Default
   - TransparentFX

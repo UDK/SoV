@@ -14,14 +14,20 @@ namespace Assets.Scripts.Gameplay.Cilivization.Workshop
 
         public Resources Cost { get; set; }
 
-        public GameObject ShipBase { get; private set; }
+        public GameObject Hull { get; private set; }
 
         public List<WeaponTemplate> Weapons { get; private set; } =
             new List<WeaponTemplate>();
 
-        public ShipTemplate(GameObject ship)
+        public ShipTemplate()
         {
-            foreach (Transform child in ship.transform)
+        }
+
+        public void SetNewHull(GameObject hull)
+        {
+            Weapons.Clear();
+            Hull = hull;
+            foreach (Transform child in hull.transform)
             {
                 Weapons.Add(new WeaponTemplate
                 {
