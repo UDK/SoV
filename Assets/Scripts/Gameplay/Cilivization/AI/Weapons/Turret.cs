@@ -10,40 +10,13 @@ using UnityEngine;
 
 namespace Assets.Scripts.Gameplay.Cilivization.AI.Weapons
 {
-    public class Turret : MonoBehaviour, IWeapon
+    public class Turret : WeaponBase
     {
-        public GameObject Shell;
-
-        private float _timeLeft;
-
-        public Turret()
-        {
-        }
-
-        public void Attack(
+        protected override void CoreAttack(
             GameObject target,
             Guid allianceGuid)
         {
-            _timeLeft -= Time.fixedDeltaTime;
-            if(_timeLeft > 0)
-            {
-                return;
-            }
-
-            Shell.CheckComponent<UsualBullet>(usualBullet =>
-                {
-                    _timeLeft = usualBullet.ReloadTime;
-                    ShellHelper.InitShell<UsualBullet>(
-                                Shell,
-                                target,
-                                transform.position,
-                                allianceGuid);
-                    _timeLeft = usualBullet.ReloadTime;
-                })
-                ?.CheckComponent<MonoBehaviour>(_ =>
-                    throw new ArgumentException("Unknown shell", nameof(RocketLauncher)));
+            InitShell(target, allianceGuid);
         }
     }
-
-
 }

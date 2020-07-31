@@ -43,7 +43,7 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI
         private void Start()
         {
             Container.Weapons = Weapons.Select(x =>
-                x.GetComponent<MonoBehaviour>() as IWeapon)
+                x.GetComponent<MonoBehaviour>() as WeaponBase)
                     .ToArray();
             AllianceGuid = Guid.NewGuid();
             Container.StateMachine = new AStateMachine<ShipStates>();

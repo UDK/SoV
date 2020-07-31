@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8703454523515031767}
   - component: {fileID: 5269759346393665114}
   - component: {fileID: 3310706478545530155}
+  - component: {fileID: 3950444947434436956}
   m_Layer: 17
   m_Name: UsualBullet2
   m_TagString: Untagged
@@ -140,6 +141,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BaseDamage: 0.1
+  ReloadTime: 0
   ReloadTimeOfBullet: 0.1
 --- !u!50 &3310706478545530155
 Rigidbody2D:
@@ -162,3 +164,16 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &3950444947434436956
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7707035806518947171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d3f1798fea5ce5439418d7b236e5e11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectUniqueId: a05693b3-15f5-4409-9066-dce95a0b4b38

@@ -30,7 +30,7 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI
         public GameObject Target;
 
         [NonSerialized]
-        public IWeapon[] Weapons;
+        public WeaponBase[] Weapons;
 
         [NonSerialized]
         public MovementBehaviour MovementBehaviour;

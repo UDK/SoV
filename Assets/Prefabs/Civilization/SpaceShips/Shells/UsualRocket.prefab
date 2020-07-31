@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 5871890873659631510}
   - component: {fileID: 6815280507526631962}
   - component: {fileID: 8058320971068191704}
+  - component: {fileID: -6169072235731992244}
   m_Layer: 17
   m_Name: UsualRocket
   m_TagString: Untagged
@@ -96,7 +97,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BaseDamage: 1
-  ReloadTimeOfBullet: 1
+  ReloadTime: 0
   Homing: 1
 --- !u!61 &5871890873659631510
 BoxCollider2D:
@@ -161,3 +162,16 @@ MonoBehaviour:
   MaxVelocity: 0.2
   CollisionEnabled: 0
   Block: 0
+--- !u!114 &-6169072235731992244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5551198921606634166}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d3f1798fea5ce5439418d7b236e5e11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectUniqueId: d3a73fe2-a621-4d96-8b35-4101ea6f371e

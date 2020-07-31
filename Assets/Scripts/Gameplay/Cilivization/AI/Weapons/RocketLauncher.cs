@@ -10,25 +10,12 @@ using UnityEngine;
 
 namespace Assets.Scripts.Gameplay.Cilivization.AI.Weapons
 {
-    public class RocketLauncher : MonoBehaviour, IWeapon
+    public class RocketLauncher: WeaponBase
     {
-        public GameObject Shell;
-
-        private float _timeLeft;
-
-        public RocketLauncher()
-        {
-        }
-
-        public void Attack(
+        protected override void CoreAttack(
             GameObject target,
             Guid allianceGuid)
         {
-            _timeLeft -= Time.fixedDeltaTime;
-            if (_timeLeft > 0)
-            {
-                return;
-            }
             var heading = target.transform.position - transform.position;
             var right = transform.right;
             var dot = Vector3.Dot(
@@ -37,17 +24,7 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Weapons
             var angle = Vector3.Angle(right, heading);
             if (angle < 20)
             {
-                Shell.CheckComponent<UsualRocket>(usualRocket =>
-                    {
-                        _timeLeft = usualRocket.ReloadTime;
-                        ShellHelper.InitShell<UsualRocket>(
-                                Shell,
-                                target,
-                                transform.position,
-                                allianceGuid);
-                    })
-                    ?.CheckComponent<MonoBehaviour>(_ =>
-                        throw new ArgumentException("Unknown shell", nameof(RocketLauncher)));
+                InitShell(target, allianceGuid);
             }
         }
     }

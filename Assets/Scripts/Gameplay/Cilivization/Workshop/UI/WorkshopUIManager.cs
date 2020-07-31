@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using Library = Assets.Scripts.Helpers.LibraryOfRenderedGameobjects<
     System.Collections.Generic.Dictionary<UnityEngine.GameObject, UnityEngine.Vector2>>;
 
@@ -63,16 +64,6 @@ namespace Assets.Scripts.Gameplay.Cilivization.Workshop.UI
 
         private ShipsDatabase _shipsDatabase;
 
-        public void AddNewTemplate()
-        {
-
-        }
-
-        public void RemoveTemplate()
-        {
-
-        }
-
         public void Enable(
             List<ShipTemplate> ReadyTemplates,
             ShipsDatabase shipsDatabase)
@@ -98,6 +89,39 @@ namespace Assets.Scripts.Gameplay.Cilivization.Workshop.UI
             });
         }
 
+        public void AddNewTemplate()
+        {
+            _currentReadyTemplates.Add(new ShipTemplate
+            {
+                Name = "My new spaceship" + (_currentReadyTemplates.Count + 1),
+            });
+            var templatePanel = Instantiate(TemplatePanelOrigin, TemplatesStack.transform);
+            _templateStack.Add(new StackMapping<ShipTemplate>
+            {
+                TemplateAtStack = templatePanel,
+                Source = _currentReadyTemplates.Last(),
+            });
+            var button = FirstSetUpOfButtonOnTemplate(templatePanel);
+            button.onClick.Invoke();
+        }
+
+        public void RemoveTemplate()
+        {
+            if(_templateStack.Count < 2)
+            {
+                return;
+            }
+
+            var chosenTemplate = _chosenButtons[TemplatesStack];
+            var container = _templateStack.First(x =>
+                     x.TemplateAtStack == chosenTemplate);
+            var source = container.Source;
+            _currentReadyTemplates.Remove(source);
+            _templateStack.Remove(container);
+            DestroyImmediate(chosenTemplate.gameObject);
+            _templateStack.First().TemplateAtStack.GetComponent<Button>().onClick.Invoke();
+        }
+
         private void AddTemplatesAndGetFirst(
             ShipsDatabase shipsDatabase)
         {
@@ -111,7 +135,7 @@ namespace Assets.Scripts.Gameplay.Cilivization.Workshop.UI
                     TemplateAtStack = templatePanel,
                     Source = template,
                 });
-                var button = FirstSetUpOfButtonOnTempalte(templatePanel, template.Hull);
+                var button = FirstSetUpOfButtonOnTemplate(templatePanel);
                 if(_templateStack.Count == 1)
                 {
                     button.onClick.Invoke();
@@ -119,27 +143,22 @@ namespace Assets.Scripts.Gameplay.Cilivization.Workshop.UI
             }
             if(_templateStack.Count == 0)
             {
-                var templatePanel = Instantiate(TemplatePanelOrigin, TemplatesStack.transform);
-                var hull = shipsDatabase.Hulls.First();
-                _templateStack.Add(new StackMapping<ShipTemplate>
-                {
-                    TemplateAtStack = templatePanel,
-                    Source = new ShipTemplate(),
-                });
-                var button = FirstSetUpOfButtonOnTempalte(templatePanel, hull);
-                button.onClick.Invoke();
-                GetTMPInput(NameInput).text = "My first spaceship";
+                AddNewTemplate();
             }
         }
 
-        private Button FirstSetUpOfButtonOnTempalte(GameObject templatePanel, GameObject hull)
+        private Button FirstSetUpOfButtonOnTemplate(GameObject templatePanel)
         {
             var button = templatePanel.GetComponent<Button>();
             button.onClick.AddListener(() =>
             {
+                var container = _templateStack.First(x =>
+                    x.TemplateAtStack == templatePanel);
+                GameObject hull = container.Source.Hull;
                 MakeButtonActive(TemplatesStack, button);
-                _hullsStack.First(x => x.Source == hull)
+                _hullsStack.First(x => hull == null || x.Source == hull)
                     .TemplateAtStack.GetComponent<Button>().onClick.Invoke();
+                GetTMPInput(NameInput).text = container.Source.Name;
             });
 
             return button;
@@ -267,22 +286,22 @@ namespace Assets.Scripts.Gameplay.Cilivization.Workshop.UI
                     {
                         normalColor = Color.white,
                         highlightedColor = Color.white,
-                        pressedColor = Color.white,
+                        pressedColor = button.colors.pressedColor,
                         disabledColor = Color.white,
                         colorMultiplier = 1,
-                        selectedColor = button.colors.selectedColor,
+                        selectedColor = Color.white,
                     };
                 }
                 _chosenButtons[stack] = button.gameObject;
             }
             button.colors = new ColorBlock
             {
-                normalColor = button.colors.selectedColor,
-                highlightedColor = button.colors.selectedColor,
-                pressedColor = button.colors.selectedColor,
+                normalColor = button.colors.pressedColor,
+                highlightedColor = button.colors.pressedColor,
+                pressedColor = button.colors.pressedColor,
                 disabledColor = Color.white,
                 colorMultiplier = 1,
-                selectedColor = button.colors.selectedColor,
+                selectedColor = button.colors.pressedColor,
             };
         }
 

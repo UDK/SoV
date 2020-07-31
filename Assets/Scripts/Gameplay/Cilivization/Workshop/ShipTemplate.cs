@@ -25,6 +25,10 @@ namespace Assets.Scripts.Gameplay.Cilivization.Workshop
 
         public void SetNewHull(GameObject hull)
         {
+            if(Hull == hull)
+            {
+                return;
+            }
             Weapons.Clear();
             Hull = hull;
             foreach (Transform child in hull.transform)
