@@ -45,7 +45,16 @@ namespace Assets.Scripts.Helpers.CompareObjects
 
         public override bool Equals(object other)
         {
-            return base.Equals(other);
+            if(other is Comparable c)
+            {
+                return this == c;
+            }
+            else if(other is GameObject go)
+            {
+                return this == go;
+            }
+
+            return false;
         }
 
         public override int GetHashCode()
