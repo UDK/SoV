@@ -99,7 +99,7 @@ LightmapSettings:
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 112000000, guid: 64f4bfac705816b4bbe7b839eb8b86d8,
     type: 2}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -6078,6 +6078,75 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 313572010}
   m_CullTransparentMesh: 0
+--- !u!1001 &328306840
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4195707115224009651, guid: ee431c22ec7ee794abd23451a54991d9,
+        type: 3}
+      propertyPath: m_Name
+      value: UsualBullet
+      objectReference: {fileID: 0}
+    - target: {fileID: 5986126303685936537, guid: ee431c22ec7ee794abd23451a54991d9,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5986126303685936537, guid: ee431c22ec7ee794abd23451a54991d9,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5986126303685936537, guid: ee431c22ec7ee794abd23451a54991d9,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5986126303685936537, guid: ee431c22ec7ee794abd23451a54991d9,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5986126303685936537, guid: ee431c22ec7ee794abd23451a54991d9,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5986126303685936537, guid: ee431c22ec7ee794abd23451a54991d9,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5986126303685936537, guid: ee431c22ec7ee794abd23451a54991d9,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5986126303685936537, guid: ee431c22ec7ee794abd23451a54991d9,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 5986126303685936537, guid: ee431c22ec7ee794abd23451a54991d9,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5986126303685936537, guid: ee431c22ec7ee794abd23451a54991d9,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5986126303685936537, guid: ee431c22ec7ee794abd23451a54991d9,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: ee431c22ec7ee794abd23451a54991d9, type: 3}
 --- !u!1001 &343983459
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8443,7 +8512,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -34.700012}
+  m_AnchoredPosition: {x: 0, y: -34.69995}
   m_SizeDelta: {x: 0, y: 68.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &781570064
@@ -16129,7 +16198,7 @@ MonoBehaviour:
   ShipsDatabase: {fileID: 8700749099084013818, guid: 65f3520098c9eb24ca90e45d46f86d0a,
     type: 3}
   WorkshopUIManager: {fileID: 1279310679}
-  RenderTexture: {fileID: 8400000, guid: 966f3a37d55883340bd669d6d8b267cf, type: 2}
+  RenderTexture: {fileID: 0}
 --- !u!23 &1349827348
 MeshRenderer:
   m_ObjectHideFlags: 0
