@@ -13,14 +13,14 @@ using UnityEditor;
 namespace Assets.Scripts.Helpers.CompareObjects
 {
 #if UNITY_EDITOR
-
-    class SelectAllOfComparableObject : MonoBehaviour
+    public class SelectAllOfComparableObject : MonoBehaviour
     {
-        [MenuItem("Game helpers/Get all comparable objects...")]
+        [MenuItem("Game helpers/Update all comparable objects")]
         static void GetAllComparable()
         {
             var guids = AssetDatabase.FindAssets("t:Object", new[] { "Assets/Prefabs" });
-            var selected = new List<UnityEngine.Object>();
+            //var selected = new List<UnityEngine.Object>();
+            var count = 0;
 
             foreach (string guid in guids)
             {
@@ -29,18 +29,18 @@ namespace Assets.Scripts.Helpers.CompareObjects
 
                 foreach (UnityEngine.Object thisObject in myObjs)
                 {
-                    if (thisObject is Comparable)
+                    if (thisObject is Comparable c)
                     {
-                        selected.Add(thisObject);
+                        c.ObjectUniqueId = Guid.NewGuid().ToString();
+                        count++;
                     }
                 }
             }
-            Debug.Log("Found 3 comparable objects: " + selected.Count);
-            Selection.objects = selected.ToArray();
+            Debug.Log("Updated comparable objects: " + count);
         }
     }
 
-    [CanEditMultipleObjects]
+    /*[CanEditMultipleObjects]
     [CustomEditor(typeof(Comparable))]
     public class ComparableObject : Editor
     {
@@ -57,7 +57,7 @@ namespace Assets.Scripts.Helpers.CompareObjects
             }
             DrawDefaultInspector();
         }
-    }
+    }*/
 
 #endif
 }

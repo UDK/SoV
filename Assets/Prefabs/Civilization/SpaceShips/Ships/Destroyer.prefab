@@ -15,6 +15,8 @@ GameObject:
   - component: {fileID: 7383148058088219271}
   - component: {fileID: 5721754509938263122}
   - component: {fileID: 4021054921537504961}
+  - component: {fileID: 2398406195713460554}
+  - component: {fileID: 3848699578700229688}
   m_Layer: 16
   m_Name: Destroyer
   m_TagString: Untagged
@@ -171,6 +173,36 @@ MonoBehaviour:
   MaxVelocity: 0.3
   CollisionEnabled: 1
   Block: 0
+--- !u!114 &2398406195713460554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5973401149819515018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d3f1798fea5ce5439418d7b236e5e11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectUniqueId: 92a4fa88-24bc-4c5e-b5d2-bd6f4ff398f2
+--- !u!114 &3848699578700229688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5973401149819515018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7572f2ac1422bad4d810f05be297744e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Money: 3
+  Merilium: 4
+  Titan: 3
+  Uranus: 2
+  Time: 5
 --- !u!1001 &163064472786528767
 PrefabInstance:
   m_ObjectHideFlags: 0

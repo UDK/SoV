@@ -327,6 +327,14 @@ namespace Assets.Scripts.Gameplay.Cilivization.Workshop.UI
             public GameObject Uranus;
 
             public GameObject Time;
+
+            private List<Cost> _costs =
+                new List<Cost>();
+
+            public void Calc()
+            {
+
+            }
         }
 
         [Serializable]

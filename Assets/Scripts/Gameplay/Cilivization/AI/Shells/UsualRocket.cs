@@ -11,7 +11,7 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Shells
 {
     public class UsualRocket : ShellBase
     {
-        public float LifeDistance { get; set; } = 10f;
+        public float LifeDistance = 10f;
 
         public bool Homing = false;
 

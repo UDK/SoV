@@ -12,7 +12,7 @@ namespace Assets.Scripts.Gameplay.Cilivization.Workshop
     {
         public string Name { get; set; }
 
-        public Resources Cost { get; set; }
+        public Cost Cost { get; set; }
 
         public GameObject Hull { get; private set; }
 

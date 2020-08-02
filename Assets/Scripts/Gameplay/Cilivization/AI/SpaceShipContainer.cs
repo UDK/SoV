@@ -14,6 +14,8 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI
     [Serializable]
     public class SpaceShipContainer
     {
+        public float HP = 177;
+
         // used for visual detection of enemies
         public float VisionAngle = 45;
         public int RayCount = 3;

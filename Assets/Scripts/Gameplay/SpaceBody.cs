@@ -10,7 +10,6 @@ using UnityEngine;
 using UnityEngine.VFX;
 using Random = UnityEngine.Random;
 using static Assets.Scripts.Manager.GameManager;
-using System;
 
 namespace Assets.Scripts.Gameplay
 {

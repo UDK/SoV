@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 5269759346393665114}
   - component: {fileID: 3310706478545530155}
   - component: {fileID: 3950444947434436956}
+  - component: {fileID: -8510930646256244816}
   m_Layer: 17
   m_Name: UsualBullet2
   m_TagString: Untagged
@@ -176,4 +177,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d3f1798fea5ce5439418d7b236e5e11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ObjectUniqueId: e4c6635d-4ebd-4bd1-be79-8123e750e4c7
+  ObjectUniqueId: 7e4894ca-ccb6-4bce-bf9c-118f82278138
+--- !u!114 &-8510930646256244816
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7707035806518947171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7572f2ac1422bad4d810f05be297744e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Money: 5
+  Merilium: 1
+  Titan: 2
+  Uranus: 3
+  Time: 10

@@ -14,6 +14,8 @@ GameObject:
   - component: {fileID: 607689686562437752}
   - component: {fileID: 8155247725737466244}
   - component: {fileID: 6656801724861280040}
+  - component: {fileID: 1339354407934891986}
+  - component: {fileID: -8539459513888574013}
   m_Layer: 0
   m_Name: Shine
   m_TagString: Untagged
@@ -99,6 +101,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Container:
+    HP: 177
     VisionAngle: 45
     RayCount: 3
     SightDist: 10
@@ -150,6 +153,36 @@ MonoBehaviour:
   MaxVelocity: 0.3
   CollisionEnabled: 1
   Block: 0
+--- !u!114 &1339354407934891986
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1055718511623148976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d3f1798fea5ce5439418d7b236e5e11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectUniqueId: 59f40c78-9df6-4520-8e42-5c4cec6b8804
+--- !u!114 &-8539459513888574013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1055718511623148976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7572f2ac1422bad4d810f05be297744e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Money: 4
+  Merilium: 5
+  Titan: 3
+  Uranus: 4
+  Time: 6
 --- !u!1001 &1771857629468955251
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -310,7 +343,7 @@ PrefabInstance:
     - target: {fileID: 3795786553856739760, guid: 8862f3c2904f5534cb7a816f6752093d,
         type: 3}
       propertyPath: m_Name
-      value: RocketLauncher (1)
+      value: RocketLauncher
       objectReference: {fileID: 0}
     - target: {fileID: 5801427904468576972, guid: 8862f3c2904f5534cb7a816f6752093d,
         type: 3}

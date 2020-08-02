@@ -11,9 +11,7 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Shells
 {
     public class UsualBullet : ShellBase
     {
-        public float ReloadTimeOfBullet;
-
-        public float LifeDistance { get; set; } = 10f;
+        public float LifeDistance = 10f;
 
         private void Update()
         {
