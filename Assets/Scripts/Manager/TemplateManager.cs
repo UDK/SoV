@@ -21,14 +21,14 @@ namespace Assets.Scripts.Manager
         public SpaceBody GenerateSpaceBody =>
             Instantiate(SpaceBodyTemplate).GetComponent<SpaceBody>();
 
-        public GravitationBehaviour SetUpGravitation(SpaceBody spaceBody)
+        public Gravitation SetUpGravitation(SpaceBody spaceBody)
         {
-            var gravitation = FindChild<GravitationBehaviour>(spaceBody.transform);
+            var gravitation = FindChild<Gravitation>(spaceBody.transform);
             if(gravitation == null)
             {
                 gravitation =
                     Instantiate(GravitationTemplate, spaceBody.transform)
-                        .GetComponent<GravitationBehaviour>();
+                        .GetComponent<Gravitation>();
             }
 
             return gravitation;

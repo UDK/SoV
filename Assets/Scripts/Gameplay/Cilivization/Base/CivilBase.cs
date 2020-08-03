@@ -40,7 +40,7 @@ namespace Assets.Scripts.Gameplay.Cilivization.Base
 
         public float TimeLeftTillBuild;
 
-        public ShipsDatabase ShipsDatabase;
+        public Database ShipsDatabase;
 
         public WorkshopUIManager WorkshopUIManager;
 

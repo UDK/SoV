@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Gameplay.Cilivization.AI.Shells
 {
-    public class UsualRocket : ShellBase
+    public class Rocket : ShellBase
     {
         public float LifeDistance = 10f;
 

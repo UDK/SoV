@@ -1,6 +1,6 @@
 ﻿using Assets.Scripts.Gameplay.Cilivization.AI.States;
 using Assets.Scripts.Gameplay.Cilivization.AI.Strategies;
-using Assets.Scripts.Gameplay.Cilivization.AI.Weapons;
+using Assets.Scripts.Gameplay.Cilivization.AI.WeaponSlots;
 using Assets.Scripts.Gameplay.SpaceObject;
 using Assets.Scripts.Helpers;
 using Assets.Scripts.Physics;
@@ -53,7 +53,7 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI
                 StrategyType);
 
             Container.StateMachine.Push(ShipStates.SearchingOfTarget);
-            Container.MovementBehaviour = GetComponent<MovementBehaviour>();
+            Container.MovementBehaviour = GetComponent<Movement>();
         }
 
         private void FixedUpdate()

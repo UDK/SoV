@@ -1,5 +1,5 @@
 ﻿using Assets.Scripts.Gameplay.Cilivization.AI.States;
-using Assets.Scripts.Gameplay.Cilivization.AI.Weapons;
+using Assets.Scripts.Gameplay.Cilivization.AI.WeaponSlots;
 using Assets.Scripts.Helpers;
 using Assets.Scripts.Physics;
 using System;
@@ -18,14 +18,17 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI
 
         // used for visual detection of enemies
         public float VisionAngle = 45;
+
         public int RayCount = 3;
+
         public float SightDist = 10f;
 
         [NonSerialized]
         public Guid AllianceGuid;
 
-        // determines distance for attack
-        public float AttackDistance = 3f;
+        // determines minimal distance for attack
+        [NonSerialized]
+        public float MinAttackDistance = 3f;
 
         public GameObject Homing;
 
@@ -35,12 +38,10 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI
         public WeaponBase[] Weapons;
 
         [NonSerialized]
-        public MovementBehaviour MovementBehaviour;
+        public Movement MovementBehaviour;
 
         // state machine
+        [NonSerialized]
         public AStateMachine<ShipStates> StateMachine;
-
-        // for debug
-        public GameObject[] Targets;
     }
 }

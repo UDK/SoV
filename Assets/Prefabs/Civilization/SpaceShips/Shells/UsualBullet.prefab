@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1868768908321777802}
   - component: {fileID: 9025001856049138683}
   - component: {fileID: 4148291592490259158}
-  - component: {fileID: 8743902165428826001}
+  - component: {fileID: 7441082256559462768}
   m_Layer: 17
   m_Name: UsualBullet
   m_TagString: Untagged
@@ -122,12 +122,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 4195707115224009651}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a8d775938ce797d49991e3e1301ec9c9, type: 3}
+  m_Script: {fileID: 11500000, guid: 47a33161dee9955448ca93e419cd1765, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AccelarationDeltaTime: 0.1
-  MaxVelocity: 0.1
-  CollisionEnabled: 0
+  AccelarationDeltaTime: 0.001
+  MaxVelocity: 2
+  CollisionEnabled: 1
   Block: 0
 --- !u!114 &1868768908321777802
 MonoBehaviour:
@@ -141,9 +141,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df2423fb645d0cc4bb72990ec11a48f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  AttackDistance: 4
   BaseDamage: 0.1
   ReloadTime: 0
-  ReloadTimeOfBullet: 0.1
+  LifeDistance: 10
 --- !u!50 &9025001856049138683
 Rigidbody2D:
   serializedVersion: 4
@@ -178,7 +179,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ObjectUniqueId: 6a3f428e-46fa-437c-9f3b-2f530d7de798
---- !u!114 &8743902165428826001
+--- !u!114 &7441082256559462768
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -187,11 +188,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 4195707115224009651}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7572f2ac1422bad4d810f05be297744e, type: 3}
+  m_Script: {fileID: 11500000, guid: 9e1c82533beb2bd44be1f001fe6f5165, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Money: 10
-  Merilium: 1
-  Titan: 2
-  Uranus: 1
-  Time: 1
+  <Money>k__BackingField: 1
+  <Merilium>k__BackingField: 2
+  <Titan>k__BackingField: 3
+  <Uranus>k__BackingField: 4
+  <Time>k__BackingField: 1
+  <Text>k__BackingField: 
+  <Image>k__BackingField: {fileID: 2800000, guid: e9d14792a82fe424b9d2fdd3ef322767,
+    type: 3}

@@ -10,7 +10,7 @@ namespace Assets.Scripts.Gameplay.Cilivization.Workshop
 {
     public class WorkshopManager
     {
-        public ShipsDatabase Database;
+        public Database Database;
 
         public WorkshopUIManager WorkshopUIManager;
 

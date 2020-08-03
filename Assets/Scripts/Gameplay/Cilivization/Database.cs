@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Assets.Scripts.Gameplay.Cilivization.Workshop
+namespace Assets.Scripts.Gameplay.Cilivization
 {
-    public class ShipsDatabase : MonoBehaviour
+    public class Database : MonoBehaviour
     {
         /// <summary>
         /// hulls of spaceships
@@ -21,20 +21,20 @@ namespace Assets.Scripts.Gameplay.Cilivization.Workshop
         /// value is a shell array
         /// </summary>
         [SerializeField]
-        public List<WeaponMapping> WeaponMappings =
-            new List<WeaponMapping>();
+        public List<ModuleMapping> ModuleMappings =
+            new List<ModuleMapping>();
 
         public List<GameObject> GetShells(
-            GameObject weapon) =>
-            WeaponMappings.First(x =>
-                weapon.tag == x.Weapon.tag).AvailableShells;
+            GameObject module) =>
+            ModuleMappings.First(x =>
+                module.name == x.ModuleSlot.name).AvailableModules;
 
         [Serializable]
-        public class WeaponMapping
+        public class ModuleMapping
         {
-            public GameObject Weapon;
+            public GameObject ModuleSlot;
 
-            public List<GameObject> AvailableShells;
+            public List<GameObject> AvailableModules;
         }
     }
 }

@@ -15,6 +15,10 @@ namespace Assets.Scripts.Helpers
         public delegate TStorage StoreAdditionalData(
             float scaling);
 
+        private static int _width = 1024;
+
+        private static int _height= 1024;
+
         private static readonly Dictionary<GameObject, RenderContainer> _renders =
             new Dictionary<GameObject, RenderContainer>();
 
@@ -57,6 +61,9 @@ namespace Assets.Scripts.Helpers
         public static Vector3? WorldToCameraTexture(Vector3 vector3) =>
             _virtualCamera?.WorldToScreenPoint(vector3);
 
+        public static Vector2 GetSizes =>
+            new Vector2(_width, _height);
+
         private static RenderContainer AddTexture(
             GameObject template)
         {
@@ -82,7 +89,7 @@ namespace Assets.Scripts.Helpers
                 camera.cullingMask = 1 << LayerHelper.RenderedObjects;
                 camera.gameObject.layer = LayerHelper.RenderedObjects;
                 _virtualCamera = camera;
-                RenderTexture renderTexture = new RenderTexture(512, 512, 24, RenderTextureFormat.ARGB32)
+                RenderTexture renderTexture = new RenderTexture(_width, _height, 24, RenderTextureFormat.ARGB32)
                 {
                     name = "render" + _renders.Count,
                     graphicsFormat = UnityEngine.Experimental.Rendering.GraphicsFormat.R8G8B8A8_UNorm,
@@ -117,7 +124,7 @@ namespace Assets.Scripts.Helpers
             RenderTexture.active = null;
             _virtualCamera.gameObject.SetActive(false);
 
-            Texture2D texture = new Texture2D(512, 512, TextureFormat.ARGB32, false)
+            Texture2D texture = new Texture2D(_width, _height, TextureFormat.ARGB32, false)
             {
                 name = "Rendered" + template.name
             };

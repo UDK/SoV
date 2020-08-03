@@ -9,6 +9,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using Library = Assets.Scripts.Helpers.LibraryOfRenderedGameobjects<
     System.Collections.Generic.Dictionary<UnityEngine.GameObject, UnityEngine.Vector2>>;
+using Assets.Scripts.Gameplay.Cilivization.Descriptions;
 
 namespace Assets.Scripts.Gameplay.Cilivization.Workshop.UI
 {
@@ -62,11 +63,11 @@ namespace Assets.Scripts.Gameplay.Cilivization.Workshop.UI
 
         private List<ShipTemplate> _currentReadyTemplates;
 
-        private ShipsDatabase _shipsDatabase;
+        private Database _shipsDatabase;
 
         public void Enable(
             List<ShipTemplate> ReadyTemplates,
-            ShipsDatabase shipsDatabase)
+            Database shipsDatabase)
         {
             this.gameObject.SetActive(true);
             _currentReadyTemplates = ReadyTemplates;
@@ -123,7 +124,7 @@ namespace Assets.Scripts.Gameplay.Cilivization.Workshop.UI
         }
 
         private void AddTemplatesAndGetFirst(
-            ShipsDatabase shipsDatabase)
+            Database shipsDatabase)
         {
             foreach (var template in _currentReadyTemplates)
             {
@@ -165,14 +166,14 @@ namespace Assets.Scripts.Gameplay.Cilivization.Workshop.UI
         }
 
         private void AddHulls(
-            ShipsDatabase shipsDatabase)
+            Database shipsDatabase)
         {
             foreach (var hull in shipsDatabase.Hulls)
             {
                 var hullPanel = Instantiate(HullPanelOrigin, HullsStack.transform);
                 var panel = hullPanel.transform.GetChild(0).gameObject;
                 panel.GetComponent<RawImage>().texture =
-                    Library.GetTexture(hull).RenderedTexture;
+                    hull.GetComponent<Description>().Image;//Library.GetTexture(hull).RenderedTexture;
                 _hullsStack.Add(new StackMapping<GameObject>
                 {
                     TemplateAtStack = hullPanel,
@@ -195,18 +196,23 @@ namespace Assets.Scripts.Gameplay.Cilivization.Workshop.UI
         private void PlaceSpaceship(
             GameObject hull,
             ShipTemplate shipTemplate,
-            ShipsDatabase shipsDatabase)
+            Database shipsDatabase)
         {
             var shipGraphicContainer =
                 Library.GetTexture(hull, scale =>
                 {
+                    var sizes = Library.GetSizes;
+                    var rectT = ShipPlacement.GetComponent<RectTransform>();
+                    var xScale = rectT.rect.width / sizes.x;
+                    var yScale = rectT.rect.height / sizes.y;
                     Dictionary<GameObject, Vector2> weapons =
                         new Dictionary<GameObject, Vector2>();
-                    foreach (WeaponTemplate wt in shipTemplate.Weapons)
+                    foreach (ModuleTemplate wt in shipTemplate.Modules)
                     {
-                        Vector3 position = wt.Weapon.transform.position * scale;
+                        Vector3 position = wt.ModuleSlot.transform.position * scale;
                         position = Library.WorldToCameraTexture(position).Value;
-                        weapons.Add(wt.Weapon.gameObject, position);
+                        position = new Vector2(position.x * xScale, position.y * yScale);
+                        weapons.Add(wt.ModuleSlot.gameObject, position);
                     }
                     return weapons;
                 });
@@ -225,26 +231,28 @@ namespace Assets.Scripts.Gameplay.Cilivization.Workshop.UI
                 var image = panel.GetComponent<RawImage>();
 
                 // choose shell if there is no
-                var weaponOfShipTemplate = shipTemplate.Weapons.First(x => x.Weapon == places.Key);
-                if (weaponOfShipTemplate.ChosenShell == null)
+                var modulesOfShipTemplate = shipTemplate.Modules.First(x => x.ModuleSlot == places.Key);
+                if (modulesOfShipTemplate.ChosenModule == null)
                 {
-                    weaponOfShipTemplate.ChosenShell = shipsDatabase.WeaponMappings
-                                .First(x => x.Weapon.tag == places.Key.tag).AvailableShells[0];
+                    modulesOfShipTemplate.ChosenModule = shipsDatabase.ModuleMappings
+                                .First(x => x.ModuleSlot.name == places.Key.name).AvailableModules[0];
                 }
 
                 button.onClick.AddListener(() =>
                 {
                     MakeButtonActive(ShipPlacement, button);
-                    SlotClick(places.Key, weaponOfShipTemplate, image);
+                    SlotClick(places.Key, shipTemplate, modulesOfShipTemplate, image);
                 });
                 image.texture =
-                    Library.GetTexture(weaponOfShipTemplate.ChosenShell).RenderedTexture;
+                    modulesOfShipTemplate.ChosenModule.GetComponent<Description>().Image;
             }
+            CalculateOverview(shipTemplate);
         }
 
         private void SlotClick(
             GameObject weapon,
-            WeaponTemplate weaponTemplate,
+            ShipTemplate shipTemplate,
+            ModuleTemplate weaponTemplate,
             RawImage slotImage)
         {
             WeaponsStack.DestroyAllChilds();
@@ -254,16 +262,18 @@ namespace Assets.Scripts.Gameplay.Cilivization.Workshop.UI
                 var weaponPanel = Instantiate(WeaponItemOrigin, WeaponsStack.transform);
                 var panel = weaponPanel.transform.GetChild(0).gameObject;
                 panel.GetComponent<RawImage>().texture =
-                    Library.GetTexture(shell).RenderedTexture;
+                    shell.GetComponent<Description>().Image;
 
                 var button = weaponPanel.GetComponent<Button>();
                 button.onClick.AddListener(() =>
                 {
                     MakeButtonActive(WeaponsStack, button);
-                    slotImage.texture = Library.GetTexture(shell).RenderedTexture;
-                    weaponTemplate.ChosenShell = shell;
+                    slotImage.texture =
+                        shell.GetComponent<Description>().Image;
+                    weaponTemplate.ChosenModule = shell;
+                    CalculateOverview(shipTemplate);
                 });
-                if(weaponTemplate.ChosenShell == shell)
+                if(weaponTemplate.ChosenModule == shell)
                 {
                     button.onClick.Invoke();
                 }
@@ -315,6 +325,27 @@ namespace Assets.Scripts.Gameplay.Cilivization.Workshop.UI
             GameObject go) =>
             go.GetComponent<TMP_InputField>();
 
+        private void CalculateOverview(
+            ShipTemplate shipTemplate)
+        {
+            shipTemplate.CalculateCharacteristics();
+            shipTemplate.CalculateCost();
+            GetTMPText(ResourcesStack.Merilium).text = shipTemplate.Cost.Merilium.ToString();
+            GetTMPText(ResourcesStack.Money).text = shipTemplate.Cost.Money.ToString();
+            GetTMPText(ResourcesStack.Uranus).text = shipTemplate.Cost.Uranus.ToString();
+            GetTMPText(ResourcesStack.Titan).text = shipTemplate.Cost.Titan.ToString();
+            GetTMPText(ResourcesStack.Time).text = shipTemplate.Cost.Time + " s";
+            GetTMPText(OverviewStack.HP).text = shipTemplate.ShipCharacteristics.HP.ToString();
+            GetTMPText(OverviewStack.Distance).text =
+                $"{shipTemplate.ShipCharacteristics.MinAttackDistance} - {shipTemplate.ShipCharacteristics.MaxAttackDistance}";
+            GetTMPText(OverviewStack.Speed).text = $"{shipTemplate.ShipCharacteristics.Speed * 10} G/s";
+            GetTMPText(OverviewStack.Type).text = shipTemplate.Hull.GetComponent<AI.SpaceShipAI>().StrategyType.ToString();
+            GetTMPText(OverviewStack.AttackPower).text = 
+                ((shipTemplate.ShipCharacteristics.MaxAttackDistance - shipTemplate.ShipCharacteristics.MaxAttackDistance) *
+                shipTemplate.ShipCharacteristics.HP *
+                shipTemplate.ShipCharacteristics.Speed).ToString();
+        }
+
         [Serializable]
         public class Resources
         {
@@ -327,14 +358,6 @@ namespace Assets.Scripts.Gameplay.Cilivization.Workshop.UI
             public GameObject Uranus;
 
             public GameObject Time;
-
-            private List<Cost> _costs =
-                new List<Cost>();
-
-            public void Calc()
-            {
-
-            }
         }
 
         [Serializable]

@@ -10,27 +10,29 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Shells
 {
     public static class ShellCollection
     {
-        private readonly static Dictionary<GameObject, Comparable> _comparableMapping =
-            new Dictionary<GameObject, Comparable>();
+        /*private readonly static Dictionary<GameObject, Comparable> _comparableMapping =
+            new Dictionary<GameObject, Comparable>();*/
 
         /// <summary>
         /// key is original
         /// value is stack of created children
         /// </summary>
-        private readonly static Dictionary<Comparable, Stack<GameObject>> _shells =
-            new Dictionary<Comparable, Stack<GameObject>>();
+        private readonly static List<KeyValuePair<GameObject, Stack<GameObject>>> _shells =
+            new List<KeyValuePair<GameObject, Stack<GameObject>>>();
 
         public static GameObject Get(
             GameObject original,
             Vector3 position,
             Quaternion rotation)
         {
-            var c = GetComparable(original);
-            Stack<GameObject> stackShell = GetStack(c);
+            /*var c = GetComparable(original);*/
+            Stack<GameObject> stackShell = GetStack(original);
 
             if (stackShell.Count == 0)
             {
-                return UnityEngine.Object.Instantiate(original, position, rotation);
+                var obj = UnityEngine.Object.Instantiate(original, position, rotation);
+                obj.name = original.name;
+                return obj;
             }
             else
             {
@@ -42,7 +44,7 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Shells
             }
         }
 
-        private static Comparable GetComparable(GameObject original)
+        /*private static Comparable GetComparable(GameObject original)
         {
             Comparable c;
             if (!_comparableMapping.ContainsKey(original))
@@ -56,19 +58,19 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Shells
             }
 
             return c;
-        }
+        }*/
 
-        private static Stack<GameObject> GetStack(Comparable original)
+        private static Stack<GameObject> GetStack(GameObject original)
         {
             Stack<GameObject> stackShell;
-            if (!_shells.ContainsKey(original))
+            if (!_shells.Any(x => x.Key.name == original.name))
             {
                 stackShell = new Stack<GameObject>();
-                _shells.Add(original, stackShell);
+                _shells.Add(new KeyValuePair<GameObject, Stack<GameObject>>(original, stackShell));
             }
             else
             {
-                stackShell = _shells[original];
+                stackShell = _shells.First(x => x.Key.name == original.name).Value;
             }
 
             return stackShell;
@@ -77,7 +79,7 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Shells
         public static void Destroy(
             GameObject gameObject)
         {
-            Stack<GameObject> stackShell = GetStack(gameObject.c());
+            Stack<GameObject> stackShell = GetStack(gameObject);
             gameObject.SetActive(false);
             stackShell.Push(gameObject);
         }

@@ -28,7 +28,7 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Strategies
                 var heading =
                     container.Target.transform.position - self.transform.position;
 
-                if (distance < container.AttackDistance)
+                if (distance < container.MinAttackDistance)
                 {
                     container.StateMachine.Push(
                         ShipStates.Attacking);

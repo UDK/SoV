@@ -11,6 +11,8 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Shells
 {
     public abstract class ShellBase : MonoBehaviour, IGameplayObject
     {
+        public float AttackDistance = 10f;
+
         public float BaseDamage = 0.1f;
 
         public float ReloadTime = 1f;
@@ -20,14 +22,14 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Shells
         public Guid AllianceGuid { get; set; }
 
 
-        protected MovementBehaviour _movementBehaviour;
+        protected Movement _movementBehaviour;
 
         protected Vector3 _startPosition { get; set; }
 
         public virtual void Initiate()
         {
             _startPosition = transform.position;
-            _movementBehaviour = GetComponent<MovementBehaviour>();
+            _movementBehaviour = GetComponent<Movement>();
             var moveVector = Target.transform.position - transform.position;
             _movementBehaviour.SetVelocity(
                 moveVector.normalized * _movementBehaviour.MaxVelocity);

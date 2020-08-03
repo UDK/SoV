@@ -16,7 +16,7 @@ namespace Assets.Scripts.Physics.Fabric.ForceFabrics
         /// <param name="iv">Second object that will be pulled</param>
         /// <param name="influence">Influence parameter that charges end force</param>
         /// <returns>Force for moving by sob</returns>
-        public Vector2 PullForceFabricMethod(MovementBehaviour who, Vector2 iv, float influence)
+        public Vector2 PullForceFabricMethod(Movement who, Vector2 iv, float influence)
         {
             var distance = Vector2.Distance(who.transform.position, iv);
             if (distance == 0)

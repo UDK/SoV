@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Assets.Scripts.Gameplay.Cilivization.AI.Weapons
+namespace Assets.Scripts.Gameplay.Cilivization.AI.WeaponSlots
 {
     public abstract class WeaponBase : MonoBehaviour
     {

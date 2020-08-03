@@ -38,8 +38,8 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Strategies
                         raycastHits,
                         container.SightDist);
 
-                    container.Targets = raycastHits.Select(x => x.collider?.gameObject).ToArray();
-                    foreach(var t in container.Targets)
+                    var targets = raycastHits.Select(x => x.collider?.gameObject).ToArray();
+                    foreach(var t in targets)
                     {
                         var go = t?.GetComponent<IGameplayObject>();
                         if(go != null &&

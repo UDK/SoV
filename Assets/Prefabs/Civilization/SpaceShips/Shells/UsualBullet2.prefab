@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5269759346393665114}
   - component: {fileID: 3310706478545530155}
   - component: {fileID: 3950444947434436956}
-  - component: {fileID: -8510930646256244816}
+  - component: {fileID: 7575637318388385833}
   m_Layer: 17
   m_Name: UsualBullet2
   m_TagString: Untagged
@@ -122,12 +122,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 7707035806518947171}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a8d775938ce797d49991e3e1301ec9c9, type: 3}
+  m_Script: {fileID: 11500000, guid: 47a33161dee9955448ca93e419cd1765, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AccelarationDeltaTime: 0.1
-  MaxVelocity: 0.1
-  CollisionEnabled: 0
+  AccelarationDeltaTime: 0.001
+  MaxVelocity: 2
+  CollisionEnabled: 1
   Block: 0
 --- !u!114 &5269759346393665114
 MonoBehaviour:
@@ -141,9 +141,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df2423fb645d0cc4bb72990ec11a48f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  AttackDistance: 5
   BaseDamage: 0.1
   ReloadTime: 0
-  ReloadTimeOfBullet: 0.1
+  LifeDistance: 10
 --- !u!50 &3310706478545530155
 Rigidbody2D:
   serializedVersion: 4
@@ -178,7 +179,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ObjectUniqueId: 7e4894ca-ccb6-4bce-bf9c-118f82278138
---- !u!114 &-8510930646256244816
+--- !u!114 &7575637318388385833
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -187,11 +188,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 7707035806518947171}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7572f2ac1422bad4d810f05be297744e, type: 3}
+  m_Script: {fileID: 11500000, guid: 9e1c82533beb2bd44be1f001fe6f5165, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Money: 5
-  Merilium: 1
-  Titan: 2
-  Uranus: 3
-  Time: 10
+  <Money>k__BackingField: 2
+  <Merilium>k__BackingField: 1
+  <Titan>k__BackingField: 3
+  <Uranus>k__BackingField: 4
+  <Time>k__BackingField: 5
+  <Text>k__BackingField: 
+  <Image>k__BackingField: {fileID: 2800000, guid: 6379f5cfd6f18ec4d81e173d029978bc,
+    type: 3}

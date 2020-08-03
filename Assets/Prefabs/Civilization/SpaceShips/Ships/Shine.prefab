@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8155247725737466244}
   - component: {fileID: 6656801724861280040}
   - component: {fileID: 1339354407934891986}
-  - component: {fileID: -8539459513888574013}
+  - component: {fileID: 1308771088626636271}
   m_Layer: 0
   m_Name: Shine
   m_TagString: Untagged
@@ -38,6 +38,7 @@ Transform:
   - {fileID: 526305667468998576}
   - {fileID: 6167433684707853374}
   - {fileID: 1940697115109161195}
+  - {fileID: 3013490327237240042}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -105,10 +106,8 @@ MonoBehaviour:
     VisionAngle: 45
     RayCount: 3
     SightDist: 10
-    AttackDistance: 10
     Homing: {fileID: 0}
     Target: {fileID: 0}
-    Targets: []
   Weapons: []
   StrategyType: 2
 --- !u!61 &8155247725737466244
@@ -146,11 +145,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1055718511623148976}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a8d775938ce797d49991e3e1301ec9c9, type: 3}
+  m_Script: {fileID: 11500000, guid: 47a33161dee9955448ca93e419cd1765, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AccelarationDeltaTime: 0.01
-  MaxVelocity: 0.3
+  AccelarationDeltaTime: 0.001
+  MaxVelocity: 2
   CollisionEnabled: 1
   Block: 0
 --- !u!114 &1339354407934891986
@@ -166,7 +165,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ObjectUniqueId: 59f40c78-9df6-4520-8e42-5c4cec6b8804
---- !u!114 &-8539459513888574013
+--- !u!114 &1308771088626636271
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -175,14 +174,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 1055718511623148976}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7572f2ac1422bad4d810f05be297744e, type: 3}
+  m_Script: {fileID: 11500000, guid: 9e1c82533beb2bd44be1f001fe6f5165, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Money: 4
-  Merilium: 5
-  Titan: 3
-  Uranus: 4
-  Time: 6
+  <Money>k__BackingField: 1
+  <Merilium>k__BackingField: 2
+  <Titan>k__BackingField: 3
+  <Uranus>k__BackingField: 4
+  <Time>k__BackingField: 1
+  <Text>k__BackingField: 
+  <Image>k__BackingField: {fileID: 2800000, guid: 3f6ef8e656f8b074e8fc301a5deea450,
+    type: 3}
 --- !u!1001 &1771857629468955251
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -193,7 +195,7 @@ PrefabInstance:
     - target: {fileID: 4061401605906766967, guid: e2e517ef06f5fbc42a3fc503040b67d6,
         type: 3}
       propertyPath: m_Name
-      value: Turret (1)
+      value: TurretSlot
       objectReference: {fileID: 0}
     - target: {fileID: 5548935443205740109, guid: e2e517ef06f5fbc42a3fc503040b67d6,
         type: 3}
@@ -258,6 +260,81 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1771857629468955251}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1808661004737327042
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 427132539328155402}
+    m_Modifications:
+    - target: {fileID: 288010532401667411, guid: d9b01eee79a31c4459c681c182f49932,
+        type: 3}
+      propertyPath: m_Name
+      value: ModifierSlot
+      objectReference: {fileID: 0}
+    - target: {fileID: 3516105030559402792, guid: d9b01eee79a31c4459c681c182f49932,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3516105030559402792, guid: d9b01eee79a31c4459c681c182f49932,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3516105030559402792, guid: d9b01eee79a31c4459c681c182f49932,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3516105030559402792, guid: d9b01eee79a31c4459c681c182f49932,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3516105030559402792, guid: d9b01eee79a31c4459c681c182f49932,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3516105030559402792, guid: d9b01eee79a31c4459c681c182f49932,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3516105030559402792, guid: d9b01eee79a31c4459c681c182f49932,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3516105030559402792, guid: d9b01eee79a31c4459c681c182f49932,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3516105030559402792, guid: d9b01eee79a31c4459c681c182f49932,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3516105030559402792, guid: d9b01eee79a31c4459c681c182f49932,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3516105030559402792, guid: d9b01eee79a31c4459c681c182f49932,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d9b01eee79a31c4459c681c182f49932, type: 3}
+--- !u!4 &3013490327237240042 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3516105030559402792, guid: d9b01eee79a31c4459c681c182f49932,
+    type: 3}
+  m_PrefabInstance: {fileID: 1808661004737327042}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3205916083963637055
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -268,7 +345,7 @@ PrefabInstance:
     - target: {fileID: 3795786553856739760, guid: 8862f3c2904f5534cb7a816f6752093d,
         type: 3}
       propertyPath: m_Name
-      value: RocketLauncher
+      value: RocketSlot
       objectReference: {fileID: 0}
     - target: {fileID: 5801427904468576972, guid: 8862f3c2904f5534cb7a816f6752093d,
         type: 3}
@@ -343,7 +420,7 @@ PrefabInstance:
     - target: {fileID: 3795786553856739760, guid: 8862f3c2904f5534cb7a816f6752093d,
         type: 3}
       propertyPath: m_Name
-      value: RocketLauncher
+      value: RocketSlot
       objectReference: {fileID: 0}
     - target: {fileID: 5801427904468576972, guid: 8862f3c2904f5534cb7a816f6752093d,
         type: 3}
@@ -418,7 +495,7 @@ PrefabInstance:
     - target: {fileID: 4061401605906766967, guid: e2e517ef06f5fbc42a3fc503040b67d6,
         type: 3}
       propertyPath: m_Name
-      value: Turret (2)
+      value: TurretSlot
       objectReference: {fileID: 0}
     - target: {fileID: 5548935443205740109, guid: e2e517ef06f5fbc42a3fc503040b67d6,
         type: 3}

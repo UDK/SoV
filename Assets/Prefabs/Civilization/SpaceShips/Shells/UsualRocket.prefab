@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 6815280507526631962}
   - component: {fileID: 8058320971068191704}
   - component: {fileID: -6169072235731992244}
-  - component: {fileID: 2992158991449544336}
+  - component: {fileID: 2049900147883089120}
   m_Layer: 17
   m_Name: UsualRocket
   m_TagString: Untagged
@@ -97,8 +97,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca689bf224e8487429a0c560537da5c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  AttackDistance: 8
   BaseDamage: 1
   ReloadTime: 0
+  LifeDistance: 10
   Homing: 1
 --- !u!61 &5871890873659631510
 BoxCollider2D:
@@ -156,12 +158,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 5551198921606634166}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a8d775938ce797d49991e3e1301ec9c9, type: 3}
+  m_Script: {fileID: 11500000, guid: 47a33161dee9955448ca93e419cd1765, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AccelarationDeltaTime: 0.05
-  MaxVelocity: 0.2
-  CollisionEnabled: 0
+  AccelarationDeltaTime: 0.001
+  MaxVelocity: 2
+  CollisionEnabled: 1
   Block: 0
 --- !u!114 &-6169072235731992244
 MonoBehaviour:
@@ -176,7 +178,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ObjectUniqueId: e4dbd38c-2adb-4e89-b7b6-b4b56737aba2
---- !u!114 &2992158991449544336
+--- !u!114 &2049900147883089120
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -185,11 +187,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 5551198921606634166}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7572f2ac1422bad4d810f05be297744e, type: 3}
+  m_Script: {fileID: 11500000, guid: 9e1c82533beb2bd44be1f001fe6f5165, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Money: 1
-  Merilium: 2
-  Titan: 3
-  Uranus: 4
-  Time: 5
+  <Money>k__BackingField: 1
+  <Merilium>k__BackingField: 2
+  <Titan>k__BackingField: 1
+  <Uranus>k__BackingField: 2
+  <Time>k__BackingField: 3
+  <Text>k__BackingField: 11
+  <Image>k__BackingField: {fileID: 2800000, guid: a4bbe254e39b2a542a6474ed257172b6,
+    type: 3}

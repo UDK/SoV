@@ -15,8 +15,8 @@ namespace Assets.Scripts.Physics.Sattellite
         /// <summary>
         /// Кто притягивает
         /// </summary>
-        private MovementBehaviour _target = null;
-        private MovementBehaviour _subject = null;
+        private Movement _target = null;
+        private Movement _subject = null;
 
         private Vector3 _rotationVector = Vector3.forward;
         private float _deltaDistance = 3.0f;
@@ -31,10 +31,10 @@ namespace Assets.Scripts.Physics.Sattellite
         private float _minDistance;
         private float _maxDistance;
 
-        public void StartOrbiting(MovementBehaviour target)
+        public void StartOrbiting(Movement target)
         {
             _target = target;
-            _subject = GetComponent<MovementBehaviour>();
+            _subject = GetComponent<Movement>();
             _getToTarget = true;
         }
 

@@ -23,7 +23,7 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Strategies
                 var distance = Vector2.Distance(
                     container.Target.transform.position,
                     self.transform.position);
-                if (distance > container.AttackDistance)
+                if (distance > container.MinAttackDistance)
                 {
                     container.StateMachine.Push(
                         ShipStates.Moving);
@@ -53,7 +53,7 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Strategies
                     self.transform.position);
 
                 if (dot < -0.60 &&
-                    distance > container.AttackDistance * 2)
+                    distance > container.MinAttackDistance * 2)
                 {
                     container.StateMachine.Push(
                         ShipStates.Moving);
@@ -91,7 +91,7 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Strategies
                 var distance = Vector2.Distance(
                     container.Target.transform.position,
                     self.transform.position);
-                if (distance > container.AttackDistance)
+                if (distance > container.MinAttackDistance)
                 {
                     container.StateMachine.Push(
                         ShipStates.Moving);

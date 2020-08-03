@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8700749099084013819}
   - component: {fileID: 8700749099084013818}
   m_Layer: 0
-  m_Name: StartShipsDatabase
+  m_Name: Database
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,14 +46,18 @@ MonoBehaviour:
   Hulls:
   - {fileID: 5973401149819515018, guid: 8976e038672d56b42910536836c59339, type: 3}
   - {fileID: 1055718511623148976, guid: 18f59a46630e3514c8a8a6018d7f663e, type: 3}
-  WeaponMappings:
-  - Weapon: {fileID: 3795786553856739760, guid: 8862f3c2904f5534cb7a816f6752093d,
+  ModuleMappings:
+  - ModuleSlot: {fileID: 3795786553856739760, guid: 8862f3c2904f5534cb7a816f6752093d,
       type: 3}
-    AvailableShells:
-    - {fileID: 5551198921606634166, guid: 0ac3e0a78d8499844a899f4b1bc7218b, type: 3}
+    AvailableModules:
     - {fileID: 7707035806518947171, guid: c5d0f26c6a80c934faf0052c14234430, type: 3}
-  - Weapon: {fileID: 4061401605906766967, guid: e2e517ef06f5fbc42a3fc503040b67d6,
+    - {fileID: 5551198921606634166, guid: 0ac3e0a78d8499844a899f4b1bc7218b, type: 3}
+  - ModuleSlot: {fileID: 4061401605906766967, guid: e2e517ef06f5fbc42a3fc503040b67d6,
       type: 3}
-    AvailableShells:
+    AvailableModules:
     - {fileID: 4195707115224009651, guid: ee431c22ec7ee794abd23451a54991d9, type: 3}
     - {fileID: 7707035806518947171, guid: c5d0f26c6a80c934faf0052c14234430, type: 3}
+  - ModuleSlot: {fileID: 288010532401667411, guid: d9b01eee79a31c4459c681c182f49932,
+      type: 3}
+    AvailableModules:
+    - {fileID: 7549726375625290010, guid: 3f08c6db35aef344793a9b64d9e3ebc2, type: 3}

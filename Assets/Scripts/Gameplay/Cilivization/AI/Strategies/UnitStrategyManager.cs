@@ -19,9 +19,9 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Strategies
         private readonly sdType _strategies =
             new sdType
             {
-                { StrategyType.AggressiveAttack, AggressiveAttackStrategy },
-                { StrategyType.DistanceAttack, DistanceAttackStrategy },
-                { StrategyType.BombingAttack, BombingAttackStrategy },
+                { StrategyType.Fighter, AggressiveAttackStrategy },
+                { StrategyType.Artillery, DistanceAttackStrategy },
+                { StrategyType.Bomber, BombingAttackStrategy },
             };
         private GameObject _self;
         private SpaceShipContainer _container;

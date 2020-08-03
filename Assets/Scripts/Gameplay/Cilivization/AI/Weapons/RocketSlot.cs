@@ -8,9 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Assets.Scripts.Gameplay.Cilivization.AI.Weapons
+namespace Assets.Scripts.Gameplay.Cilivization.AI.WeaponSlots
 {
-    public class RocketLauncher: WeaponBase
+    public class RocketSlot: WeaponBase
     {
         protected override void CoreAttack(
             GameObject target,

@@ -20,14 +20,14 @@ namespace Assets.Scripts.Manager.Galaxy
     {
         public Vector2 PushDirection = Vector2.zero;
 
-        private readonly Dictionary<Collider2D, MovementBehaviour> _registeredGameObjects =
-            new Dictionary<Collider2D, MovementBehaviour>();
+        private readonly Dictionary<Collider2D, Movement> _registeredGameObjects =
+            new Dictionary<Collider2D, Movement>();
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (!LayerHelper.IsSatellite(collision.gameObject.layer))
             {
-                var movement = collision.GetComponent<MovementBehaviour>();
+                var movement = collision.GetComponent<Movement>();
                 movement.SetVelocity(PushDirection * 0.5f);
                 /*_registeredGameObjects.Add(
                     collision,
@@ -39,7 +39,7 @@ namespace Assets.Scripts.Manager.Galaxy
         {
             if (!LayerHelper.IsSatellite(collision.gameObject.layer))
             {
-                var movement = collision.GetComponent<MovementBehaviour>();
+                var movement = collision.GetComponent<Movement>();
 
                 var oneSideX = PushDirection.x != 0 && Mathf.Sign(PushDirection.x) == Mathf.Sign(movement.Velocity.x);
                 var oneSideY = PushDirection.y != 0 && Mathf.Sign(PushDirection.y) == Mathf.Sign(movement.Velocity.y);

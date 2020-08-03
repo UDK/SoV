@@ -11,7 +11,7 @@ namespace Assets.Scripts.GlobalControllers.Control
     {
         public float Acceleration = 1f;
 
-        private MovementBehaviour _movement { get; set; }
+        private Movement _movement { get; set; }
         private Actions _currentAction { get; set; } = Actions.EmptyInstance;
         private IForce _movementForceAdapter;
 
@@ -68,7 +68,7 @@ namespace Assets.Scripts.GlobalControllers.Control
         // Update is called once per frame
         void Awake()
         {
-            _movement = this.GetComponent<MovementBehaviour>();
+            _movement = this.GetComponent<Movement>();
         }
 
         // Update is called once per frame

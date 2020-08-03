@@ -43,7 +43,7 @@ namespace Assets.Scripts.Gameplay
 
         private SatelliteManager _satelliteManager;
 
-        private MovementBehaviour _movementBehaviour;
+        private Movement _movementBehaviour;
 
         [SerializeField]
         public float Mass
@@ -109,7 +109,7 @@ namespace Assets.Scripts.Gameplay
         private void Awake()
         {
             _satelliteManager = GetComponent<SatelliteManager>();
-            _movementBehaviour = GetComponent<MovementBehaviour>();
+            _movementBehaviour = GetComponent<Movement>();
         }
 
         public void Destroy()

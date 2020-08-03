@@ -14,7 +14,7 @@ namespace Assets.Scripts.Gameplay.Cilivization.Workshop
 
         public static void AddWorkshop(
             Guid allianceGuid,
-            ShipsDatabase database,
+            Database database,
             WorkshopUIManager workshopUIManager)
         {
             _workshops.Add(allianceGuid, new WorkshopManager
