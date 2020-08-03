@@ -60,4 +60,5 @@ MonoBehaviour:
   - ModuleSlot: {fileID: 288010532401667411, guid: d9b01eee79a31c4459c681c182f49932,
       type: 3}
     AvailableModules:
+    - {fileID: 8811504036238085437, guid: 8ac6a6f35daeb334184db5e812e35580, type: 3}
     - {fileID: 7549726375625290010, guid: 3f08c6db35aef344793a9b64d9e3ebc2, type: 3}
