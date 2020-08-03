@@ -341,7 +341,7 @@ namespace Assets.Scripts.Gameplay.Cilivization.Workshop.UI
             GetTMPText(OverviewStack.Speed).text = $"{shipTemplate.ShipCharacteristics.Speed * 10} G/s";
             GetTMPText(OverviewStack.Type).text = shipTemplate.Hull.GetComponent<AI.SpaceShipAI>().StrategyType.ToString();
             GetTMPText(OverviewStack.AttackPower).text = 
-                ((shipTemplate.ShipCharacteristics.MaxAttackDistance - shipTemplate.ShipCharacteristics.MaxAttackDistance) *
+                (shipTemplate.ShipCharacteristics.MaxAttackDistance *
                 shipTemplate.ShipCharacteristics.HP *
                 shipTemplate.ShipCharacteristics.Speed).ToString();
         }

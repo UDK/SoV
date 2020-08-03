@@ -19,8 +19,8 @@ namespace Assets.Scripts.Helpers
 
         private static int _height= 1024;
 
-        private static readonly Dictionary<GameObject, RenderContainer> _renders =
-            new Dictionary<GameObject, RenderContainer>();
+        private static readonly List<KeyValuePair<GameObject, RenderContainer>> _renders =
+            new List<KeyValuePair<GameObject, RenderContainer>>();
 
         private static Camera _virtualCamera;
 
@@ -42,13 +42,13 @@ namespace Assets.Scripts.Helpers
             StoreAdditionalData getSomeData)
         {
             RenderContainer container;
-            if (!_renders.ContainsKey(template))
+            if (!_renders.Any(x => x.Key.name == template.name))
             {
                 container = AddTexture(template);
             }
             else
             {
-                container = _renders[template];
+                container = _renders.First(x => x.Key.name == template.name).Value;
             }
 
             if(getSomeData != null)
@@ -68,7 +68,7 @@ namespace Assets.Scripts.Helpers
             GameObject template)
         {
             var container = Render(template);
-            _renders.Add(template, container);
+            _renders.Add(new KeyValuePair<GameObject, RenderContainer>(template, container));
             return container;
         }
 
@@ -135,40 +135,6 @@ namespace Assets.Scripts.Helpers
                 RenderedTexture = texture,
                 Scaling = scale,
             };
-        }
-
-
-        private static void SetComponentEnabled(Component component, bool value)
-        {
-            if (component == null) return;
-            if (component is Collider)
-            {
-                (component as Collider).enabled = value;
-            }
-            else if (component is Collider2D)
-            {
-                (component as Collider2D).enabled = value;
-            }
-            else if (component is Animation)
-            {
-                (component as Animation).enabled = value;
-            }
-            else if (component is Animator)
-            {
-                (component as Animator).enabled = value;
-            }
-            else if (component is AudioSource)
-            {
-                (component as AudioSource).enabled = value;
-            }
-            else if (component is MonoBehaviour)
-            {
-                (component as MonoBehaviour).enabled = value;
-            }
-            else
-            {
-                Debug.Log("Don't know how to enable " + component.GetType().Name);
-            }
         }
 
         public struct RenderContainer

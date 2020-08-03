@@ -66,6 +66,7 @@ namespace Assets.Scripts.Gameplay.Cilivization.Workshop
                 return;
             }
             var hullDescription = Hull.GetComponent<SpaceShipAI>();
+            ShipCharacteristics = new ShipCharacteristics();
             ShipCharacteristics.HP = hullDescription.Container.HP;
             ShipCharacteristics.Speed = Hull.GetComponent<Movement>().MaxVelocity;
             foreach(var module in Modules)

@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 607689686562437752}
   - component: {fileID: 8155247725737466244}
   - component: {fileID: 6656801724861280040}
-  - component: {fileID: 1339354407934891986}
   - component: {fileID: 1308771088626636271}
   m_Layer: 0
   m_Name: Shine
@@ -152,19 +151,6 @@ MonoBehaviour:
   MaxVelocity: 2
   CollisionEnabled: 1
   Block: 0
---- !u!114 &1339354407934891986
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1055718511623148976}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d3f1798fea5ce5439418d7b236e5e11, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObjectUniqueId: 59f40c78-9df6-4520-8e42-5c4cec6b8804
 --- !u!114 &1308771088626636271
 MonoBehaviour:
   m_ObjectHideFlags: 0
