@@ -337,8 +337,8 @@ namespace Assets.Scripts.Gameplay.Cilivization.Workshop.UI
             GetTMPText(ResourcesStack.Time).text = shipTemplate.Cost.Time + " s";
             GetTMPText(OverviewStack.HP).text = shipTemplate.ShipCharacteristics.HP.ToString();
             GetTMPText(OverviewStack.Distance).text =
-                $"{shipTemplate.ShipCharacteristics.MinAttackDistance} - {shipTemplate.ShipCharacteristics.MaxAttackDistance} G";
-            GetTMPText(OverviewStack.Speed).text = $"{shipTemplate.ShipCharacteristics.Speed * 10} G/s";
+                $"{shipTemplate.ShipCharacteristics.MinAttackDistance} - {shipTemplate.ShipCharacteristics.MaxAttackDistance} Gm";
+            GetTMPText(OverviewStack.Speed).text = $"{shipTemplate.ShipCharacteristics.Speed * 10} Gm/s";
             GetTMPText(OverviewStack.Type).text = shipTemplate.Hull.GetComponent<AI.SpaceShipAI>().StrategyType.ToString();
             GetTMPText(OverviewStack.AttackPower).text = 
                 (shipTemplate.ShipCharacteristics.MaxAttackDistance *
