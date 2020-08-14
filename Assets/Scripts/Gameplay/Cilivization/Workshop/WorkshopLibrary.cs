@@ -12,16 +12,19 @@ namespace Assets.Scripts.Gameplay.Cilivization.Workshop
         private static Dictionary<Guid, WorkshopManager> _workshops =
             new Dictionary<Guid, WorkshopManager>();
 
-        public static void AddWorkshop(
+        public static WorkshopManager AddWorkshop(
             Guid allianceGuid,
             Database database,
             WorkshopUIManager workshopUIManager)
         {
-            _workshops.Add(allianceGuid, new WorkshopManager
+            var workshopManager = new WorkshopManager
             {
                 Database = database,
                 WorkshopUIManager = workshopUIManager,
-            });
+            };
+            _workshops.Add(allianceGuid, workshopManager);
+
+            return workshopManager;
         }
 
         public static WorkshopManager GetWorkshop(

@@ -11,8 +11,6 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Shells
 {
     public abstract class ShellBase : MonoBehaviour, IGameplayObject
     {
-        public float AttackDistance = 10f;
-
         public float BaseDamage = 0.1f;
 
         public float ReloadTime = 1f;

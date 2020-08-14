@@ -10,11 +10,14 @@ using UnityEngine.EventSystems;
 using Library = Assets.Scripts.Helpers.LibraryOfRenderedGameobjects<
     System.Collections.Generic.Dictionary<UnityEngine.GameObject, UnityEngine.Vector2>>;
 using Assets.Scripts.Gameplay.Cilivization.Descriptions;
+using Assets.Scripts.Manager;
 
 namespace Assets.Scripts.Gameplay.Cilivization.Workshop.UI
 {
     public class WorkshopUIManager : MonoBehaviour
     {
+        public delegate void OnClose();
+
         #region origins
         public GameObject TemplatePanelOrigin;
 
@@ -46,8 +49,8 @@ namespace Assets.Scripts.Gameplay.Cilivization.Workshop.UI
 
         #endregion
 
-        private List<StackMapping<ShipTemplate>> _templateStack =
-            new List<StackMapping<ShipTemplate>>();
+        private List<StackMapping<ShipBuildTemplate>> _templateStack =
+            new List<StackMapping<ShipBuildTemplate>>();
 
         private List<StackMapping<GameObject>> _hullsStack =
             new List<StackMapping<GameObject>>();
@@ -61,20 +64,33 @@ namespace Assets.Scripts.Gameplay.Cilivization.Workshop.UI
             new Dictionary<GameObject, GameObject>();
         #endregion
 
-        private List<ShipTemplate> _currentReadyTemplates;
+        private List<ShipBuildTemplate> _currentReadyTemplates;
 
         private Database _shipsDatabase;
 
+        private OnClose _onClose;
         public void Enable(
-            List<ShipTemplate> ReadyTemplates,
-            Database shipsDatabase)
+            List<ShipBuildTemplate> ReadyTemplates,
+            Database shipsDatabase,
+            OnClose onClose)
         {
+            GameManager.Pause = true;
             this.gameObject.SetActive(true);
+            _onClose = onClose;
             _currentReadyTemplates = ReadyTemplates;
             _shipsDatabase = shipsDatabase;
             AddHulls(shipsDatabase);
             SetUpNameField();
             AddTemplatesAndGetFirst(shipsDatabase);
+        }
+
+        public void Disable()
+        {
+            _onClose();
+            this.gameObject.SetActive(false);
+            _currentReadyTemplates = null;
+            _shipsDatabase = null;
+            GameManager.Pause = false;
         }
 
         private void SetUpNameField()
@@ -90,25 +106,64 @@ namespace Assets.Scripts.Gameplay.Cilivization.Workshop.UI
             });
         }
 
-        public void AddNewTemplate()
+        private void AddTemplatesAndGetFirst(
+            Database shipsDatabase)
         {
-            _currentReadyTemplates.Add(new ShipTemplate
+            foreach (var template in _currentReadyTemplates)
             {
-                Name = "My new spaceship" + (_currentReadyTemplates.Count + 1),
-            });
+                AddNewTemplate(template);
+            }
+            if (_templateStack.Count != 0)
+            {
+                _templateStack.First().TemplateAtStack.GetComponent<Button>().onClick.Invoke();
+            }
+            else if (_templateStack.Count == 0)
+            {
+                AddNewTemplate();
+            }
+        }
+
+        private void AddNewTemplate(
+            ShipBuildTemplate readyTemplate = null)
+        {
+            if(readyTemplate == null)
+            {
+                readyTemplate = new ShipBuildTemplate
+                {
+                    Name = "My new spaceship" + (_currentReadyTemplates.Count + 1),
+                };
+                _currentReadyTemplates.Add(readyTemplate);
+            }
             var templatePanel = Instantiate(TemplatePanelOrigin, TemplatesStack.transform);
-            _templateStack.Add(new StackMapping<ShipTemplate>
+            _templateStack.Add(new StackMapping<ShipBuildTemplate>
             {
                 TemplateAtStack = templatePanel,
-                Source = _currentReadyTemplates.Last(),
+                Source = readyTemplate,
             });
             var button = FirstSetUpOfButtonOnTemplate(templatePanel);
             button.onClick.Invoke();
         }
 
+        private Button FirstSetUpOfButtonOnTemplate(GameObject templatePanel)
+        {
+            var button = templatePanel.GetComponent<Button>();
+            button.onClick.AddListener(() =>
+            {
+                var container = _templateStack.First(x =>
+                    x.TemplateAtStack == templatePanel);
+                GameObject hull = container.Source.Hull;
+                MakeButtonActive(TemplatesStack, button);
+                _hullsStack.First(x => hull == null || x.Source.name == hull.name)
+                    .TemplateAtStack.GetComponent<Button>().onClick.Invoke();
+                GetTMPInput(NameInput).text = container.Source.Name;
+            });
+
+            return button;
+        }
+
         public void RemoveTemplate()
         {
-            if(_templateStack.Count < 2)
+            if (_templateStack.Count < 2)
             {
                 return;
             }
@@ -121,48 +176,6 @@ namespace Assets.Scripts.Gameplay.Cilivization.Workshop.UI
             _templateStack.Remove(container);
             DestroyImmediate(chosenTemplate.gameObject);
             _templateStack.First().TemplateAtStack.GetComponent<Button>().onClick.Invoke();
-        }
-
-        private void AddTemplatesAndGetFirst(
-            Database shipsDatabase)
-        {
-            foreach (var template in _currentReadyTemplates)
-            {
-                var templatePanel = Instantiate(TemplatePanelOrigin, TemplatesStack.transform);
-                var panel = templatePanel.transform.GetChild(0).gameObject;
-                panel.GetComponent<TextMeshPro>().text = template.Name;
-                _templateStack.Add(new StackMapping<ShipTemplate>
-                {
-                    TemplateAtStack = templatePanel,
-                    Source = template,
-                });
-                var button = FirstSetUpOfButtonOnTemplate(templatePanel);
-                if(_templateStack.Count == 1)
-                {
-                    button.onClick.Invoke();
-                }
-            }
-            if(_templateStack.Count == 0)
-            {
-                AddNewTemplate();
-            }
-        }
-
-        private Button FirstSetUpOfButtonOnTemplate(GameObject templatePanel)
-        {
-            var button = templatePanel.GetComponent<Button>();
-            button.onClick.AddListener(() =>
-            {
-                var container = _templateStack.First(x =>
-                    x.TemplateAtStack == templatePanel);
-                GameObject hull = container.Source.Hull;
-                MakeButtonActive(TemplatesStack, button);
-                _hullsStack.First(x => hull == null || x.Source == hull)
-                    .TemplateAtStack.GetComponent<Button>().onClick.Invoke();
-                GetTMPInput(NameInput).text = container.Source.Name;
-            });
-
-            return button;
         }
 
         private void AddHulls(
@@ -195,7 +208,7 @@ namespace Assets.Scripts.Gameplay.Cilivization.Workshop.UI
 
         private void PlaceSpaceship(
             GameObject hull,
-            ShipTemplate shipTemplate,
+            ShipBuildTemplate shipTemplate,
             Database shipsDatabase)
         {
             var shipGraphicContainer =
@@ -251,7 +264,7 @@ namespace Assets.Scripts.Gameplay.Cilivization.Workshop.UI
 
         private void SlotClick(
             GameObject weapon,
-            ShipTemplate shipTemplate,
+            ShipBuildTemplate shipTemplate,
             ModuleTemplate weaponTemplate,
             RawImage slotImage)
         {
@@ -326,7 +339,7 @@ namespace Assets.Scripts.Gameplay.Cilivization.Workshop.UI
             go.GetComponent<TMP_InputField>();
 
         private void CalculateOverview(
-            ShipTemplate shipTemplate)
+            ShipBuildTemplate shipTemplate)
         {
             shipTemplate.CalculateCharacteristics();
             shipTemplate.CalculateCost();

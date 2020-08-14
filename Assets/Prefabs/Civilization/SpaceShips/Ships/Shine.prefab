@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8155247725737466244}
   - component: {fileID: 6656801724861280040}
   - component: {fileID: 1308771088626636271}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: Shine
   m_TagString: Untagged
   m_Icon: {fileID: -5397416234189338067, guid: 0000000000000000d000000000000000, type: 0}
@@ -100,14 +100,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5863bd2d1aecc694d96d0d4e6109132f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Container:
-    HP: 177
-    VisionAngle: 45
-    RayCount: 3
-    SightDist: 10
-    Homing: {fileID: 0}
-    Target: {fileID: 0}
-  Weapons: []
+  <HP>k__BackingField: 100
+  <VisionAngle>k__BackingField: 45
+  <RayCount>k__BackingField: 3
+  <SightDist>k__BackingField: 10
+  <Homing>k__BackingField: {fileID: 0}
+  <Target>k__BackingField: {fileID: 0}
   StrategyType: 2
 --- !u!61 &8155247725737466244
 BoxCollider2D:
@@ -148,7 +146,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AccelarationDeltaTime: 0.001
-  MaxVelocity: 2
+  MaxVelocity: 0.3
   CollisionEnabled: 1
   Block: 0
 --- !u!114 &1308771088626636271

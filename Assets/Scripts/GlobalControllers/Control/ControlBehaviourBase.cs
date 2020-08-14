@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Physics;
+﻿using Assets.Scripts.Manager;
+using Assets.Scripts.Physics;
 using Assets.Scripts.Physics.Fabric.ForceFabrics;
 using System.Collections;
 using System.Collections.Generic;
@@ -80,6 +81,11 @@ namespace Assets.Scripts.GlobalControllers.Control
         // Update is called once per frame
         void Update()
         {
+            if (GameManager.Pause)
+            {
+                return;
+            }
+
             RegisterDrive();
         }
     }

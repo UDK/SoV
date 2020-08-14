@@ -13,24 +13,38 @@ using UnityEngine;
 
 namespace Assets.Scripts.Gameplay.Cilivization.AI
 {
-    public class SpaceShipAI : MonoBehaviour, IGameplayObject
+    public class SpaceShipAI : MonoBehaviour, IStrategyContainer
     {
-        [SerializeField]
-        public SpaceShipContainer Container;
+        [field: SerializeField]
+        public float HP { get; set; } = 100;
 
-        public Guid AllianceGuid 
-        { 
-            get
-            {
-                return Container.AllianceGuid;
-            }
-            set
-            {
-                Container.AllianceGuid = value;
-            }
-        }
+        // used for visual detection of enemies
+        [field: SerializeField]
+        public float VisionAngle { get; set; } = 45;
 
-        public GameObject[] Weapons;
+        [field: SerializeField]
+        public int RayCount { get; set; } = 3;
+
+        [field: SerializeField]
+        public float SightDist { get; set; } = 10f;
+
+        public Guid AllianceGuid { get; set; }
+
+        // determines minimal distance for attack
+        public float MinAttackDistance { get; set; } = 3f;
+
+        [field: SerializeField]
+        public GameObject Homing { get; set; }
+
+        [field: SerializeField]
+        public GameObject Target { get; set; }
+
+        public List<WeaponBase> Weapons { get; set; }
+
+        public Movement MovementBehaviour { get; set; }
+
+        // state machine
+        public AStateMachine<ShipStates> StateMachine { get; set; }
 
         public StrategyType StrategyType;
 
@@ -42,18 +56,23 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI
 
         private void Start()
         {
-            Container.Weapons = Weapons.Select(x =>
-                x.GetComponent<MonoBehaviour>() as WeaponBase)
-                    .ToArray();
-            AllianceGuid = Guid.NewGuid();
-            Container.StateMachine = new AStateMachine<ShipStates>();
-            _strategyManager = new UnitStrategyManager(gameObject, Container);
+            Weapons = new List<WeaponBase>();
+            foreach (Transform child in this.transform)
+            {
+                child.gameObject.CheckComponent<WeaponBase>(
+                    wb =>
+                    {
+                        Weapons.Add(wb);
+                    });
+            }
+            StateMachine = new AStateMachine<ShipStates>();
+            _strategyManager = new UnitStrategyManager(gameObject, this);
 
             _strategyManager.ApplyStrategy(
                 StrategyType);
 
-            Container.StateMachine.Push(ShipStates.SearchingOfTarget);
-            Container.MovementBehaviour = GetComponent<Movement>();
+            StateMachine.Push(ShipStates.SearchingOfTarget);
+            MovementBehaviour = GetComponent<Movement>();
         }
 
         private void FixedUpdate()
@@ -61,7 +80,7 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI
             // remove
             /*_strategyManager.ApplyStrategy(
                 StrategyType);*/
-            Container.StateMachine.Update();
+            StateMachine.Update();
         }
 
         public void MakeDamage(float damage)

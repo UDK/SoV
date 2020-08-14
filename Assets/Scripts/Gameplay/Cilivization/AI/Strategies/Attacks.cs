@@ -12,7 +12,7 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Strategies
     {
         public static Action CircleAround(
             GameObject self,
-            SpaceShipContainer container) =>
+            IStrategyContainer container) =>
             () =>
             {
                 foreach (var weapon in container.Weapons)
@@ -36,7 +36,7 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Strategies
 
         public static Action Back(
             GameObject self,
-            SpaceShipContainer container) =>
+            IStrategyContainer container) =>
             () =>
             {
                 Vector3 toTarget = (container.Target.transform.position - self.transform.position).normalized;
@@ -78,7 +78,7 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Strategies
 
         public static Action Distance(
             GameObject self,
-            SpaceShipContainer container) =>
+            IStrategyContainer container) =>
             () =>
             {
                 Rotations.RotateToTarget(self, container);

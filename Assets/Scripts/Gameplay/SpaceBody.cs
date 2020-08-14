@@ -38,6 +38,8 @@ namespace Assets.Scripts.Gameplay
 
         public bool JustEat = false;
 
+        public bool Invincible = false;
+
         [SerializeField]
         private float _DamagePercent = 0.5f;
 
@@ -90,8 +92,17 @@ namespace Assets.Scripts.Gameplay
             }
         }
 
+        private void Start()
+        {
+            AllianceGuid = Guid.NewGuid();
+        }
+
         public void MakeDamage(float healtDamage)
         {
+            if (Invincible)
+            {
+                return;
+            }
             Mass -= healtDamage;
             if (Mass <= 0)
             {
@@ -101,7 +112,7 @@ namespace Assets.Scripts.Gameplay
 
         public float EatMe()
         {
-            _satelliteManager.DetachSattelites();
+            _satelliteManager?.DetachSattelites();
             Destroy(gameObject);
             return Mass;
         }
@@ -114,7 +125,7 @@ namespace Assets.Scripts.Gameplay
 
         public void Destroy()
         {
-            _satelliteManager.DetachSattelites();
+            _satelliteManager?.DetachSattelites();
             if(DestroyEffect != null)
             {
                 var position = new Vector3(transform.position.x, transform.position.y, transform.position.z);

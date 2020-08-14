@@ -147,14 +147,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5863bd2d1aecc694d96d0d4e6109132f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Container:
-    HP: 177
-    VisionAngle: 45
-    RayCount: 3
-    SightDist: 10
-    Homing: {fileID: 0}
-    Target: {fileID: 0}
-  Weapons: []
+  <HP>k__BackingField: 100
+  <VisionAngle>k__BackingField: 45
+  <RayCount>k__BackingField: 3
+  <SightDist>k__BackingField: 10
+  <Homing>k__BackingField: {fileID: 0}
+  <Target>k__BackingField: {fileID: 0}
   StrategyType: 0
 --- !u!114 &4021054921537504961
 MonoBehaviour:
@@ -169,7 +167,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AccelarationDeltaTime: 0.001
-  MaxVelocity: 2
+  MaxVelocity: 0.2
   CollisionEnabled: 1
   Block: 0
 --- !u!114 &4101733349919602591

@@ -11,6 +11,8 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.WeaponSlots
 {
     public abstract class WeaponBase : MonoBehaviour
     {
+        public float AttackDistance = 10f;
+
         public GameObject Shell;
 
         protected ShellBase _shellBase;

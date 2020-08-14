@@ -1,6 +1,8 @@
 ﻿using Assets.Scripts.Gameplay.Cilivization.AI;
 using Assets.Scripts.Gameplay.Cilivization.AI.Modilfiers;
 using Assets.Scripts.Gameplay.Cilivization.AI.Shells;
+using Assets.Scripts.Gameplay.Cilivization.AI.WeaponSlots;
+using Assets.Scripts.Gameplay.Cilivization.Base;
 using Assets.Scripts.Gameplay.Cilivization.Descriptions;
 using Assets.Scripts.Helpers;
 using Assets.Scripts.Physics;
@@ -13,23 +15,34 @@ using UnityEngine;
 
 namespace Assets.Scripts.Gameplay.Cilivization.Workshop
 {
-    public class ShipTemplate
+    public class ShipBuildTemplate : IShipBuildTemplate, IShipTemplate
     {
         public string Name { get; set; }
 
-        public ShipCost Cost { get; set; } =
+        public ShipCost Cost { get; private set; } =
             new ShipCost();
-
-        public ShipCharacteristics ShipCharacteristics { get; set; } =
-            new ShipCharacteristics();
 
         public GameObject Hull { get; private set; }
 
         public List<ModuleTemplate> Modules { get; private set; } =
             new List<ModuleTemplate>();
 
-        public ShipTemplate()
+        public GameObject BuiltTemplate { get; private set; }
+
+        public ShipCharacteristics ShipCharacteristics { get; private set; } =
+            new ShipCharacteristics();
+
+        public ShipBuildTemplate()
         {
+        }
+        public ShipBuildTemplate(
+            string name,
+            GameObject hull,
+            List<ModuleTemplate> modules)
+        {
+            Name = name;
+            Hull = hull;
+            Modules = modules;
         }
 
         public void CalculateCost()
@@ -65,27 +78,28 @@ namespace Assets.Scripts.Gameplay.Cilivization.Workshop
             {
                 return;
             }
-            var hullDescription = Hull.GetComponent<SpaceShipAI>();
+            var hullDescription = Hull.GetComponent<ISpaceShipAI>();
             ShipCharacteristics = new ShipCharacteristics();
-            ShipCharacteristics.HP = hullDescription.Container.HP;
+            ShipCharacteristics.HP = hullDescription.HP;
             ShipCharacteristics.Speed = Hull.GetComponent<Movement>().MaxVelocity;
+            ShipCharacteristics.MinAttackDistance = hullDescription.MinAttackDistance;
             foreach(var module in Modules)
             {
                 if(module.ChosenModule == null)
                 {
                     continue;
                 }
-                if(module.ChosenModule.TryGetComponent(out ShellBase shellBase))
+                if(module.ChosenModule.TryGetComponent(out WeaponBase weapon))
                 {
-                    if(ShipCharacteristics.MinAttackDistance > shellBase.AttackDistance
+                    if(ShipCharacteristics.MinAttackDistance > weapon.AttackDistance
                         || ShipCharacteristics.MinAttackDistance == 0)
                     {
-                        ShipCharacteristics.MinAttackDistance = shellBase.AttackDistance;
+                        ShipCharacteristics.MinAttackDistance = weapon.AttackDistance;
                     }
-                    if (ShipCharacteristics.MaxAttackDistance < shellBase.AttackDistance
+                    if (ShipCharacteristics.MaxAttackDistance < weapon.AttackDistance
                         || ShipCharacteristics.MaxAttackDistance == 0)
                     {
-                        ShipCharacteristics.MaxAttackDistance = shellBase.AttackDistance;
+                        ShipCharacteristics.MaxAttackDistance = weapon.AttackDistance;
                     }
                 }
                 else if (module.ChosenModule.TryGetComponent(out Modifier modifier))
@@ -101,7 +115,7 @@ namespace Assets.Scripts.Gameplay.Cilivization.Workshop
 
         public void SetNewHull(GameObject hull)
         {
-            if(Hull == hull)
+            if(Hull.name == hull.name)
             {
                 return;
             }
@@ -116,15 +130,40 @@ namespace Assets.Scripts.Gameplay.Cilivization.Workshop
                 });
             }
         }
-    }
 
-    public class ShipCost : ICost
-    {
-        public int Money { get; set; }
-        public int Merilium { get; set; }
-        public int Titan { get; set; }
-        public int Uranus { get; set; }
-        public int Time { get; set; }
+        public IShipTemplate Build()
+        {
+            if(BuiltTemplate != null)
+            {
+                UnityEngine.Object.DestroyImmediate(BuiltTemplate);
+            }
+
+            CalculateCharacteristics();
+            CalculateCost();
+
+            var newTemplate = UnityEngine.Object.Instantiate(
+                Hull,
+                Hull.transform.position,
+                Quaternion.identity);
+            newTemplate.SetActive(false);
+            for(int i = 0; i < Modules.Count; i++)
+            {
+                var module = newTemplate.transform.GetChild(i).gameObject.CheckComponent<WeaponBase>(
+                    wb =>
+                    {
+                        wb.Shell =
+                            Modules[i].ChosenModule;
+                        wb.AttackDistance *= ShipCharacteristics.AttackDistanceMultiplier;
+                    });
+            }
+            var hull = newTemplate.GetComponent<ISpaceShipAI>();
+            hull.HP = ShipCharacteristics.HP;
+            hull.MinAttackDistance = ShipCharacteristics.MinAttackDistance;
+            hull.SightDist = ShipCharacteristics.MinAttackDistance * 2;
+            newTemplate.GetComponent<Movement>().MaxVelocity = ShipCharacteristics.Speed;
+            BuiltTemplate = newTemplate;
+            return this;
+        }
     }
 
     public class ShipCharacteristics
@@ -134,12 +173,5 @@ namespace Assets.Scripts.Gameplay.Cilivization.Workshop
         public float AttackDistanceMultiplier { get; set; } = 1;
         public float HP { get; set; }
         public float Speed { get; set; }
-    }
-
-    public class ModuleTemplate
-    {
-        public GameObject ModuleSlot { get; set; }
-
-        public GameObject ChosenModule { get; set; }
     }
 }

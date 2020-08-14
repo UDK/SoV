@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Gameplay.SpaceObject;
+using Assets.Scripts.Manager;
 using Assets.Scripts.Physics;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,11 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Shells
 
         private void Update()
         {
+            if (GameManager.Pause)
+            {
+                return;
+            }
+
             if(Target == null)
             {
                 ShellCollection.Destroy(gameObject);

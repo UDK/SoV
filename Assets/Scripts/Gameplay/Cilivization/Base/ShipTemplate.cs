@@ -6,10 +6,7 @@ using System.Threading.Tasks;
 
 namespace Assets.Scripts.Gameplay.Cilivization.Base
 {
-    public enum SpaceshipTypes
+    class ShipTemplate
     {
-        Fighter,
-        Bomber,
-        Artillery
     }
 }
