@@ -52,12 +52,6 @@ namespace Assets.Scripts.Manager
             galaxy.InitBorders();
         }
 
-        //Update is called every frame.
-        void Update()
-        {
-
-        }
-
         private void SetControlForGameObject<TControl>(
             GameObject player)
             where TControl : ControlBehaviourBase

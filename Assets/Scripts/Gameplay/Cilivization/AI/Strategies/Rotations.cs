@@ -11,7 +11,7 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Strategies
     {
         public static void RotateBySpeed(
             GameObject self,
-            SpaceShipContainer container)
+            IStrategyContainer container)
         {
             float angle = Mathf.Atan2(container.MovementBehaviour.Velocity.y,
                 container.MovementBehaviour.Velocity.x) * Mathf.Rad2Deg;
@@ -20,7 +20,7 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Strategies
 
         public static void RotateToTarget(
             GameObject self,
-            SpaceShipContainer container)
+            IStrategyContainer container)
         {
             var heading = container.Target.transform.position - self.transform.position;
             float angle = Mathf.Atan2(heading.y, heading.x) * Mathf.Rad2Deg;

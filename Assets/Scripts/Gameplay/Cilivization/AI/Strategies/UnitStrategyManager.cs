@@ -10,7 +10,7 @@ using sdType =
         Assets.Scripts.Gameplay.Cilivization.AI.Strategies.StrategyType,
         System.Action<
             UnityEngine.GameObject,
-            Assets.Scripts.Gameplay.Cilivization.AI.SpaceShipContainer>>;
+            Assets.Scripts.Gameplay.Cilivization.AI.Strategies.IStrategyContainer>>;
 
 namespace Assets.Scripts.Gameplay.Cilivization.AI.Strategies
 {
@@ -19,16 +19,16 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Strategies
         private readonly sdType _strategies =
             new sdType
             {
-                { StrategyType.AggressiveAttack, AggressiveAttackStrategy },
-                { StrategyType.DistanceAttack, DistanceAttackStrategy },
-                { StrategyType.BombingAttack, BombingAttackStrategy },
+                { StrategyType.Fighter, AggressiveAttackStrategy },
+                { StrategyType.Artillery, DistanceAttackStrategy },
+                { StrategyType.Bomber, BombingAttackStrategy },
             };
         private GameObject _self;
-        private SpaceShipContainer _container;
+        private IStrategyContainer _container;
 
         public UnitStrategyManager(
             GameObject self,
-            SpaceShipContainer container)
+            IStrategyContainer container)
         {
             _self = self;
             _container = container;
@@ -42,7 +42,7 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Strategies
 
         private static void AggressiveAttackStrategy(
             GameObject self,
-            SpaceShipContainer container)
+            IStrategyContainer container)
         {
             container.StateMachine
                 .Set(
@@ -62,7 +62,7 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Strategies
 
         private static void DistanceAttackStrategy(
             GameObject self,
-            SpaceShipContainer container)
+            IStrategyContainer container)
         {
             container.StateMachine
                 .Set(
@@ -82,7 +82,7 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Strategies
 
         private static void BombingAttackStrategy(
             GameObject self,
-            SpaceShipContainer container)
+            IStrategyContainer container)
         {
             container.StateMachine
                 .Set(
@@ -101,7 +101,7 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Strategies
         }
 
 
-        private static Func<bool> TargetCheckMiddleware(SpaceShipContainer container) =>
+        private static Func<bool> TargetCheckMiddleware(IStrategyContainer container) =>
             () =>
             {
                 if (container.Target == null)

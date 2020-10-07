@@ -6,6 +6,10 @@ TagManager:
   tags:
   - Core Gravity
   - Space body
+  - TurretLot
+  - RocketLot
+  - Destroyer
+  - Shine
   layers:
   - Default
   - TransparentFX
@@ -38,7 +42,7 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - renderedObjects
   m_SortingLayers:
   - name: Default
     uniqueID: 0

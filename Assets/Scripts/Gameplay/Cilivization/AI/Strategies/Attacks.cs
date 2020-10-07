@@ -12,7 +12,7 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Strategies
     {
         public static Action CircleAround(
             GameObject self,
-            SpaceShipContainer container) =>
+            IStrategyContainer container) =>
             () =>
             {
                 foreach (var weapon in container.Weapons)
@@ -23,7 +23,7 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Strategies
                 var distance = Vector2.Distance(
                     container.Target.transform.position,
                     self.transform.position);
-                if (distance > container.AttackDistance)
+                if (distance > container.MinAttackDistance)
                 {
                     container.StateMachine.Push(
                         ShipStates.Moving);
@@ -36,7 +36,7 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Strategies
 
         public static Action Back(
             GameObject self,
-            SpaceShipContainer container) =>
+            IStrategyContainer container) =>
             () =>
             {
                 Vector3 toTarget = (container.Target.transform.position - self.transform.position).normalized;
@@ -53,7 +53,7 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Strategies
                     self.transform.position);
 
                 if (dot < -0.60 &&
-                    distance > container.AttackDistance * 2)
+                    distance > container.MinAttackDistance * 2)
                 {
                     container.StateMachine.Push(
                         ShipStates.Moving);
@@ -78,7 +78,7 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Strategies
 
         public static Action Distance(
             GameObject self,
-            SpaceShipContainer container) =>
+            IStrategyContainer container) =>
             () =>
             {
                 Rotations.RotateToTarget(self, container);
@@ -91,7 +91,7 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Strategies
                 var distance = Vector2.Distance(
                     container.Target.transform.position,
                     self.transform.position);
-                if (distance > container.AttackDistance)
+                if (distance > container.MinAttackDistance)
                 {
                     container.StateMachine.Push(
                         ShipStates.Moving);

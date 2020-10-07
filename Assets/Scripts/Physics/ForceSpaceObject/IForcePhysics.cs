@@ -15,6 +15,6 @@ namespace Assets.Scripts.Physics.Fabric.ForceFabrics
         /// <param name="iv">Influence vector</param>
         /// <param name="influence">Influence parameter that charges end force</param>
         /// <returns>Force related to who or sob</returns>
-        Vector2 PullForceFabricMethod(MovementBehaviour who, Vector2 iv, float influence);
+        Vector2 PullForceFabricMethod(Movement who, Vector2 iv, float influence);
     }
 }

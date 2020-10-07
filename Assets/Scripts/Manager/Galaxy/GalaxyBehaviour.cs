@@ -63,7 +63,7 @@ namespace Assets.Scripts.Manager.Galaxy
                                 x * PointsOnOnePlanet,
                                 y * PointsOnOnePlanet,
                                 0f);
-                        var movement = spaceBody.GetComponent<MovementBehaviour>();
+                        var movement = spaceBody.GetComponent<Movement>();
                         movement.MaxVelocity = MaxSpeedForObjects;
                         movement.SetVelocity(
                             new Vector3(Random.Range(-0.2f, 0.2f), Random.Range(-0.2f, 0.2f)));
@@ -76,7 +76,7 @@ namespace Assets.Scripts.Manager.Galaxy
             SpaceBody gameObject,
             Vector3? placePosition = null)
         {
-            var movement = gameObject.GetComponent<MovementBehaviour>();
+            var movement = gameObject.GetComponent<Movement>();
             movement.MaxVelocity = MaxSpeedForObjects;
 
             gameObject.transform.parent = transform;

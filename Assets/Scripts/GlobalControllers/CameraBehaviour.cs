@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Assets.Scripts.Manager;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -24,8 +25,13 @@ namespace Assets.Scripts.GlobalControllers
         // LateUpdate is called after Update each frame
         void LateUpdate()
         {
+            if (GameManager.Pause)
+            {
+                return;
+            }
+
             // Set the position of the camera's transform to be the same as the player's, but offset by the calculated offset distance.
-            if(Player != null && Player.ToString() != "null")
+            if (Player != null && Player.ToString() != "null")
             {
                 transform.position = Player.transform.position + _offset;
             }

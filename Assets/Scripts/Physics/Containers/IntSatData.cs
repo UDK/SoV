@@ -12,7 +12,7 @@ namespace Assets.Scripts.Physics.Containers
     /// </summary>
     public class IntSatData
     {
-        public MovementBehaviour MovementBehaviour { get; set; }
+        public Movement MovementBehaviour { get; set; }
 
         public Collider2D Collider2D { get; set; }
 
@@ -23,7 +23,7 @@ namespace Assets.Scripts.Physics.Containers
         public int TempI { get; set; }
         public bool TheSameLayer { get; set; }
 
-        public static implicit operator MovementBehaviour(IntSatData satellite)
+        public static implicit operator Movement(IntSatData satellite)
         {
             return satellite.MovementBehaviour;
         }
@@ -37,7 +37,7 @@ namespace Assets.Scripts.Physics.Containers
         {
             return new IntSatData
             {
-                MovementBehaviour = collider2D.GetComponent<MovementBehaviour>(),
+                MovementBehaviour = collider2D.GetComponent<Movement>(),
                 Collider2D = collider2D.GetComponent<Collider2D>(),
 
             };

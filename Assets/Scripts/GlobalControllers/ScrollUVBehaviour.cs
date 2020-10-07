@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Scripts.Manager;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -27,6 +28,11 @@ namespace Assets.Scripts.GlobalControllers
 		}
 		void Update()
 		{
+			if (GameManager.Pause)
+			{
+				return;
+			}
+
 			SetOffset(transform.position.x, transform.position.y);
 		}
 

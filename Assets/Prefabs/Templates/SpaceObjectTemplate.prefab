@@ -46,11 +46,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 6308597186227575611}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a8d775938ce797d49991e3e1301ec9c9, type: 3}
+  m_Script: {fileID: 11500000, guid: 47a33161dee9955448ca93e419cd1765, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   AccelarationDeltaTime: 0.001
   MaxVelocity: 2
+  CollisionEnabled: 1
   Block: 0
 --- !u!114 &4031832501962654012
 MonoBehaviour:
@@ -78,7 +79,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af3297b847c2d4e4ab72431557b2085c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Mass: 0
+  mappingUpgradeSpaceObject:
+    Downgrade: 0
+    Source: 0
+    Upgrade: 0
+    criticalMassUpgrade: 0
+    criticalMassDowngrade: 0
   DestroyEffect: {fileID: 0}
   JustEat: 0
   _DamagePercent: 0.5

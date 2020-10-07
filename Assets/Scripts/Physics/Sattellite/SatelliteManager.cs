@@ -28,7 +28,7 @@ namespace Assets.Scripts.Physics.Sattellite
         public float LastRadius =>
             DeltaOrbitsDistance * (satelliteObservers.Count + 1);
 
-        public void AttachSatellite(MovementBehaviour sattelite, MovementBehaviour parent)
+        public void AttachSatellite(Movement sattelite, Movement parent)
         {
             Satellite satelliteBehaviour = sattelite.GetComponent<Satellite>();
             satelliteBehaviour.StartOrbiting(parent);

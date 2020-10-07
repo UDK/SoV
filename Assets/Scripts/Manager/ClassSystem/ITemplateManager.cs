@@ -12,6 +12,6 @@ namespace Assets.Scripts.Manager.ClassSystem
     {
         SpaceBody GenerateSpaceBody { get; }
 
-        GravitationBehaviour SetUpGravitation(SpaceBody spaceBody);
+        Gravitation SetUpGravitation(SpaceBody spaceBody);
     }
 }

@@ -8,8 +8,8 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Strategies
 {
     public enum StrategyType
     {
-        AggressiveAttack,
-        DistanceAttack,
-        BombingAttack,
+        Fighter,
+        Artillery,
+        Bomber,
     }
 }

@@ -14,7 +14,7 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Strategies
     {
         public static Action GoAfterTarget(
             GameObject self,
-            SpaceShipContainer container) =>
+            IStrategyContainer container) =>
             () =>
             {
                 if(container.Target == null)
@@ -28,7 +28,7 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Strategies
                 var heading =
                     container.Target.transform.position - self.transform.position;
 
-                if (distance < container.AttackDistance)
+                if (distance < container.MinAttackDistance)
                 {
                     container.StateMachine.Push(
                         ShipStates.Attacking);
@@ -42,7 +42,10 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Strategies
                 Rotations.RotateBySpeed(self, container);
             };
 
-        public static void MoveByCircle(GameObject self, GameObject target, SpaceShipContainer container)
+        public static void MoveByCircle(
+            GameObject self,
+            GameObject target,
+            IStrategyContainer container)
         {
             // get current magnitude
             var maxVelocity = container.MovementBehaviour.MaxVelocity;
@@ -65,7 +68,10 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Strategies
             container.MovementBehaviour.SmoothlySetVelocity(newDirection * maxVelocity);
         }
 
-        public static void HeadToTarget(GameObject self, GameObject target, SpaceShipContainer container)
+        public static void HeadToTarget(
+            GameObject self,
+            GameObject target,
+            IStrategyContainer container)
         {
             var heading =
                 target.transform.position - self.transform.position;
@@ -73,7 +79,10 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Strategies
                 heading.normalized * container.MovementBehaviour.MaxVelocity);
         }
 
-        public static void CircleAroundTarget(GameObject self, GameObject target, SpaceShipContainer container)
+        public static void CircleAroundTarget(
+            GameObject self,
+            GameObject target,
+            IStrategyContainer container)
         {
             var distance = Vector2.Distance(
                 container.Homing.transform.position,

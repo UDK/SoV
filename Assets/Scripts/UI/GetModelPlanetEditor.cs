@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(GetModelPlayer))]
+/*[CustomEditor(typeof(GetModelPlayer))]
 public class NewBehaviourScript : Editor
 {
     GetModelPlayer modelPlayer;
@@ -36,4 +36,4 @@ public class NewBehaviourScript : Editor
         if(modelPlayer == null)
             modelPlayer = (GetModelPlayer)target;
     }
-}
+}*/

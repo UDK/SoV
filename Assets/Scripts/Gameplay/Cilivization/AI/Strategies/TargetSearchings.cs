@@ -12,7 +12,7 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Strategies
     {
         public static Action SearchTarget(
             GameObject self,
-            SpaceShipContainer container) =>
+            IStrategyContainer container) =>
             () =>
             {
                 Ray enemyRay = new Ray(
@@ -38,11 +38,13 @@ namespace Assets.Scripts.Gameplay.Cilivization.AI.Strategies
                         raycastHits,
                         container.SightDist);
 
-                    container.Targets = raycastHits.Select(x => x.collider?.gameObject).ToArray();
-                    foreach(var t in container.Targets)
+                    var targets = raycastHits.Select(x => x.collider?.gameObject).ToArray();
+                    foreach(var t in targets)
                     {
                         var go = t?.GetComponent<IGameplayObject>();
                         if(go != null &&
+                            (t.TryGetComponent(out SpaceBody _) ||
+                            t.TryGetComponent(out SpaceShipAI _)) &&
                             go.AllianceGuid != container.AllianceGuid)
                         {
                             container.Target = t;
